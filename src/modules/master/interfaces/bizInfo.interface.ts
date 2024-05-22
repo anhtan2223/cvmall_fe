@@ -1,0 +1,17 @@
+export type BizInfo = {
+  id : string,
+  prj_name : string,
+  prj_content : string,
+  period : string,
+  system_analysis : boolean,
+  overview_design : boolean,
+  basic_design : boolean,
+  functional_design : boolean,
+  detailed_design : boolean,
+  coding : boolean,
+  unit_test : boolean,
+  operation : string,
+  os_db : string,
+  language : string,
+  role : string,
+};
