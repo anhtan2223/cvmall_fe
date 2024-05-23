@@ -1,37 +1,22 @@
 import tl from "@/utils/locallize";
-export const FUNC_NAME = 'dashboard'
+export const FUNC_NAME = 'cv_info'
 
 // ========================== ROUTER =============================
 export const ROUTER_USER = [
   {
-    path: '/dashboard',
-    name: 'DashboardList',
-    component: () => import('@master/views/static/DashboardView.vue'),
+    path: '/cv',
+    name: 'CV',
+    component: () => import('@master/views/cv/ListView.vue'),
   },
 ]
 
 // ========================== PATH API =============================
 export const API = {
-  // LIST: `/${FUNC_NAME}`,
-  // CREATE: `/${FUNC_NAME}`,
-  // DETAIL: (id: string) => `${FUNC_NAME}/${id}`,
-  // UPDATE: (id: string) => `${FUNC_NAME}/${id}`,
-  // DELETE: (id: string | string[]) => `${FUNC_NAME}/${id}`,
-  // DELETE_MULTI: `${FUNC_NAME}/delete-multi`,
-  // EXPORT: `${FUNC_NAME}/export-excel`,
+  LIST: `/${FUNC_NAME}`,
+  DELETE: (id: string | string[]) => `${FUNC_NAME}/${id}`,
 }
 
 // ========================== CONFIG TABLE ==========================
-
-interface DashboardColConfig {
-  key : string | null,
-  title: string | null,
-  is_sort: boolean | null,
-  linked: boolean | null,
-  width?: number
-  child?: DashboardColConfig[] | null
-  is_custom?: boolean | null
-}
 
 export const tableConfig = {
   checkbox: false,
@@ -41,7 +26,7 @@ export const tableConfig = {
   index: true,
 };
 
-export const colConfig : DashboardColConfig[] = [
+export const colConfig = [
   {
     key: "user_code",
     title: tl(FUNC_NAME, "ID"),
@@ -52,7 +37,6 @@ export const colConfig : DashboardColConfig[] = [
   {
     key: "branch",
     title: tl(FUNC_NAME, "Chi nhánh"),
-    width: 95,
     is_sort: true,
     linked: false,
     child: null
@@ -62,16 +46,16 @@ export const colConfig : DashboardColConfig[] = [
     title: tl(FUNC_NAME, "Tình trạng"),
     is_sort: false,
     linked: false,
+    // is_custom: true,
     child: null
   },
   {
     key: "name",
     title: tl(FUNC_NAME, "Họ tên"),
     is_sort: true,
-    width: 200,
     linked: false,
     child: null,
   }
 ];
 
-export default { tableConfig, colConfig, FUNC_NAME };
+export default { tableConfig, colConfig };
