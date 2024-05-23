@@ -24,7 +24,7 @@ interface BizColConfig {
 
 export const tableConfig = {
   checkbox: false,
-  action: true,
+  action: false,
   showPaging: false,
   dbClick: false,
   index: true,

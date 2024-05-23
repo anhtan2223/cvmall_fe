@@ -2,7 +2,7 @@ const tl = (...params: any): string => {
   const dataI18n = localStorage.getItem('i18n.ja') ?? '[]'
   const dataLocalize = JSON.parse(dataI18n)
 
-  const lang = 'ja'
+  const lang = 'vi'
   const module = 'Core'
 
   let screen = params[0];
@@ -27,7 +27,6 @@ const tl = (...params: any): string => {
       message = message?.replace('{' + index + '}', element)
     })
   }
-
   // return message ?? `${params[0]}_${params[1]}`;
   return message ?? `${params[1]}`
 }

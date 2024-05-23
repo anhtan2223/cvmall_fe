@@ -8,9 +8,9 @@
         </vc-button>
       </vc-col>
       <vc-col :md="18" class="d-flex flex-end">
-        <vc-button class="ml-2" @click="onAddNew" type="primary" :icon="'Plus'">
+        <!-- <vc-button class="ml-2" @click="onAddNew" type="primary" :icon="'Plus'">
           {{ tl("Common", "BtnAddNew") }} 
-        </vc-button>
+        </vc-button> -->
         <vc-button class="ml-2" @click="onExport" type="success" :icon="'Download'">
           {{ tl("Common", "BtnExportExcel") }}
         </vc-button>
@@ -21,14 +21,10 @@
       <vc-col :span="24">
         <el-scrollbar>
           <vc-table :datas="dataGrid" :tableConfig="tableConfig" :colConfigs="colConfig" :page="techPageConfig"
-          :loading="techCatLoading" @dbClick="onEdit" @sorted="onSort" @rowSelected="onRowSelected" @pageChanged="onPageChanged">
+          :loading="techCatLoading" @dbClick="onView" @sorted="onSort" @rowSelected="onRowSelected" @pageChanged="onPageChanged">
             <template #action="{ data }">
               <div class="d-flex flex-center">
-                <vc-button type="warning" size="small" class="btn-acttion" @click="onEdit(data)" :icon="'Edit'"></vc-button>
-                <vc-button type="danger" code="F00015" size="small" class="btn-acttion" @click="onDeleteItem(data)"
-                :icon="'Delete'">
-              </vc-button>
-              <vc-button type="success" size="small" class="btn-acttion" @click="onView(data)" :icon="'Download'"></vc-button>
+                <vc-button type="warning" size="small" class="btn-acttion" @click="onView(data)" :icon="'View'"></vc-button>
               </div>
             </template>
           </vc-table>
@@ -46,7 +42,7 @@ import { onBeforeMount, ref } from "vue";
 import { storeToRefs } from "pinia";
 
 import tl from "@/utils/locallize";
-import DetailModal from './DetailModal.vue'
+import DetailModal from '../cv/DetailModal.vue'
 import { colConfig, tableConfig, FUNC_NAME } from "@/commons/config/dashboard.config";
 
 import { useTechnicalStore } from '@master/stores/technical.store'
@@ -105,21 +101,13 @@ const onExport = () => {
   
 };
 
-const onImport = () => {
-  
-};
-
 const onSuccess = async () => {
   
 }
 
-const onEdit = (item: any) => {
+const onView = (item: any) => {
   var selectedItem = {...item}
   detailRef.value.open(techCatDataGrid.value, cvDataGrid.value.find(x => x.id == selectedItem.id))
-};
-
-const onView = (item: any) => {
-  
 };
 
 const onDeleteItem = (item: any) => {
@@ -140,10 +128,16 @@ const getData = async () => {
   cvDataGrid.value = []
   techCatDataGrid.value = []
   await cvInfoStore.getList();
+  console.log(cvDataGrid.value);
+  
   await technicalCategoryStore.getList();
 }
 
 const configColumnTable = () => {
+
+  // Clean 
+  colConfig.value = []
+
   techCatDataGrid.value.forEach((element: any) => {
     let columnObject : ColConfig = {
       key: element.id.toString(),
@@ -171,11 +165,11 @@ const bindingDataToTable = () => {
     colConfig.forEach((elementCol: any, indexCol: any) => {
       
       if(elementCol.child == null){
-        if(elementCol.key == "id"){
-          newObject[elementCol.key] = elementData.id
+        if(elementCol.key == "user_code"){
+          newObject[elementCol.key] = elementData.user_code
             
-        }else if(elementCol.key == "department"){
-          newObject[elementCol.key] = elementData.department
+        }else if(elementCol.key == "branch"){
+          newObject[elementCol.key] = elementData.branch
             
         }else if(elementCol.key == "is_actived"){
           newObject[elementCol.key] = elementData.is_actived

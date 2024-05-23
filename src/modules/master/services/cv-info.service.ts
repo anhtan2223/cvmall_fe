@@ -2,7 +2,7 @@ import apiClient from '@/utils/httpClient'
 import type { APIResponse } from '@/interfaces/response.interface'
 import { useToastStore } from '@/stores/toast.store'
 import fileService from '@/utils/file'
-import { API } from '@/commons/config/cv-info.config'
+import { API } from '@/commons/config/cv.config'
 
 const cvInfoService = {
   async getList(params? : unknown) : Promise<APIResponse<any[]>>{
