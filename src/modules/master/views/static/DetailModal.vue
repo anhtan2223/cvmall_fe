@@ -607,13 +607,13 @@ const close = () => {
   dataGrid.value = []
   techCatDataGrid.value = []
   if(cvForm.value){
-    cvForm.value.resetFields()y
+    cvForm.value.resetFields()
   }
   modal.value.close()
 }
 
 const techMapData = (techData: any,cvData: any) => [
-  cvData.forEach
+  // cvData.forEach
 ]
 
 const bizMapData = (item: any) => {
