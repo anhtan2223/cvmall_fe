@@ -1,75 +1,81 @@
 <template>
-  <vc-modal ref="modal" :title="tl('Business content', 'Business content detail')" width="70%" @close="close">
+  <vc-modal ref="modal" :title="tl('Business content', 'Business content detail')" width="40%" @close="close">
     <template #content>
       <el-form ref="bizForm" :rules="rules" :model="biz" label-width="200px" label-position="top"
         require-asterisk-position="right" :disabled="type == POPUP_TYPE.VIEW">
-          <vc-row :gutter="10">
-            <vc-col :lg="12" :md="12" :sm="24" :xs="24">
-              <vc-input-group required prop="prj_name" :label="tl('BizInfo', 'Project')">
-                <vc-input v-model="biz.prj_name" :disabled="type == POPUP_TYPE.VIEW" />
-              </vc-input-group>
-            </vc-col>
-            <vc-col :lg="12" :md="12" :sm="24" :xs="24">
-              <vc-input-group required prop="period" :label="tl('BizInfo', 'Period (Month)')">
-                <el-input-number
-                  v-model="biz.period"  
-                  :min="1"
-                  :controls="false"
-                />
-              </vc-input-group>
-            </vc-col>
-          </vc-row>
 
-          <vc-row :gutter="10">
-            <vc-col :lg="12" :md="24" :sm="24" :xs="24">
-              <vc-input-group required prop="prj_content" :label="tl('BizInfo', 'Duties / Comments')">
-                <vc-textarea v-model="biz.prj_content" />
-              </vc-input-group>
-              <vc-input-group required prop="os_db" :label="tl('BizInfo', 'OS・DB')">
-                <vc-input v-model="biz.os_db" />
-              </vc-input-group>
-            </vc-col>
-            <vc-col :lg="12" :md="24" :sm="24" :xs="24" class="mb-3">
-              <vc-row>
-              <vc-col :lg="12" :md="12" :sm="12" :xs="12">
-                <vc-row class="pa-3">
-                </vc-row>
+        <vc-row :gutter="10">
+          <vc-col :lg="18" :md="24" :sm="24" :xs="24">
+            <vc-input-group required prop="prj_name" :label="tl('BizInfo', 'Project')">
+              <vc-input v-model="biz.prj_name" :disabled="type == POPUP_TYPE.VIEW" />
+            </vc-input-group>
+          </vc-col>
+          <vc-col :lg="6" :md="24" :sm="24" :xs="24">
+            <vc-input-group required prop="period" :label="tl('BizInfo', 'Period (month)')">
+              <el-input-number v-model="biz.period" :min="1" :controls="false" class="full-width" />
+            </vc-input-group>
+          </vc-col>
+        </vc-row>
 
-                <vc-checkbox :label="tl('BizInfo', 'System analysis')" v-model="biz.system_analysis" class="checkbox-width"></vc-checkbox>
+        <vc-row :gutter="10">
+          <vc-col :lg="24" :md="24" :sm="24" :xs="24">
+            <vc-input-group required prop="prj_content" :label="tl('BizInfo', 'Duties / Comments')">
+              <vc-textarea v-model="biz.prj_content" />
+            </vc-input-group>
+          </vc-col>
+        </vc-row>
+        
+        <vc-row :gutter="10">
+          <vc-col :lg="24" :md="24" :sm="24" :xs="24">
+            <vc-input-group required prop="os_db" :label="tl('BizInfo', 'OS・DB')">
+              <vc-input v-model="biz.os_db" />
+            </vc-input-group>
+          </vc-col>
+        </vc-row>
 
-                <vc-checkbox :label="tl('BizInfo', 'Overview design')" v-model="biz.overview_design" class="checkbox-width"></vc-checkbox>
+        <vc-row>
+          <vc-col :lg="12" :md="12" :sm="12" :xs="12">
+            <!-- <vc-row class="pa-3">
+            </vc-row>
+             -->
+            <vc-checkbox :label="tl('BizInfo', 'System analysis')" v-model="biz.system_analysis"
+              class="checkbox-width"></vc-checkbox>
+            <vc-checkbox :label="tl('BizInfo', 'Overview design')" v-model="biz.overview_design"
+              class="checkbox-width"></vc-checkbox>
+            <vc-checkbox :label="tl('BizInfo', 'Basic design')" v-model="biz.basic_design"
+              class="checkbox-width"></vc-checkbox>
+            <vc-checkbox :label="tl('BizInfo', 'Function design')" v-model="biz.function_design"
+              class="checkbox-width"></vc-checkbox>
+          </vc-col>
 
-                <vc-checkbox :label="tl('BizInfo', 'Basic design')" v-model="biz.basic_design" class="checkbox-width"></vc-checkbox>
+          <vc-col :lg="12" :md="12" :sm="12" :xs="12">
+            <!-- <vc-row class="pa-3">
+            </vc-row> -->
+            <vc-checkbox :label="tl('BizInfo', 'Detail design')" v-model="biz.detail_design"
+              class="checkbox-width"></vc-checkbox>
+            <vc-checkbox :label="tl('BizInfo', 'Coding')" v-model="biz.coding" class="checkbox-width"></vc-checkbox>
+            <vc-checkbox :label="tl('BizInfo', 'Unit Test')" v-model="biz.unit_test"
+              class="checkbox-width"></vc-checkbox>
+            <vc-checkbox :label="tl('BizInfo', 'Operation')" v-model="biz.operation"
+              class="checkbox-width"></vc-checkbox>
+          </vc-col>
+        </vc-row>
 
-                <vc-checkbox :label="tl('BizInfo', 'Function design')" v-model="biz.function_design" class="checkbox-width"></vc-checkbox>
-              </vc-col>
-              <vc-col :lg="12" :md="12" :sm="12" :xs="12">
-                <vc-row class="pa-3" >
-                </vc-row>
-                <vc-checkbox :label="tl('BizInfo', 'Detail design')" v-model="biz.detail_design" class="checkbox-width"></vc-checkbox>
+        <vc-row :gutter="10">
+          <vc-col :lg="24" :md="24" :sm="24" :xs="24">
+            <vc-input-group required prop="language" :label="tl('BizInfo', 'Language')">
+              <vc-input v-model="biz.language" />
+            </vc-input-group>
+          </vc-col>
+        </vc-row>
 
-                <vc-checkbox :label="tl('BizInfo', 'Coding')" v-model="biz.coding" class="checkbox-width"></vc-checkbox>
-
-                <vc-checkbox :label="tl('BizInfo', 'Unit Test')" v-model="biz.unit_test" class="checkbox-width"></vc-checkbox>
-
-                <vc-checkbox :label="tl('BizInfo', 'Operation')" v-model="biz.operation" class="checkbox-width"></vc-checkbox>
-              </vc-col>
-              </vc-row>
-            </vc-col>
-          </vc-row>
-
-          <vc-row :gutter="10">
-            <vc-col :lg="12" :md="12" :sm="24" :xs="24">
-              <vc-input-group required prop="language" :label="tl('BizInfo', 'Language')">
-                <vc-input v-model="biz.language" />
-              </vc-input-group>
-            </vc-col>
-            <vc-col :lg="12" :md="12" :sm="24" :xs="24">
-              <vc-input-group required prop="role" :label="tl('BizInfo', 'Role')">
-                <vc-input v-model="biz.role" />
-              </vc-input-group>
-            </vc-col>
-          </vc-row>
+        <vc-row :gutter="10">
+          <vc-col :lg="24" :md="24" :sm="24" :xs="24">
+            <vc-input-group required prop="role" :label="tl('BizInfo', 'Role')">
+              <vc-input v-model="biz.role" />
+            </vc-input-group>
+          </vc-col>
+        </vc-row>
 
       </el-form>
     </template>
@@ -109,10 +115,10 @@ const props = defineProps<{
 const emits = defineEmits(['submit']);
 
 const biz = reactive({
-  id : null,
-  prj_name : null,
-  prj_content : null,
-  period : 1,
+  id: null,
+  prj_name: null,
+  prj_content: null,
+  period: 1,
   system_analysis: null,
   overview_design: null,
   basic_design: null,
@@ -137,12 +143,12 @@ const rules = reactive({
 
 const open = async (item: any) => {
 
-  if(item == null) {
+  if (item == null) {
     let bizInfo = {
-      id : generateUUID(),
-      prj_name : null,
-      prj_content : null,
-      period : 1,
+      id: generateUUID(),
+      prj_name: null,
+      prj_content: null,
+      period: 1,
       system_analysis: false,
       overview_design: false,
       basic_design: false,
@@ -157,24 +163,24 @@ const open = async (item: any) => {
     }
 
     Object.assign(biz, bizInfo)
-  }else{
+  } else {
     Object.assign(biz, item)
   }
-  
+
   modal.value.open();
 };
 
-const generateUUID = () => { 
+const generateUUID = () => {
   var d = new Date().getTime();
-  if (typeof performance !== 'undefined' && typeof performance.now === 'function'){
-      d += performance.now();
+  if (typeof performance !== 'undefined' && typeof performance.now === 'function') {
+    d += performance.now();
   }
   var newGuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-      var r = (d + Math.random() * 16) % 16 | 0;
-      d = Math.floor(d / 16);
-      return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+    var r = (d + Math.random() * 16) % 16 | 0;
+    d = Math.floor(d / 16);
+    return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
   });
-  
+
   return newGuid;
 }
 
@@ -195,10 +201,10 @@ const onSave = async (formEl: FormInstance | undefined) => {
 const close = () => {
 
   let bizInfo = {
-    id : null,
-    prj_name : null,
-    prj_content : null,
-    period : true,
+    id: null,
+    prj_name: null,
+    prj_content: null,
+    period: true,
     system_analysis: false,
     overview_design: false,
     basic_design: false,
@@ -214,7 +220,7 @@ const close = () => {
 
   Object.assign(biz, bizInfo)
 
-  if(bizForm.value){
+  if (bizForm.value) {
     bizForm.value.resetFields()
   }
   modal.value.close()
@@ -251,8 +257,9 @@ defineExpose({
 }
 
 .vertical-item {
-    display: flex;
-    gap: 5px; /* Adjust gap as needed */
+  display: flex;
+  gap: 5px;
+  /* Adjust gap as needed */
 }
 
 .no-pading-right {
@@ -268,7 +275,7 @@ defineExpose({
 }
 
 .border {
-  border : 1px solid #b9bcc1
+  border: 1px solid #b9bcc1
 }
 
 .no-min-height .el-select__wrapper {

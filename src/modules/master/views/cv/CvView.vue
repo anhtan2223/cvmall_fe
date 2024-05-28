@@ -537,6 +537,7 @@ const getCvDetail = async () => {
     .detail(_id)
     .then(async (data) => {
       mapDataCv(data.data)
+      console.log(data.data);
     })
     .finally(() => {
       isLoading.value = false;
