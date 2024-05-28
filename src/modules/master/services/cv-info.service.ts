@@ -11,6 +11,30 @@ const cvInfoService = {
     })
   },
 
+  async detail(id: string): Promise<APIResponse<any>> {
+    return await apiClient.get(API.DETAIL(id))
+  },
+
+  async create(data: any) {
+    const toastStore = useToastStore()
+    return await apiClient
+      .post(API.CREATE, data)
+      .then((response: any) => {
+        toastStore.fromApiResponse(response)
+        return response
+      })
+  },
+
+  async update(data: any) {
+    const toastStore = useToastStore()
+    return await apiClient
+      .put(API.UPDATE(data.id || ''), data)
+      .then((response: any) => {
+        toastStore.fromApiResponse(response)
+        return response
+      })
+  },
+
   async delete(id: string) {
     const toastStore = useToastStore()
     return await apiClient

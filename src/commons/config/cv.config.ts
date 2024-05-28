@@ -2,17 +2,25 @@ import tl from "@/utils/locallize";
 export const FUNC_NAME = 'cv_info'
 
 // ========================== ROUTER =============================
-export const ROUTER_USER = [
+export const ROUTER_CV = [
   {
-    path: '/cv',
-    name: 'CV',
-    component: () => import('@master/views/cv/ListView.vue'),
+    path: "/cv/new",
+    name: "CvAddNew",
+    component: () => import("@master/views/cv/CvView.vue"),
+  },
+  {
+    path: "/cv/:id/edit",
+    name: "CvEditById",
+    component: () => import("@master/views/cv/CvView.vue"),
   },
 ]
 
 // ========================== PATH API =============================
 export const API = {
   LIST: `/${FUNC_NAME}`,
+  CREATE: `/${FUNC_NAME}`,
+  DETAIL: (id: string) => `${FUNC_NAME}/${id}`,
+  UPDATE: (id: string) => `${FUNC_NAME}/${id}`,
   DELETE: (id: string | string[]) => `${FUNC_NAME}/${id}`,
 }
 

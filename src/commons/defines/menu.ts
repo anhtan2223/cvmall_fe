@@ -1,6 +1,6 @@
 export default [
-  { routerName: 'Dashboard', path: '/', text: 'Dashboard', icon: 'Sunrise' },
-  { routerName: 'CV', path: '/cv', text: 'Danh sách CV', icon: 'Plus' },
+  { routerName: 'Dashboard', path: '/', text: 'Danh sách CV', icon: 'Sunrise' },
+  // { routerName: 'CV', path: '/cv', text: 'Danh sách CV', icon: 'Plus' },
   {
     text: 'Quản lý danh mục',
     icon: 'Plus',

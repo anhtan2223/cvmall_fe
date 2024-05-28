@@ -52,7 +52,7 @@ export const colConfig : DashboardColConfig[] = [
   {
     key: "branch",
     title: tl(FUNC_NAME, "Chi nhánh"),
-    width: 95,
+    width: 120,
     is_sort: true,
     linked: false,
     child: null
