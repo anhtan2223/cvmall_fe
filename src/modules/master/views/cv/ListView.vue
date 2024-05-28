@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
     <div class="vc-page page-dashboard">
     <vc-row class="mt-4 mb-4">
       <vc-col :span="6" class="d-flex">
@@ -120,7 +120,8 @@ const onSuccess = async () => {
 
 const onEdit = (item: any) => {
   var selectedItem = {...item}
-  detailRef.value.open(techCatDataGrid.value)
+  
+  detailRef.value.open(techCatDataGrid.value, selectedItem)
 };
 
 const onView = (item: any) => {
@@ -145,64 +146,8 @@ const getData = async () => {
   cvDataGrid.value = []
   techCatDataGrid.value = []
   await cvInfoStore.getList();
-  console.log(cvDataGrid.value);
-  
   await technicalCategoryStore.getList();
 }
-
-// const configColumnTable = () => {
-//   techCatDataGrid.value.forEach((element: any) => {
-//     let columnObject : ColConfig = {
-//       key: element.id.toString(),
-//       title: tl(FUNC_NAME, element.name),
-//       child: []
-//     }
-
-//     element.technicals.forEach((childElement: any) => {
-//       let columnChildObject : ColConfig = {
-//         key: childElement.id,
-//         title: tl(FUNC_NAME, childElement.name),
-//       }
-
-//       columnObject.child.push(columnChildObject)
-//     })
-
-//     colConfig.push(columnObject)
-//   });
-// }
-
-// const bindingDataToTable = () => {
-//   cvDataGrid.value.forEach((elementData: any) =>{
-//     let newObject = {};
-
-//     colConfig.forEach((elementCol: any, indexCol: any) => {
-      
-//       if(elementCol.child == null){
-//         if(elementCol.key == "id"){
-//           newObject[elementCol.key] = elementData.id
-            
-//         }else if(elementCol.key == "department"){
-//           newObject[elementCol.key] = elementData.department
-            
-//         }else if(elementCol.key == "is_actived"){
-//           newObject[elementCol.key] = elementData.is_actived
-            
-//         }else if(elementCol.key == "name"){
-//           newObject[elementCol.key] = elementData.name
-            
-//         }
-
-//       }else{
-//         elementCol.child.forEach((elementChildCol: any) => {
-//           let data = {...elementData.cvTechInfos.find(x => x.technicalId == elementChildCol.key)}
-//           newObject[elementChildCol.key] = data.value
-//         })
-//       }
-//     });
-    
-//     dataGrid.value.push(newObject)
-//   })
-// }
 
 const search = async () => {
   cleanData()
@@ -221,4 +166,4 @@ const cleanData = () => {
   background-color: #fff;
   padding: 12px
 }
-</style>
+</style> -->

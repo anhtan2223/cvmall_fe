@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import DashboardView from '@master/views/static/DashboardView.vue'
-import CvListView from '@master/views/cv/ListView.vue'
+import CvListView from '@master/views/cv/CvView.vue'
 import HomeScreenMobile from '@master/views/static/HomeScreenMobile.vue'
 import NotFoundView from '@master/views/static/NotFoundView.vue'
 
@@ -23,14 +23,6 @@ const router = createRouter({
       path: '/',
       name: 'Dashboard',
       component: DashboardView,
-      meta: {
-        layout: 'Admin',
-      },
-    },
-    {
-      path: '/cv',
-      name: 'CV',
-      component: CvListView,
       meta: {
         layout: 'Admin',
       },

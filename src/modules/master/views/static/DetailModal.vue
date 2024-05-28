@@ -541,8 +541,6 @@ const open = async (techCatData: any, cvData: any) => {
     })
   })
 
-  console.log(techCatDataGrid);
-
   techMapData(techCatDataGrid, cvData);
 
   if(cvData != null){
