@@ -628,9 +628,6 @@ const bizMapData = (item: any) => {
       }
     )
   })
-
-  // cv.bizInfos = dataGrid;
-  // console.log(dataGrid);
 }
 
 const onAddNewBiz = () => {

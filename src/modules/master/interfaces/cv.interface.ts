@@ -1,4 +1,5 @@
 import type { BizInfo } from "./bizInfo.interface";
+import type { CvTechnicalInfo } from "./cv-technical.interface";
 import type { Technical } from "./technical.interface";
 
 export type Cv = {
@@ -31,5 +32,6 @@ export type Cv = {
   work_process: string | undefined,
   note: string | undefined,
   technicals : Technical[]  | undefined,
+  cvTechInfos : CvTechnicalInfo[]  | undefined,
   bizInfos : BizInfo[] | undefined
 };

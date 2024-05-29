@@ -1,15 +1,14 @@
 <template>
   <div class="vc-page page-dashboard">
-
     <vc-row class="mt-4 mb-4">
         <vc-col :span="6" class="d-flex">
 
         </vc-col>
         <vc-col :md="18" class="d-flex flex-end">
-          <vc-button class="ml-2" @click="onSave" type="primary" :icon="'FolderChecked'">
+          <vc-button class="ml-2" @click="onSave" type="primary" :icon="'FolderChecked'" :loading="isLoading" >
             {{ tl("Common", "BtnSave") }} 
           </vc-button>
-          <vc-button class="ml-2" @click="onClose" type="info" :icon="'Close'">
+          <vc-button class="ml-2" @click="onClose" type="info" :icon="'Close'" :loading="isLoading">
             {{ tl("Common", "BtnClose") }} 
           </vc-button>
         </vc-col>
@@ -19,6 +18,28 @@
         require-asterisk-position="right" :disabled="type == POPUP_TYPE.VIEW">
         <!-- Invidual Info -->
         <vc-row :gutter="20" class="no-margin-left">
+          <vc-row :gutter="20" class="full-width no-margin-left">
+            <vc-col :lg="3" :md="3" :sm="3" :xs="3" class="no-pading">
+              <div class="full-width full-height center-item border label-style-custom">
+                <el-text class="w-150px mb-2 " truncated>
+                  {{ tl('Curriculum vitae', 'UserCode') }}
+                </el-text>  
+              </div>
+            </vc-col>
+            <vc-col :lg="3" :md="3" :sm="3" :xs="3" class="no-pading">
+              <vc-input v-model="cv.user_code" class="full-height"/>
+            </vc-col>
+            <vc-col :lg="3" :md="3" :sm="3" :xs="3" class="no-pading">
+              <div class="full-width full-height center-item border label-style-custom">
+                  <el-text class="w-150px mb-2 " truncated>
+                    {{ tl('Curriculum vitae', 'Branch') }}
+                  </el-text>  
+                </div>
+            </vc-col>
+            <vc-col :lg="3" :md="3" :sm="3" :xs="3" class="no-pading">
+              <vc-input v-model="cv.branch" class="full-height"/>
+            </vc-col>
+          </vc-row>
           <vc-row :gutter="20" class="full-width no-margin-left">
             <vc-col :lg="3" :md="3" :sm="3" :xs="3" class="no-pading">
               <vc-row style="height: 50%;" class="label-style-custom">
@@ -59,6 +80,7 @@
                 </vc-row>
                 <vc-row style="height: 50%;">
                   <vc-col :lg="12" :md="12" :sm="12" :xs="12">
+                    <!-- <vc-input v-model="cv.name"/> -->
                     <vc-input v-model="cv.name" class="full-height"/>
                   </vc-col>
                   <vc-col :lg="5" :md="5" :sm="5" :xs="5">
@@ -145,16 +167,16 @@
                     </vc-col>
                     <vc-col :lg="17" :md="17" :sm="17" :xs="17" class="d-flex">
                       <vc-col :lg="6" :md="6" :sm="6" :xs="6">
-                        <vc-select v-model="cv.lang1_hearing" :items="rankLanguages" fieldValue="key" fieldText="value" class="no-min-height"></vc-select>
+                        <vc-select v-model="cv.lang1_hearing" :items="rankLanguages" fieldValue="key" fieldText="value" class="no-min-height" clearable></vc-select>
                       </vc-col>
                       <vc-col :lg="6" :md="6" :sm="6" :xs="6">
-                        <vc-select v-model="cv.lang1_speaking" :items="rankLanguages" fieldValue="key" fieldText="value" class="no-min-height"></vc-select>
+                        <vc-select v-model="cv.lang1_speaking" :items="rankLanguages" fieldValue="key" fieldText="value" class="no-min-height" clearable></vc-select>
                       </vc-col>
                       <vc-col :lg="6" :md="6" :sm="6" :xs="6">
-                        <vc-select v-model="cv.lang1_reading" :items="rankLanguages" fieldValue="key" fieldText="value" class="no-min-height"></vc-select>
+                        <vc-select v-model="cv.lang1_reading" :items="rankLanguages" fieldValue="key" fieldText="value" class="no-min-height" clearable></vc-select>
                       </vc-col>
                       <vc-col :lg="6" :md="6" :sm="6" :xs="6">
-                        <vc-select v-model="cv.lang1_writing" :items="rankLanguages" fieldValue="key" fieldText="value" class="no-min-height"></vc-select>
+                        <vc-select v-model="cv.lang1_writing" :items="rankLanguages" fieldValue="key" fieldText="value" class="no-min-height" clearable></vc-select>
                       </vc-col>
                     </vc-col>
                   </vc-row>
@@ -168,16 +190,16 @@
                     </vc-col>
                     <vc-col :lg="17" :md="17" :sm="17" :xs="17" class="d-flex">
                       <vc-col :lg="6" :md="6" :sm="6" :xs="6">
-                        <vc-select v-model="cv.lang2_hearing" :items="rankLanguages" fieldValue="key" fieldText="value" class="no-min-height" ></vc-select>
+                        <vc-select v-model="cv.lang2_hearing" :items="rankLanguages" fieldValue="key" fieldText="value" class="no-min-height" clearable ></vc-select>
                       </vc-col>
                       <vc-col :lg="6" :md="6" :sm="6" :xs="6">
-                        <vc-select v-model="cv.lang2_speaking" :items="rankLanguages" fieldValue="key" fieldText="value" class="no-min-height"></vc-select>
+                        <vc-select v-model="cv.lang2_speaking" :items="rankLanguages" fieldValue="key" fieldText="value" class="no-min-height" clearable></vc-select>
                       </vc-col>
                       <vc-col :lg="6" :md="6" :sm="6" :xs="6">
-                        <vc-select v-model="cv.lang2_reading" :items="rankLanguages" fieldValue="key" fieldText="value" class="no-min-height"></vc-select>
+                        <vc-select v-model="cv.lang2_reading" :items="rankLanguages" fieldValue="key" fieldText="value" class="no-min-height" clearable></vc-select>
                       </vc-col>
                       <vc-col :lg="6" :md="6" :sm="6" :xs="6">
-                        <vc-select v-model="cv.lang2_writing" :items="rankLanguages" fieldValue="key" fieldText="value" class="no-min-height"></vc-select>
+                        <vc-select v-model="cv.lang2_writing" :items="rankLanguages" fieldValue="key" fieldText="value" class="no-min-height" clearable></vc-select>
                       </vc-col>
                     </vc-col>
                   </vc-row>
@@ -282,10 +304,16 @@
                 </vc-col>
                 <vc-col :lg="10" :md="10" :sm="10" :xs="10">
                   <div class="full-width center-item">
-                    <el-date-picker
+                    <!-- <el-date-picker
                       v-model="cv.certificate1_year"
                       type="date"
                       placeholder="Pick a day"
+                    /> -->
+                    <el-input-number
+                      v-model="cv.certificate1_year"  
+                      :min="1"
+                      class="full-width"
+                      :controls="false"
                     />
                     <!-- <vc-input v-model="cv.certificate1_year" /> -->
                   </div>
@@ -299,10 +327,11 @@
                 </vc-col>
                 <vc-col :lg="10" :md="10" :sm="10" :xs="10">
                   <div class="full-width center-item">
-                    <el-date-picker
-                      v-model="cv.certificate2_year"
-                      type="date"
-                      placeholder="Pick a day"
+                    <el-input-number
+                      v-model="cv.certificate2_year"  
+                      :min="1"
+                      class="full-width"
+                      :controls="false"
                     />
                     <!-- <vc-input v-model="cv.certificate2_year"/> -->
                   </div>
@@ -316,10 +345,11 @@
                 </vc-col>
                 <vc-col :lg="10" :md="10" :sm="10" :xs="10">
                   <div class="full-width center-item">
-                    <el-date-picker
-                      v-model="cv.certificate3_year"
-                      type="date"
-                      placeholder="Pick a day"
+                    <el-input-number
+                      v-model="cv.certificate3_year"  
+                      :min="1"
+                      class="full-width"
+                      :controls="false"
                     />
                     <!-- <vc-input v-model="cv.certificate3_year"/> -->
                   </div>
@@ -333,10 +363,11 @@
                 </vc-col>
                 <vc-col :lg="10" :md="10" :sm="10" :xs="10">
                   <div class="full-width center-item">
-                    <el-date-picker
-                      v-model="cv.certificate4_year"
-                      type="date"
-                      placeholder="Pick a day"
+                    <el-input-number
+                      v-model="cv.certificate4_year"  
+                      :min="1"
+                      class="full-width"
+                      :controls="false"
                     />
                     <!-- <vc-input v-model="cv.certificate4_year"/> -->
                   </div>
@@ -491,6 +522,8 @@ import { useRouter, useRoute } from "vue-router";
 import technicalCategoryService from "@master/services/technical-category.service";
 import cvService from "@master/services/cv-info.service";
 import DetailModal from './DetailBizModal.vue'
+import { useToastStore } from '@/stores/toast.store'
+
 
 const router = useRouter();
 const route = useRoute();
@@ -508,28 +541,24 @@ const detailRef = ref<any>(null);
 const confirmDialog = ref<any>(null);
 const _id = route.params.id as string;
 const popupType = ref<POPUP_TYPE>(POPUP_TYPE.CREATE);
+const toastStore = useToastStore();
 const props = defineProps<{
   type: POPUP_TYPE;
 }>();
 
 onBeforeMount(async () => {
-  initData()
-  if (_id) await getCvDetail();
-  await getListTechnicalCategory();
+  await onReload();
 })
 
 const getListTechnicalCategory = async () => {
   await technicalCategoryService
     .getList({
       page: 1,
-      size: 100,
+      size: 9999,
     })
     .then(async (data) => {
       mapDataTechnical(data.data ?? [])
     })
-    .finally(() => {
-      isLoading.value = false;
-    });
 };
 
 const getCvDetail = async () => {
@@ -537,14 +566,13 @@ const getCvDetail = async () => {
     .detail(_id)
     .then(async (data) => {
       mapDataCv(data.data)
-      console.log(data.data);
+      mapDataBizInfo(data.data)
     })
-    .finally(() => {
-      isLoading.value = false;
-    });
 };
 
 const mapDataTechnical = (technicalData: any) => {
+  technicals.value = []
+
   technicalData?.forEach((item: any) => {
     let technicalList: { id: any; name: any; cvTechInfoId: any; value: null; }[] = []
 
@@ -552,8 +580,8 @@ const mapDataTechnical = (technicalData: any) => {
 
       let cvTechInfo : null;
         
-      if(cv?.technicals != null){
-        cvTechInfo = cv.technicals.find(x => x.technicalId == childItem.id)
+      if(cv?.cvTechInfos != null){
+        cvTechInfo = cv.cvTechInfos.find(x => x.technicalId == childItem.id)
       }
 
       let technical = {
@@ -583,7 +611,7 @@ const mapDataCv = (cvData: any) => {
       branch: cvData.branch,
       user_code: cvData.user_code,
       name: cvData.name,
-      gender: cvData.gender,
+      gender: cvData.gender ?? 0,
       birthday: cvData.birthday,
       lang1_hearing: cvData.lang1_hearing,
       lang1_speaking: cvData.lang1_speaking,
@@ -606,11 +634,39 @@ const mapDataCv = (cvData: any) => {
       certificate4_year: cvData.certificate4_year,
       work_process: cvData.work_process,
       note: cvData.note,
-      technicals : cvData.cvTechInfos,
+      cvTechInfos : cvData.cvTechInfos,
       bizInfos : cvData.bizInfos
     };
 
     Object.assign(cv, cvInfo)
+  }
+}
+
+const mapDataBizInfo = (data: any) => {
+  bizInfos.value = []
+
+  if(data.bizInfos != null){
+    data.bizInfos.forEach(item => {
+      let bizData = {
+        id : item.id,
+        cvInfoId : item.cvInfoId,
+        prj_name : item.prj_name,
+        prj_content : item.prj_content,
+        period : item.period,
+        system_analysis: item.system_analysis,
+        overview_design: item.overview_design,
+        basic_design: item.basic_design,
+        function_design: item.function_design,
+        detail_design: item.detail_design,
+        coding: item.coding,
+        unit_test: item.unit_test,
+        operation: item.operation,
+        os_db: item.os_db,
+        language: item.language,
+        role: item.role,
+      }
+      bizInfos.value.push(bizData)
+    });
   }
 }
 
@@ -632,10 +688,10 @@ const getTechnicalDataToCv = () => {
   })
 }
 
-const handlePopupSubmit = (data: any) => {
-
+const handlePopupSubmit = (data: any, index: number) => {
   let newData = {
     id : data.id,
+    cvInfoId : _id,
     prj_name : data.prj_name,
     prj_content : data.prj_content,
     period : data.period,
@@ -652,19 +708,16 @@ const handlePopupSubmit = (data: any) => {
     role: data.role,
   }
 
-  let indexItem = bizInfos.value.findIndex(item => item.id === newData.id)
-
-  if(indexItem !== -1){
-    bizInfos.value[indexItem] = newData;
-
-  }else{
+  if (Number.isInteger(index) && index >= -1) {
+    bizInfos.value[index] = newData;
+  }
+  else{
     bizInfos.value.push(newData)
-
   }
 };
 
 const getBizInfoData = () => {
-  cv.bizInfos = [];
+  cv.bizInfos = bizInfos.value;
 }
 
 const rules = reactive({
@@ -681,12 +734,12 @@ const rules = reactive({
 
 const cv = reactive({
   id : null,
-  furigana : null,
+  furigana : '',
   is_actived : true,
-  name: null,
-  branch: null,
-  user_code: null,
-  gender: null,
+  name: '',
+  branch: '',
+  user_code: '',
+  gender: 0,
   birthday: null,
   lang1_hearing: null,
   lang1_speaking: null,
@@ -710,30 +763,75 @@ const cv = reactive({
   certificate4_year: null,
   work_process: null,
   note: null,
-  technicals : [],
+  cvTechInfos : [],
   bizInfos : []
 });
 
-const onSave = async (formEl: FormInstance | undefined) => {
-  const valid = await cvForm.value.validate();
+const onReload = async () => {
+  isLoading.value = true;
+  initData()
+  if (_id) await getCvDetail();
+  await getListTechnicalCategory();
+  isLoading.value = false;
+}
 
-  if (!valid) return;
+const onSave = async (formEl: FormInstance | undefined) => {
+
+  if(checkValidateForm()) return;
+
   isLoading.value = true;
 
   getTechnicalDataToCv()
   
   getBizInfoData()
-
+  
   if (_id) {
     await cvService.update(cv).finally(() => {
       isLoading.value = false;
     });
+    onReload();
   } else {
     await cvService.create(cv).finally(() => {
       isLoading.value = false;
     });
+    router.go(-1)
   }
 };
+
+const checkValidateForm = () => {
+  let isValid = false;
+
+  if(!cv.user_code || cv.user_code.trim() === ''){
+    toastStore.push({
+      type: "warning",
+      message: tl("Common", "UserCode là bắt buộc"),
+    });
+    isValid = true;
+  }
+  if(!cv.branch || cv.branch.trim() === ''){
+    toastStore.push({
+      type: "warning",
+      message: tl("Common", "Branch là bắt buộc"),
+    });
+    isValid = true;
+  }
+  if(!cv.name || cv.name.trim() === ''){
+    toastStore.push({
+      type: "warning",
+      message: tl("Common", "Name là bắt buộc"),
+    });
+    isValid = true;
+  }
+  if(!cv.furigana || cv.furigana.trim() === ''){
+    toastStore.push({
+      type: "warning",
+      message: tl("Common", "Furigana là bắt buộc"),
+    });
+    isValid = true;
+  }
+
+  return isValid;
+}
 
 const onClose = () => {
   // confirmDialog.value.confirm(
@@ -754,8 +852,9 @@ const BizAddNew = () => {
 }
 
 const onEditTable = (item: any) => {
+  const index = bizInfos.value.findIndex(x => x === item);
   popupType.value = POPUP_TYPE.EDIT;
-  detailRef.value.open(item)
+  detailRef.value.open(item, index)
 }
 
 const onViewTable = (item: any) => {

@@ -47,7 +47,6 @@ export const colConfig : DashboardColConfig[] = [
     title: tl(FUNC_NAME, "ID"),
     is_sort: true,
     linked: false,
-    child: null
   },
   {
     key: "branch",
@@ -55,14 +54,14 @@ export const colConfig : DashboardColConfig[] = [
     width: 120,
     is_sort: true,
     linked: false,
-    child: null
   },
   {
     key: "is_actived",
     title: tl(FUNC_NAME, "Tình trạng"),
     is_sort: false,
+    width: 125,
     linked: false,
-    child: null
+    is_custom: true
   },
   {
     key: "name",
@@ -70,7 +69,6 @@ export const colConfig : DashboardColConfig[] = [
     is_sort: true,
     width: 200,
     linked: false,
-    child: null,
   }
 ];
 

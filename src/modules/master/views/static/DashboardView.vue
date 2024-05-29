@@ -3,15 +3,15 @@
       <vc-row class="mt-4 mb-4">
         <vc-col :span="6" class="d-flex">
           <vc-input v-model="cvSearch" hide-details="true" :prefix-icon="'Search'" @on:keyup.enter="search"></vc-input>
-          <vc-button class="ml-2" @click="search" :icon="'Search'">
+          <vc-button class="ml-2" @click="search" :icon="'Search'" :loading="isLoading">
             {{ tl("Common", "BtnSearch") }}
           </vc-button>
         </vc-col>
         <vc-col :md="18" class="d-flex flex-end">
-          <vc-button class="ml-2" @click="onAddNew" type="primary" :icon="'Plus'">
+          <vc-button class="ml-2" @click="onAddNew" type="primary" :icon="'Plus'" :loading="isLoading">
             {{ tl("Common", "BtnAddNew") }} 
           </vc-button>
-          <vc-button class="ml-2" @click="onExport" type="success" :icon="'Download'">
+          <vc-button class="ml-2" @click="onExport" type="success" :icon="'Download'" :loading="isLoading" :disabled="true">
             {{ tl("Common", "BtnExportExcel") }}
           </vc-button>
         </vc-col>
@@ -20,17 +20,21 @@
       <vc-row>
         <vc-col :span="24">
           <el-scrollbar>
-            <vc-table :datas="dataGrid" :tableConfig="tableConfig" :colConfigs="colConfig" :page="techPageConfig"
-            :loading="techCatLoading" @dbClick="onView" @sorted="onSort" @rowSelected="onRowSelected" @pageChanged="onPageChanged">
+            <vc-table :datas="dataGrid" :tableConfig="tableConfig" :colConfigs="colConfigDashboard" :page="cvPageConfig"
+            :loading="isLoading" @pageChanged="onPageChanged">
               <template #action="{ data }">
                 <div class="d-flex flex-center">
                   <vc-button type="primary" size="small" class="btn-acttion" @click="onEdit(data)" :icon="'Edit'"></vc-button>
                   <vc-button type="danger" code="F00015" size="small" class="btn-acttion" @click="onDeleteItem(data)"
                   :icon="'Delete'">
                   </vc-button>
-                  <vc-button type="success" size="small" class="btn-acttion" @click="onView(data)" :icon="'Download'"></vc-button>
+                  <vc-button type="success" size="small" class="btn-acttion" @click="onExport" :icon="'Download'" :disabled="true"></vc-button>
                 </div>
               </template>
+              <template #is_actived="{ data }">
+                  <el-tag v-if="data.is_actived" size="small">{{ tl("Common", "Employed") }}</el-tag>
+                  <el-tag v-if="!data.is_actived" size="small" type="danger">{{ tl("Common", "Resigned") }}</el-tag>
+                </template>
             </vc-table>
           </el-scrollbar>
         </vc-col>
@@ -61,17 +65,18 @@ const template = ref({
 const technicalStore = useTechnicalStore()
 const technicalCategoryStore = useTechnicalCategoryStore()
 const cvInfoStore = useCvInfoStore()
-const { techDataGrid, techPageConfig, techSearch, techGoSort, techLoading } = storeToRefs(technicalStore);
-const { techCatDataGrid, techCatPageConfig, techCatSearch, techCatGoSort, techCatLoading } = storeToRefs(technicalCategoryStore);
-const { cvDataGrid, cvPageConfig, cvSearch, cvGoSort, cvLoading } = storeToRefs(cvInfoStore);
+const { techPageConfig } = storeToRefs(technicalStore);
+const { techCatDataGrid } = storeToRefs(technicalCategoryStore);
+const { cvDataGrid, cvSearch, cvGoSort, cvPageConfig } = storeToRefs(cvInfoStore);
 const dataGrid = ref<any[]>([]);
-const popupType = ref<POPUP_TYPE>(POPUP_TYPE.CREATE);
-const selectedItems = ref<any[]>([]);
 const confirmDialog = ref<any>(null);
-const detailRef = ref<any>(null);
 const router = useRouter();
+const isLoading = ref<boolean>(false);
+const colConfigDashboard = ref<any>([]);
 
 onBeforeMount(async () => {
+  isLoading.value = true
+
   cleanData()
 
   await getData()
@@ -80,15 +85,8 @@ onBeforeMount(async () => {
 
   bindingDataToTable()
 
+  isLoading.value = false
 })
-
-const onRowSelected = (selected: any) => {
-  selectedItems.value = selected;
-};
-
-const onSort = async (sortBy: any) => {
-  
-};
 
 const onPageChanged = async (page: any) => {
   
@@ -105,10 +103,6 @@ const onExport = () => {
 const onSuccess = async () => {
   
 }
-
-const onView = (item: any) => {
-
-};
 
 const onEdit = (item: any) => {
   router.push({
@@ -137,14 +131,14 @@ const getData = async () => {
   cvDataGrid.value = []
   techCatDataGrid.value = []
 
+  cvGoSort.value = "user_code.asc";
   await cvInfoStore.getList();
   await technicalCategoryStore.getList();
 }
 
 const configColumnTable = () => {
 
-  // Clean 
-  colConfig.value = []
+  colConfigDashboard.value = colConfig
 
   techCatDataGrid.value.forEach((element: any) => {
     let columnObject : ColConfig = {
@@ -162,8 +156,9 @@ const configColumnTable = () => {
       columnObject.child.push(columnChildObject)
     })
 
-    colConfig.push(columnObject)
+    colConfigDashboard.value.push(columnObject)
   });
+
 }
 
 const bindingDataToTable = () => {
@@ -172,7 +167,7 @@ const bindingDataToTable = () => {
 
     newObject['id'] = elementData.id
 
-    colConfig.forEach((elementCol: any) => {
+    colConfigDashboard.value.forEach((elementCol: any) => {
       
       if(elementCol.child == null){
         if(elementCol.key == "user_code"){
@@ -202,13 +197,17 @@ const bindingDataToTable = () => {
 }
 
 const search = async () => {
+  isLoading.value = true;
   cleanData()
   await getData()
+  configColumnTable()
   bindingDataToTable()
+  isLoading.value = false;
 }
 
 const cleanData = () => {
   dataGrid.value = []
+  colConfigDashboard.value = []
 }
 
 </script>

@@ -100,18 +100,10 @@ import { reactive, ref, defineEmits } from "vue";
 import { useCvInfoStore } from '@master/stores/cv-info.store'
 import type { FormInstance } from "element-plus";
 
-const cvInfoStore = useCvInfoStore()
-const leftLabelWidth = ref<any>('200px')
-const languageLabelWidth = ref<any>('45px')
 const modal = ref<any>(null);
-const techCatDataGrid = ref<any[]>([]);
-const rankTechnicals = ref<any>([]);
-const rankLanguages = ref<any>([]);
-const genders = ref<any>([]);
-const dataGrid = ref<any[]>([]);
 const bizForm = ref<FormInstance>();
 const isLoading = ref(false);
-
+const _index = ref(-1);
 const props = defineProps<{
   type: POPUP_TYPE;
 }>();
@@ -145,11 +137,12 @@ const rules = reactive({
   ],
 });
 
-const open = async (item: any) => {
-
+const open = async (item: any, index: number) => {
+  _index.value = index
+  
   if (item == null) {
     let bizInfo = {
-      id: generateUUID(),
+      id: "00000000-0000-0000-0000-000000000000",
       prj_name: null,
       prj_content: null,
       period: 1,
@@ -174,28 +167,14 @@ const open = async (item: any) => {
   modal.value.open();
 };
 
-const generateUUID = () => {
-  var d = new Date().getTime();
-  if (typeof performance !== 'undefined' && typeof performance.now === 'function') {
-    d += performance.now();
-  }
-  var newGuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-    var r = (d + Math.random() * 16) % 16 | 0;
-    d = Math.floor(d / 16);
-    return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
-  });
-
-  return newGuid;
-}
-
 const onSave = async (formEl: FormInstance | undefined) => {
 
   if (!formEl) return;
 
   formEl.validate((valid) => {
     if (!valid) return;
-
-    emits('submit', biz);
+    
+    emits('submit', biz, _index);
 
     modal.value.close()
   });
