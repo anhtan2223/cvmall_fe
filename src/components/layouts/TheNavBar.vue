@@ -14,11 +14,11 @@
         </el-col>
 
         <el-col :span="6" class="col-right">
-          <el-link type="primary" :underline="false" @click="goPage('AccountProfile')">
+          <el-link type="primary" :underline="false">
             <span> {{ account?.full_name }} </span>
-            <el-icon class="el-icon--right">
+            <!-- <el-icon class="el-icon--right">
               <CaretBottom />
-            </el-icon>
+            </el-icon> -->
           </el-link>
         </el-col>
       </el-row>
