@@ -174,7 +174,7 @@ const onSave = async (formEl: FormInstance | undefined) => {
   formEl.validate((valid) => {
     if (!valid) return;
     
-    emits('submit', biz, _index);
+    emits('submit', biz, _index.value);
 
     modal.value.close()
   });

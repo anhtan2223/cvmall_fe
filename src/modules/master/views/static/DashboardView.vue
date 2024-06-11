@@ -138,7 +138,7 @@ const getData = async () => {
 
 const configColumnTable = () => {
 
-  colConfigDashboard.value = colConfig
+  colConfigDashboard.value = [...colConfig]
 
   techCatDataGrid.value.forEach((element: any) => {
     let columnObject : ColConfig = {
