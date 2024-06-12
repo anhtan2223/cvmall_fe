@@ -1,46 +1,49 @@
 <template>
-    <div class="vc-page page-dashboard">
-      <vc-row class="mt-4 mb-4">
-        <vc-col :span="6" class="d-flex">
-          <vc-input v-model="cvSearch" hide-details="true" :prefix-icon="'Search'" @on:keyup.enter="search"></vc-input>
-          <vc-button class="ml-2" @click="search" :icon="'Search'" :loading="isLoading">
-            {{ tl("Common", "BtnSearch") }}
-          </vc-button>
-        </vc-col>
-        <vc-col :md="18" class="d-flex flex-end">
-          <vc-button class="ml-2" @click="onAddNew" type="primary" :icon="'Plus'" :loading="isLoading">
-            {{ tl("Common", "BtnAddNew") }} 
-          </vc-button>
-          <vc-button class="ml-2" @click="onExport" type="success" :icon="'Download'" :loading="isLoading" :disabled="true">
-            {{ tl("Common", "BtnExportExcel") }}
-          </vc-button>
-        </vc-col>
-      </vc-row>
+  <div class="vc-page page-dashboard">
+    <vc-row class="mt-4 mb-4">
+      <vc-col :span="6" class="d-flex">
+        <vc-input v-model="cvSearch" hide-details="true" :prefix-icon="'Search'" @on:keyup.enter="search"></vc-input>
+        <vc-button class="ml-2" @click="search" :icon="'Search'" :loading="isLoading">
+          {{ tl("Common", "BtnSearch") }}
+        </vc-button>
+      </vc-col>
+      <vc-col :md="18" class="d-flex flex-end">
+        <vc-button class="ml-2" @click="onAddNew" type="primary" :icon="'Plus'" :loading="isLoading">
+          {{ tl("Common", "BtnAddNew") }}
+        </vc-button>
+        <vc-button class="ml-2" @click="onExport" type="success" :icon="'Download'" :loading="isLoading"
+          :disabled="true">
+          {{ tl("Common", "BtnExportExcel") }}
+        </vc-button>
+      </vc-col>
+    </vc-row>
 
-      <vc-row>
-        <vc-col :span="24">
-          <el-scrollbar>
-            <vc-table :datas="dataGrid" :tableConfig="tableConfig" :colConfigs="colConfigDashboard" :page="cvPageConfig"
-            :loading="isLoading" @pageChanged="onPageChanged">
-              <template #action="{ data }">
-                <div class="d-flex flex-center">
-                  <vc-button type="primary" size="small" class="btn-acttion" @click="onEdit(data)" :icon="'Edit'"></vc-button>
-                  <vc-button type="danger" code="F00015" size="small" class="btn-acttion" @click="onDeleteItem(data)"
+    <vc-row>
+      <vc-col :span="24">
+        <el-scrollbar>
+          <vc-table :datas="dataGrid" :tableConfig="tableConfig" :colConfigs="colConfigDashboard" :page="cvPageConfig"
+            :loading="isLoading" :total="cvPageConfig.total" @pageChanged="onPageChanged" @sizeChanged="onSizeChanged">
+            <template #action="{ data }">
+              <div class="d-flex flex-center">
+                <vc-button type="primary" size="small" class="btn-acttion" @click="onEdit(data)"
+                  :icon="'Edit'"></vc-button>
+                <vc-button type="danger" code="F00015" size="small" class="btn-acttion" @click="onDeleteItem(data)"
                   :icon="'Delete'">
-                  </vc-button>
-                  <vc-button type="success" size="small" class="btn-acttion" @click="onExport" :icon="'Download'" :disabled="true"></vc-button>
-                </div>
-              </template>
-              <template #is_actived="{ data }">
-                  <el-tag v-if="data.is_actived" size="small">{{ tl("Common", "Employed") }}</el-tag>
-                  <el-tag v-if="!data.is_actived" size="small" type="danger">{{ tl("Common", "Resigned") }}</el-tag>
-                </template>
-            </vc-table>
-          </el-scrollbar>
-        </vc-col>
-      </vc-row>
-      <vc-confirm ref="confirmDialog"></vc-confirm>
-      <vc-import ref="importDialogOrg" :urlImport="urlImport" :template="template" :onSuccess="onSuccess"></vc-import>
+                </vc-button>
+                <vc-button type="success" size="small" class="btn-acttion" @click="onExport" :icon="'Download'"
+                  :disabled="true"></vc-button>
+              </div>
+            </template>
+            <template #is_actived="{ data }">
+              <el-tag v-if="data.is_actived" size="small">{{ tl("Common", "Employed") }}</el-tag>
+              <el-tag v-if="!data.is_actived" size="small" type="danger">{{ tl("Common", "Resigned") }}</el-tag>
+            </template>
+          </vc-table>
+        </el-scrollbar>
+      </vc-col>
+    </vc-row>
+    <vc-confirm ref="confirmDialog"></vc-confirm>
+    <vc-import ref="importDialogOrg" :urlImport="urlImport" :template="template" :onSuccess="onSuccess"></vc-import>
   </div>
 </template>
 
@@ -75,41 +78,40 @@ const isLoading = ref<boolean>(false);
 const colConfigDashboard = ref<any>([]);
 
 onBeforeMount(async () => {
-  isLoading.value = true
-
-  cleanData()
-
-  await getData()
-
-  configColumnTable()
-
-  bindingDataToTable()
-
-  isLoading.value = false
-})
+  isLoading.value = true;
+  await fetchData();
+  isLoading.value = false;
+});
 
 const onPageChanged = async (page: any) => {
-  
+  isLoading.value = true;
+  cvPageConfig.value.page = page.page;
+  cvPageConfig.value.size = page.size;
+  await fetchData();
+  isLoading.value = false;
+};
+
+const onSizeChanged = async (size: number) => {
+  isLoading.value = true;
+  cvPageConfig.value.size = size;
+  cvPageConfig.value.page = 1;
+  await fetchData();
+  console.log(cvPageConfig);  
+  isLoading.value = false;
 };
 
 const onAddNew = () => {
   router.push({ name: 'CvAddNew' })
 };
 
-const onExport = () => {
-  
-};
+const onExport = () => { };
 
-const onSuccess = async () => {
-  
-}
+const onSuccess = async () => { };
 
 const onEdit = (item: any) => {
   router.push({
     name: "CvEditById",
-    params: {
-      id: item.id,
-    },
+    params: { id: item.id },
   });
 };
 
@@ -118,103 +120,93 @@ const onDeleteItem = (item: any) => {
     tl("Common", "Delete"),
     tl("Common", "ConfirmDelete", [item.id]),
     async (res: any) => {
-      if (res){
+      if (res) {
         await cvInfoStore.delete(item);
         search();
-      } 
+      }
     }
   );
+};
 
+const fetchData = async () => {
+  await getData();
+  cleanData();
+  configColumnTable();
+  bindingDataToTable();
 };
 
 const getData = async () => {
-  cvDataGrid.value = []
-  techCatDataGrid.value = []
-
+  cvDataGrid.value = [];
+  techCatDataGrid.value = [];
   cvGoSort.value = "user_code.asc";
   await cvInfoStore.getList();
   await technicalCategoryStore.getList();
-}
+};
 
 const configColumnTable = () => {
-
-  colConfigDashboard.value = colConfig
+  colConfigDashboard.value = colConfig;
 
   techCatDataGrid.value.forEach((element: any) => {
-    let columnObject : ColConfig = {
+    let columnObject: ColConfig = {
       key: element.id.toString(),
       title: tl(FUNC_NAME, element.name),
       child: []
-    }
+    };
 
     element.technicals.forEach((childElement: any) => {
-      let columnChildObject : ColConfig = {
+      let columnChildObject: ColConfig = {
         key: childElement.id,
         title: tl(FUNC_NAME, childElement.name),
-      }
-
-      columnObject.child.push(columnChildObject)
-    })
-
-    colConfigDashboard.value.push(columnObject)
+      };
+      columnObject.child.push(columnChildObject);
+    });
+    colConfigDashboard.value.push(columnObject);
   });
-
-}
+};
 
 const bindingDataToTable = () => {
-  cvDataGrid.value.forEach((elementData: any) =>{
+  cvDataGrid.value.forEach((elementData: any) => {
     let newObject = {};
-
     newObject['id'] = elementData.id
 
     colConfigDashboard.value.forEach((elementCol: any) => {
-      
-      if(elementCol.child == null){
-        if(elementCol.key == "user_code"){
+      if (elementCol.child == null) {
+        if (elementCol.key == "user_code") {
           newObject[elementCol.key] = elementData.user_code
-            
-        }else if(elementCol.key == "branch"){
+        } else if (elementCol.key == "branch") {
           newObject[elementCol.key] = elementData.branch
-            
-        }else if(elementCol.key == "is_actived"){
+        } else if (elementCol.key == "is_actived") {
           newObject[elementCol.key] = elementData.is_actived
-            
-        }else if(elementCol.key == "name"){
+        } else if (elementCol.key == "name") {
           newObject[elementCol.key] = elementData.name
-            
         }
-
-      }else{
+      } else {
         elementCol.child.forEach((elementChildCol: any) => {
-          let data = {...elementData.cvTechInfos.find(x => x.technicalId == elementChildCol.key)}
+          let data = { ...elementData.cvTechInfos.find(x => x.technicalId == elementChildCol.key) }
           newObject[elementChildCol.key] = data.value
         })
       }
     });
-    
     dataGrid.value.push(newObject)
   })
 }
 
 const search = async () => {
   isLoading.value = true;
-  cleanData()
-  await getData()
-  configColumnTable()
-  bindingDataToTable()
+  cvPageConfig.value.page = 1;
+  await fetchData();
   isLoading.value = false;
-}
+};
 
 const cleanData = () => {
-  dataGrid.value = []
-  colConfigDashboard.value = []
-}
-
+  dataGrid.value = [];
+  colConfigDashboard.value = [];
+};
 </script>
 
 <style lang="scss">
 .box-search {
   background-color: #fff;
-  padding: 12px
+  padding: 12px;
 }
 </style>
