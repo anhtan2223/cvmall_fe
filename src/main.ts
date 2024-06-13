@@ -1,6 +1,7 @@
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 
+
 import App from './App.vue'
 import router from './modules/router'
 import resourceService from '@master/services/resource.service'
@@ -14,6 +15,9 @@ import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
 import '@/assets/styles/main.scss'
 import vi from 'element-plus/dist/locale/vi.mjs'
+
+
+import i18n from '@/lang/i18n'
 
 const app = createApp(App)
 
@@ -29,6 +33,8 @@ VcRegister.register(app)
 const pinia = createPinia()
 app.use(pinia)
 
+// ===================== ENABLE i18n ===========================
+app.use(i18n)
 // ===================== ADD DIRECTIVE ===========================
 app.use(directive)
 

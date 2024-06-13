@@ -1,17 +1,17 @@
 <template>
-  <vc-modal ref="modal" :title="tl('Business content', 'Business content detail')" width="40%" @close="close">
+  <vc-modal ref="modal" :title="tl('Business content', $t('business_content_details'))" width="40%" @close="close">
     <template #content>
       <el-form ref="bizForm" :rules="rules" :model="biz" label-width="200px" label-position="top"
         require-asterisk-position="right" :disabled="type == POPUP_TYPE.VIEW">
 
         <vc-row :gutter="10">
           <vc-col :lg="18" :md="24" :sm="24" :xs="24">
-            <vc-input-group required prop="prj_name" :label="tl('BizInfo', 'Project')">
+            <vc-input-group required prop="prj_name" :label="tl('BizInfo', $t('project'))">
               <vc-input v-model="biz.prj_name" :disabled="type == POPUP_TYPE.VIEW" />
             </vc-input-group>
           </vc-col>
           <vc-col :lg="6" :md="24" :sm="24" :xs="24">
-            <vc-input-group required prop="period" :label="tl('BizInfo', 'Period (month)')">
+            <vc-input-group required prop="period" :label="tl('BizInfo', `${$t('period')} (${$t('month')})`)">
               <el-input-number v-model="biz.period" :min="1" :controls="false" class="full-width" />
             </vc-input-group>
           </vc-col>
@@ -19,7 +19,7 @@
 
         <vc-row :gutter="10">
           <vc-col :lg="24" :md="24" :sm="24" :xs="24">
-            <vc-input-group required prop="prj_content" :label="tl('BizInfo', 'Duties / Comments')">
+            <vc-input-group required prop="prj_content" :label="tl('BizInfo', $t('duties_comments'))">
               <vc-textarea v-model="biz.prj_content" />
             </vc-input-group>
           </vc-col>
@@ -36,30 +36,30 @@
         <vc-row>
           <vc-col :lg="12" :md="12" :sm="12" :xs="12">
             <vc-row>
-              <vc-checkbox :label="tl('BizInfo', 'System analysis')" v-model="biz.system_analysis"
+              <vc-checkbox :label="tl('BizInfo', $t('system_analysis'))" v-model="biz.system_analysis"
                 class="checkbox-width"></vc-checkbox>
-              <vc-checkbox :label="tl('BizInfo', 'Overview design')" v-model="biz.overview_design"
+              <vc-checkbox :label="tl('BizInfo', $t('overview_design'))" v-model="biz.overview_design"
                 class="checkbox-width"></vc-checkbox>
             </vc-row>
             <vc-row>
-              <vc-checkbox :label="tl('BizInfo', 'Basic design')" v-model="biz.basic_design"
+              <vc-checkbox :label="tl('BizInfo', $t('basic_design'))" v-model="biz.basic_design"
                 class="checkbox-width"></vc-checkbox>
-              <vc-checkbox :label="tl('BizInfo', 'Function design')" v-model="biz.function_design"
+              <vc-checkbox :label="tl('BizInfo', $t('function_design'))" v-model="biz.function_design"
                 class="checkbox-width"></vc-checkbox>
             </vc-row>
           </vc-col>
 
           <vc-col :lg="12" :md="12" :sm="12" :xs="12">
             <vc-row>
-              <vc-checkbox :label="tl('BizInfo', 'Detail design')" v-model="biz.detail_design" class="checkbox-width">
+              <vc-checkbox :label="tl('BizInfo', $t('detail_design'))" v-model="biz.detail_design" class="checkbox-width">
               </vc-checkbox>
-              <vc-checkbox :label="tl('BizInfo', 'Coding')" v-model="biz.coding" class="checkbox-width">
+              <vc-checkbox :label="tl('BizInfo', $t('coding'))" v-model="biz.coding" class="checkbox-width">
               </vc-checkbox>
             </vc-row>
             <vc-row>
-              <vc-checkbox :label="tl('BizInfo', 'Unit Test')" v-model="biz.unit_test"
+              <vc-checkbox :label="tl('BizInfo', $t('unit_test'))" v-model="biz.unit_test"
                 class="checkbox-width"></vc-checkbox>
-              <vc-checkbox :label="tl('BizInfo', 'Operation')" v-model="biz.operation"
+              <vc-checkbox :label="tl('BizInfo', $t('operation'))" v-model="biz.operation"
                 class="checkbox-width"></vc-checkbox>
             </vc-row>
           </vc-col>
@@ -67,7 +67,7 @@
 
         <vc-row :gutter="10">
           <vc-col :lg="24" :md="24" :sm="24" :xs="24">
-            <vc-input-group required prop="language" :label="tl('BizInfo', 'Language')">
+            <vc-input-group required prop="language" :label="tl('BizInfo', $t('language'))">
               <vc-input v-model="biz.language" />
             </vc-input-group>
           </vc-col>
@@ -75,7 +75,7 @@
 
         <vc-row :gutter="10">
           <vc-col :lg="24" :md="24" :sm="24" :xs="24">
-            <vc-input-group required prop="role" :label="tl('BizInfo', 'Role')">
+            <vc-input-group required prop="role" :label="tl('BizInfo', $t('role'))">
               <vc-input v-model="biz.role" />
             </vc-input-group>
           </vc-col>
