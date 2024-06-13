@@ -15,12 +15,13 @@ import { toRef, ref, watch } from "vue";
 
 const props = defineProps<{
   pageConfig: MetaResponse;
+  total: number;
 }>();
 
 const meta = toRef(props, "pageConfig");
 const startPage = ref(0);
 const endPage = ref(0);
-const totalItem = ref(0);
+const totalItem = toRef(props, "total");
 const totalPage = ref(0);
 
 watch(meta, (newVal) => {
@@ -41,14 +42,16 @@ const calculate = (newVal: any) => {
   totalItem.value = total;
 }
 
-const emit = defineEmits(["changed"]);
+const emit = defineEmits(["changed", "sizeChanged"]);
 
 const onPageChange = () => {
   emit("changed", meta.value);
 };
 
-const onSizeChange = () => {
+const onSizeChange = (size: number) => {
   meta.value.page = 1;
+  meta.value.size = size;
+  emit("sizeChanged", size);
   emit("changed", meta.value);
 };
 </script>
