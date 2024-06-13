@@ -2,9 +2,11 @@
   <div class="vc-page page-dashboard">
     <vc-row class="mt-4 mb-4">
         <vc-col :span="6" class="d-flex">
-
         </vc-col>
         <vc-col :md="18" class="d-flex flex-end">
+          <select v-model="$i18n.locale">
+            <option v-for="locale in $i18n.availableLocales" :key="`locale-${locale}`" :value="locale">{{ locale }}</option>
+          </select>
           <vc-button class="ml-2" @click="onSave" type="primary" :icon="'FolderChecked'" :loading="isLoading" >
             {{ tl("Common", "BtnSave") }} 
           </vc-button>
@@ -14,501 +16,501 @@
         </vc-col>
       </vc-row>
 
-    <el-form ref="cvForm" :model="cv" :rules="rules" label-width="200px" label-position="top"
-        require-asterisk-position="right" :disabled="type == POPUP_TYPE.VIEW">
-        <!-- Invidual Info -->
-        <vc-row :gutter="20" class="no-margin-left">
-          <vc-row :gutter="20" class="full-width no-margin-left">
-            <vc-col :lg="3" :md="3" :sm="3" :xs="3" class="no-pading">
-              <div class="full-width full-height center-item border label-style-custom">
+      <el-form ref="cvForm" :model="cv" :rules="rules" label-width="200px" label-position="top"
+      require-asterisk-position="right" :disabled="type == POPUP_TYPE.VIEW">
+      <!-- Invidual Info -->
+      <vc-row :gutter="20" class="no-margin-left">
+        <vc-row :gutter="20" class="full-width no-margin-left">
+          <vc-col :lg="3" :md="3" :sm="3" :xs="3" class="no-pading">
+            <div class="full-width full-height center-item border label-style-custom">
+              <el-text class="w-150px mb-2 " truncated>
+                {{ tl('Curriculum vitae', $t('user_code')) }}
+              </el-text>  
+            </div>
+          </vc-col>
+          <vc-col :lg="3" :md="3" :sm="3" :xs="3" class="no-pading">
+            <vc-input v-model="cv.user_code" class="full-height"/>
+          </vc-col>
+          <vc-col :lg="3" :md="3" :sm="3" :xs="3" class="no-pading">
+            <div class="full-width full-height center-item border label-style-custom">
                 <el-text class="w-150px mb-2 " truncated>
-                  {{ tl('Curriculum vitae', 'UserCode') }}
+                  {{ tl('Curriculum vitae', $t('branch')) }}
                 </el-text>  
               </div>
-            </vc-col>
-            <vc-col :lg="3" :md="3" :sm="3" :xs="3" class="no-pading">
-              <vc-input v-model="cv.user_code" class="full-height"/>
-            </vc-col>
-            <vc-col :lg="3" :md="3" :sm="3" :xs="3" class="no-pading">
-              <div class="full-width full-height center-item border label-style-custom">
-                  <el-text class="w-150px mb-2 " truncated>
-                    {{ tl('Curriculum vitae', 'Branch') }}
-                  </el-text>  
-                </div>
-            </vc-col>
-            <vc-col :lg="3" :md="3" :sm="3" :xs="3" class="no-pading">
-              <vc-input v-model="cv.branch" class="full-height"/>
-            </vc-col>
-          </vc-row>
-          <vc-row :gutter="20" class="full-width no-margin-left">
-            <vc-col :lg="3" :md="3" :sm="3" :xs="3" class="no-pading">
-              <vc-row style="height: 50%;" class="label-style-custom">
-                <div class="full-width full-height center-item border">
-                  <el-text class="w-150px mb-2 " truncated>
-                    {{ tl('Curriculum vitae', 'Furigana') }}
-                  </el-text>  
-                </div>
+          </vc-col>
+          <vc-col :lg="3" :md="3" :sm="3" :xs="3" class="no-pading">
+            <vc-input v-model="cv.branch" class="full-height"/>
+          </vc-col>
+        </vc-row>
+        <vc-row :gutter="20" class="full-width no-margin-left">
+          <vc-col :lg="3" :md="3" :sm="3" :xs="3" class="no-pading">
+            <vc-row style="height: 50%;" class="label-style-custom">
+              <div class="full-width full-height center-item border">
+                <el-text class="w-150px mb-2 " truncated>
+                  {{ tl('Curriculum vitae', $t('furigana')) }}
+                </el-text>  
+              </div>
+            </vc-row>
+            <vc-row style="height: 50%;" class="label-style-custom">
+              <div class="full-width full-height center-item border">
+                <el-text class="w-150px mb-2 " truncated>
+                  {{ tl('Curriculum vitae', $t('fullname')) }}
+                </el-text>  
+              </div>
+            </vc-row>
+          </vc-col>
+          <vc-col :lg="21" :md="21" :sm="21" :xs="21" class="no-pading-left display-flex">
+            <vc-col :lg="14" :md="14" :sm="14" :xs="14" class="full-width full-height center-item no-pading">
+              <vc-row  class="no-pading-left" style="height: 50%;">
+                <vc-col :lg="12" :md="12" :sm="12" :xs="12">
+                  <vc-input v-model="cv.furigana" class="full-height"/>
+                </vc-col>
+                <vc-col :lg="5" :md="5" :sm="5" :xs="5" class="label-style-custom">
+                  <div class="full-width full-height center-item border">
+                    <el-text class="w-150px mb-2 " truncated>
+                      {{ tl('Curriculum vitae', $t('gender')) }}
+                    </el-text>  
+                  </div>
+                </vc-col>
+                <vc-col :lg="7" :md="7" :sm="7" :xs="7" >
+                  <div class="full-width full-height center-item border label-style-custom">
+                    <el-text class="w-150px mb-2 " truncated>
+                      {{ tl('Curriculum vitae', $t('birthday')) }}
+                    </el-text>  
+                  </div>
+                </vc-col>
               </vc-row>
-              <vc-row style="height: 50%;" class="label-style-custom">
-                <div class="full-width full-height center-item border">
-                  <el-text class="w-150px mb-2 " truncated>
-                    {{ tl('Curriculum vitae', 'Fullname') }}
-                  </el-text>  
-                </div>
+              <vc-row style="height: 50%;">
+                <vc-col :lg="12" :md="12" :sm="12" :xs="12">
+                  <!-- <vc-input v-model="cv.name"/> -->
+                  <vc-input v-model="cv.name" class="full-height"/>
+                </vc-col>
+                <vc-col :lg="5" :md="5" :sm="5" :xs="5">
+                  <vc-select v-model="cv.gender" :items="genders" fieldValue="key" fieldText="value" class="full-height full-height-select"></vc-select>
+                </vc-col>
+                <vc-col :lg="7" :md="7" :sm="7" :xs="7">
+                  <el-date-picker
+                    v-model="cv.birthday"
+                    type="date"
+                    placeholder="Pick a day"
+                  />
+                </vc-col>
               </vc-row>
             </vc-col>
-            <vc-col :lg="21" :md="21" :sm="21" :xs="21" class="no-pading-left display-flex">
-              <vc-col :lg="14" :md="14" :sm="14" :xs="14" class="full-width full-height center-item no-pading">
-                <vc-row  class="no-pading-left" style="height: 50%;">
-                  <vc-col :lg="12" :md="12" :sm="12" :xs="12">
-                    <vc-input v-model="cv.furigana" class="full-height"/>
-                  </vc-col>
-                  <vc-col :lg="5" :md="5" :sm="5" :xs="5" class="label-style-custom">
-                    <div class="full-width full-height center-item border">
-                      <el-text class="w-150px mb-2 " truncated>
-                        {{ tl('Curriculum vitae', 'Gender') }}
-                      </el-text>  
+            <vc-col :lg="10" :md="10" :sm="10" :xs="10" class="no-pading">
+                <vc-row>
+                  <vc-col :lg="7" :md="7" :sm="7" :xs="7" class="border">
+                    <div class="full-width full-height center-item label-style-custom">
+                      <el-text>
+                        {{ tl('Curriculum vitae', $t('language')) }}
+                      </el-text>
                     </div>
                   </vc-col>
-                  <vc-col :lg="7" :md="7" :sm="7" :xs="7" >
-                    <div class="full-width full-height center-item border label-style-custom">
-                      <el-text class="w-150px mb-2 " truncated>
-                        {{ tl('Curriculum vitae', 'Birthday') }}
-                      </el-text>  
-                    </div>
+                  <vc-col :lg="17" :md="17" :sm="17" :xs="17">
+                    <vc-row class="border">
+                      <div class="full-width full-height center-item label-style-custom">
+                        <el-text size="small" truncated>
+                          {{ tl('Curriculum vitae', $t('evaluate')) }}
+                        </el-text>
+                      </div>
+                    </vc-row>
+                    <vc-row>
+                      <vc-col :lg="12" :md="12" :sm="12" :xs="12">
+                        <vc-row class="border">
+                          <div class="full-width full-height center-item  label-style-custom">
+                            <el-text>
+                              {{ tl('Curriculum vitae', $t('conversation')) }}
+                            </el-text>
+                          </div>
+                        </vc-row>
+                        <vc-row>
+                          <vc-col :lg="12" :md="12" :sm="12" :xs="12" class="border">
+                            <div class="full-width full-height center-item label-style-custom">
+                              <el-text>
+                                {{ tl('Curriculum vitae', $t('listen')) }}
+                              </el-text>
+                            </div>
+                          </vc-col>
+                          <vc-col :lg="12" :md="12" :sm="12" :xs="12" class="border">
+                            <div class="full-width full-height center-item label-style-custom">
+                              <el-text>
+                                {{ tl('Curriculum vitae', $t('speak')) }}
+                              </el-text>
+                            </div>
+                          </vc-col>
+                        </vc-row>
+                      </vc-col>
+                      <vc-col :lg="12" :md="12" :sm="12" :xs="12" class="d-flex">
+                        <vc-col :lg="12" :md="12" :sm="12" :xs="12" class="border full-height">
+                          <div class="full-width full-height center-item label-style-custom">
+                            <el-text>
+                              {{ tl('Curriculum vitae', $t('read')) }}
+                            </el-text>
+                          </div>
+                        </vc-col>
+                        <vc-col :lg="12" :md="12" :sm="12" :xs="12" class="border full-height">
+                          <div class="full-width full-height center-item label-style-custom">
+                            <el-text>
+                              {{ tl('Curriculum vitae', $t('write')) }}
+                            </el-text>
+                          </div>
+                        </vc-col>
+                      </vc-col>
+                    </vc-row>
                   </vc-col>
                 </vc-row>
-                <vc-row style="height: 50%;">
-                  <vc-col :lg="12" :md="12" :sm="12" :xs="12">
-                    <!-- <vc-input v-model="cv.name"/> -->
-                    <vc-input v-model="cv.name" class="full-height"/>
+                <vc-row>
+                  <vc-col :lg="7" :md="7" :sm="7" :xs="7" class="border">
+                    <div class="full-width full-height center-item label-style-custom">
+                      <el-text>
+                        {{ tl('Curriculum vitae', $t('english')) }}
+                      </el-text>
+                    </div>
                   </vc-col>
-                  <vc-col :lg="5" :md="5" :sm="5" :xs="5">
-                    <vc-select v-model="cv.gender" :items="genders" fieldValue="key" fieldText="value" class="full-height full-height-select"></vc-select>
+                  <vc-col :lg="17" :md="17" :sm="17" :xs="17" class="d-flex">
+                    <vc-col :lg="6" :md="6" :sm="6" :xs="6">
+                      <vc-select v-model="cv.lang1_hearing" :items="rankLanguages" fieldValue="key" fieldText="value" class="no-min-height" clearable></vc-select>
+                    </vc-col>
+                    <vc-col :lg="6" :md="6" :sm="6" :xs="6">
+                      <vc-select v-model="cv.lang1_speaking" :items="rankLanguages" fieldValue="key" fieldText="value" class="no-min-height" clearable></vc-select>
+                    </vc-col>
+                    <vc-col :lg="6" :md="6" :sm="6" :xs="6">
+                      <vc-select v-model="cv.lang1_reading" :items="rankLanguages" fieldValue="key" fieldText="value" class="no-min-height" clearable></vc-select>
+                    </vc-col>
+                    <vc-col :lg="6" :md="6" :sm="6" :xs="6">
+                      <vc-select v-model="cv.lang1_writing" :items="rankLanguages" fieldValue="key" fieldText="value" class="no-min-height" clearable></vc-select>
+                    </vc-col>
                   </vc-col>
-                  <vc-col :lg="7" :md="7" :sm="7" :xs="7">
-                    <el-date-picker
-                      v-model="cv.birthday"
-                      type="date"
-                      placeholder="Pick a day"
-                    />
+                </vc-row>
+                <vc-row>
+                  <vc-col :lg="7" :md="7" :sm="7" :xs="7" class="border">
+                    <div class="full-width full-height center-item label-style-custom">
+                      <el-text>
+                        {{ tl('Curriculum vitae', $t('japanese')) }}
+                      </el-text>
+                    </div>
+                  </vc-col>
+                  <vc-col :lg="17" :md="17" :sm="17" :xs="17" class="d-flex">
+                    <vc-col :lg="6" :md="6" :sm="6" :xs="6">
+                      <vc-select v-model="cv.lang2_hearing" :items="rankLanguages" fieldValue="key" fieldText="value" class="no-min-height" clearable ></vc-select>
+                    </vc-col>
+                    <vc-col :lg="6" :md="6" :sm="6" :xs="6">
+                      <vc-select v-model="cv.lang2_speaking" :items="rankLanguages" fieldValue="key" fieldText="value" class="no-min-height" clearable></vc-select>
+                    </vc-col>
+                    <vc-col :lg="6" :md="6" :sm="6" :xs="6">
+                      <vc-select v-model="cv.lang2_reading" :items="rankLanguages" fieldValue="key" fieldText="value" class="no-min-height" clearable></vc-select>
+                    </vc-col>
+                    <vc-col :lg="6" :md="6" :sm="6" :xs="6">
+                      <vc-select v-model="cv.lang2_writing" :items="rankLanguages" fieldValue="key" fieldText="value" class="no-min-height" clearable></vc-select>
+                    </vc-col>
                   </vc-col>
                 </vc-row>
               </vc-col>
-              <vc-col :lg="10" :md="10" :sm="10" :xs="10" class="no-pading">
-                  <vc-row>
-                    <vc-col :lg="7" :md="7" :sm="7" :xs="7" class="border">
-                      <div class="full-width full-height center-item label-style-custom">
-                        <el-text>
-                          {{ tl('Curriculum vitae', 'Language') }}
-                        </el-text>
-                      </div>
-                    </vc-col>
-                    <vc-col :lg="17" :md="17" :sm="17" :xs="17">
-                      <vc-row class="border">
-                        <div class="full-width full-height center-item label-style-custom">
-                          <el-text size="small" truncated>
-                            {{ tl('Curriculum vitae', '○: No problem ☆: Connected △: Elementary') }}
-                          </el-text>
-                        </div>
-                      </vc-row>
-                      <vc-row>
-                        <vc-col :lg="12" :md="12" :sm="12" :xs="12">
-                          <vc-row class="border">
-                            <div class="full-width full-height center-item  label-style-custom">
-                              <el-text>
-                                {{ tl('Curriculum vitae', 'Conversation') }}
-                              </el-text>
-                            </div>
-                          </vc-row>
-                          <vc-row>
-                            <vc-col :lg="12" :md="12" :sm="12" :xs="12" class="border">
-                              <div class="full-width full-height center-item label-style-custom">
-                                <el-text>
-                                  {{ tl('Curriculum vitae', 'Listen') }}
-                                </el-text>
-                              </div>
-                            </vc-col>
-                            <vc-col :lg="12" :md="12" :sm="12" :xs="12" class="border">
-                              <div class="full-width full-height center-item label-style-custom">
-                                <el-text>
-                                  {{ tl('Curriculum vitae', 'Speak') }}
-                                </el-text>
-                              </div>
-                            </vc-col>
-                          </vc-row>
-                        </vc-col>
-                        <vc-col :lg="12" :md="12" :sm="12" :xs="12" class="d-flex">
-                          <vc-col :lg="12" :md="12" :sm="12" :xs="12" class="border full-height">
-                            <div class="full-width full-height center-item label-style-custom">
-                              <el-text>
-                                {{ tl('Curriculum vitae', 'Read') }}
-                              </el-text>
-                            </div>
-                          </vc-col>
-                          <vc-col :lg="12" :md="12" :sm="12" :xs="12" class="border full-height">
-                            <div class="full-width full-height center-item label-style-custom">
-                              <el-text>
-                                {{ tl('Curriculum vitae', 'Write') }}
-                              </el-text>
-                            </div>
-                          </vc-col>
-                        </vc-col>
-                      </vc-row>
-                    </vc-col>
-                  </vc-row>
-                  <vc-row>
-                    <vc-col :lg="7" :md="7" :sm="7" :xs="7" class="border">
-                      <div class="full-width full-height center-item label-style-custom">
-                        <el-text>
-                          {{ tl('Curriculum vitae', 'English') }}
-                        </el-text>
-                      </div>
-                    </vc-col>
-                    <vc-col :lg="17" :md="17" :sm="17" :xs="17" class="d-flex">
-                      <vc-col :lg="6" :md="6" :sm="6" :xs="6">
-                        <vc-select v-model="cv.lang1_hearing" :items="rankLanguages" fieldValue="key" fieldText="value" class="no-min-height" clearable></vc-select>
-                      </vc-col>
-                      <vc-col :lg="6" :md="6" :sm="6" :xs="6">
-                        <vc-select v-model="cv.lang1_speaking" :items="rankLanguages" fieldValue="key" fieldText="value" class="no-min-height" clearable></vc-select>
-                      </vc-col>
-                      <vc-col :lg="6" :md="6" :sm="6" :xs="6">
-                        <vc-select v-model="cv.lang1_reading" :items="rankLanguages" fieldValue="key" fieldText="value" class="no-min-height" clearable></vc-select>
-                      </vc-col>
-                      <vc-col :lg="6" :md="6" :sm="6" :xs="6">
-                        <vc-select v-model="cv.lang1_writing" :items="rankLanguages" fieldValue="key" fieldText="value" class="no-min-height" clearable></vc-select>
-                      </vc-col>
-                    </vc-col>
-                  </vc-row>
-                  <vc-row>
-                    <vc-col :lg="7" :md="7" :sm="7" :xs="7" class="border">
-                      <div class="full-width full-height center-item label-style-custom">
-                        <el-text>
-                          {{ tl('Curriculum vitae', 'Janpanese') }}
-                        </el-text>
-                      </div>
-                    </vc-col>
-                    <vc-col :lg="17" :md="17" :sm="17" :xs="17" class="d-flex">
-                      <vc-col :lg="6" :md="6" :sm="6" :xs="6">
-                        <vc-select v-model="cv.lang2_hearing" :items="rankLanguages" fieldValue="key" fieldText="value" class="no-min-height" clearable ></vc-select>
-                      </vc-col>
-                      <vc-col :lg="6" :md="6" :sm="6" :xs="6">
-                        <vc-select v-model="cv.lang2_speaking" :items="rankLanguages" fieldValue="key" fieldText="value" class="no-min-height" clearable></vc-select>
-                      </vc-col>
-                      <vc-col :lg="6" :md="6" :sm="6" :xs="6">
-                        <vc-select v-model="cv.lang2_reading" :items="rankLanguages" fieldValue="key" fieldText="value" class="no-min-height" clearable></vc-select>
-                      </vc-col>
-                      <vc-col :lg="6" :md="6" :sm="6" :xs="6">
-                        <vc-select v-model="cv.lang2_writing" :items="rankLanguages" fieldValue="key" fieldText="value" class="no-min-height" clearable></vc-select>
-                      </vc-col>
-                    </vc-col>
-                  </vc-row>
-                </vc-col>
-            </vc-col>
-          </vc-row>
-
-          <vc-row :gutter="20" class="full-width no-margin-left">
-            <vc-col :lg="3" :md="3" :sm="3" :xs="3" class="border no-pading-right label-style-custom">
-              <div class="full-width full-height center-item">
-                <el-text class="w-150px mb-2 " truncated>
-                  {{ tl('Curriculum vitae', 'Education') }}
-                </el-text>  
-              </div>
-            </vc-col>
-            <vc-col :lg="6" :md="6" :sm="6" :xs="6" class=" no-pading">
-              <vc-row class="border">
-                <div class="full-width full-height center-item label-style-custom">
-                    <el-text class="w-150px mb-2" truncated>
-                      {{ tl('Curriculum vitae', 'University') }}
-                    </el-text>
-                  </div>
-              </vc-row>
-              <vc-row>
-                <vc-input v-model="cv.last_university_name"/>
-              </vc-row>
-            </vc-col>
-            <vc-col :lg="5" :md="5" :sm="5" :xs="5" class="no-pading">
-              <vc-row class="border">
-                <div class="full-width full-height center-item label-style-custom">
-                    <el-text class="w-150px mb-2" truncated>
-                      {{ tl('Curriculum vitae', 'Department') }}
-                    </el-text>
-                  </div>
-              </vc-row>
-              <vc-row>
-                <vc-input v-model="cv.subject"/>
-              </vc-row>
-            </vc-col>
-            <vc-col :lg="5" :md="5" :sm="5" :xs="5" class="no-pading">
-              <vc-row class="border">
-                <div class="full-width full-height center-item label-style-custom">
-                    <el-text class="w-150px mb-2" truncated>
-                      {{ tl('Curriculum vitae', 'Graduation year') }}
-                    </el-text>
-                  </div>
-              </vc-row>
-              <vc-row>
-                <el-input-number
-                  v-model="cv.graduation_year"  
-                  :min="1"
-                  class="full-width"
-                  :controls="false"
-                />
-                <!-- <vc-input v-model="cv.graduation_year"/> -->
-              </vc-row>
-            </vc-col>
-            <vc-col :lg="5" :md="5" :sm="5" :xs="5" class="no-pading-left">
-              <vc-row class="border">
-                <div class="full-width full-height center-item label-style-custom">
-                    <el-text class="w-150px mb-2" truncated>
-                      {{ tl('Curriculum vitae', 'Final Education') }}
-                    </el-text>
-                  </div>
-              </vc-row>
-              <vc-row>
-                <vc-input v-model="cv.final_education"/>
-              </vc-row>
-            </vc-col>
-          </vc-row>
-
-          <vc-row :gutter="20" class="full-width no-margin-left">
-            <vc-col :lg="3" :md="3" :sm="3" :xs="3" class="border no-pading-right label-style-custom">
-              <div class="full-width full-height center-item">
-                <el-text class="w-150px mb-2">
-                  {{ tl('Curriculum vitae', 'Other qualifications') }}
-                </el-text>
-              </div>
-            </vc-col>
-            <vc-col :lg="21" :md="21" :sm="21" :xs="21" class="no-pading-left"> 
-              <vc-row>
-                <vc-col :lg="14" :md="14" :sm="14" :xs="14" class="border no-pading">
-                  <div class="full-width full-height center-item label-style-custom">
-                    <el-text class="w-150px mb-2" truncated>
-                      {{ tl('Curriculum vitae', 'Qualification') }}
-                    </el-text>
-                  </div>
-                </vc-col>
-                <vc-col :lg="10" :md="10" :sm="10" :xs="10" class="border">
-                  <div class="full-width full-height center-item label-style-custom">
-                    <el-text class="w-150px mb-2" truncated>
-                      {{ tl('Curriculum vitae', 'Acquisition Date') }}
-                    </el-text>
-                  </div>
-                </vc-col>
-              </vc-row>
-              <vc-row class="no-pading">
-                <vc-col :lg="14" :md="14" :sm="14" :xs="14" >
-                  <div class="full-width center-item">
-                    <vc-input v-model="cv.certificate1_name"/>
-                  </div>
-                </vc-col>
-                <vc-col :lg="10" :md="10" :sm="10" :xs="10">
-                  <div class="full-width center-item">
-                    <!-- <el-date-picker
-                      v-model="cv.certificate1_year"
-                      type="date"
-                      placeholder="Pick a day"
-                    /> -->
-                    <el-input-number
-                      v-model="cv.certificate1_year"  
-                      :min="1"
-                      class="full-width"
-                      :controls="false"
-                    />
-                    <!-- <vc-input v-model="cv.certificate1_year" /> -->
-                  </div>
-                </vc-col>
-              </vc-row>
-              <vc-row>
-                <vc-col :lg="14" :md="14" :sm="14" :xs="14">
-                  <div class="full-width center-item">
-                    <vc-input v-model="cv.certificate2_name"/>
-                  </div>
-                </vc-col>
-                <vc-col :lg="10" :md="10" :sm="10" :xs="10">
-                  <div class="full-width center-item">
-                    <el-input-number
-                      v-model="cv.certificate2_year"  
-                      :min="1"
-                      class="full-width"
-                      :controls="false"
-                    />
-                    <!-- <vc-input v-model="cv.certificate2_year"/> -->
-                  </div>
-                </vc-col>
-              </vc-row>
-              <vc-row>
-                <vc-col :lg="14" :md="14" :sm="14" :xs="14">
-                  <div class="full-width center-item">
-                    <vc-input v-model="cv.certificate3_name"/>
-                  </div>
-                </vc-col>
-                <vc-col :lg="10" :md="10" :sm="10" :xs="10">
-                  <div class="full-width center-item">
-                    <el-input-number
-                      v-model="cv.certificate3_year"  
-                      :min="1"
-                      class="full-width"
-                      :controls="false"
-                    />
-                    <!-- <vc-input v-model="cv.certificate3_year"/> -->
-                  </div>
-                </vc-col>
-              </vc-row>
-              <vc-row>
-                <vc-col :lg="14" :md="14" :sm="14" :xs="14">
-                  <div class="full-width center-item">
-                    <vc-input v-model="cv.certificate4_name"/>
-                  </div>
-                </vc-col>
-                <vc-col :lg="10" :md="10" :sm="10" :xs="10">
-                  <div class="full-width center-item">
-                    <el-input-number
-                      v-model="cv.certificate4_year"  
-                      :min="1"
-                      class="full-width"
-                      :controls="false"
-                    />
-                    <!-- <vc-input v-model="cv.certificate4_year"/> -->
-                  </div>
-                </vc-col>
-              </vc-row>
-            </vc-col>
-            
-          </vc-row>
-
-          <vc-row :gutter="20" class="full-width no-margin-left">
-            <vc-col :lg="3" :md="3" :sm="3" :xs="3" class="border no-pading-right label-style-custom">
-              <div class="full-width full-height center-item">
-                <el-text class="w-150px mb-2">
-                  {{ tl('Curriculum vitae', 'Development Process') }}
-                </el-text>
-              </div>
-            </vc-col>
-            <vc-col :lg="21" :md="21" :sm="21" :xs="21" class="no-pading-left">
-              <div class="full-width center-item">
-                <vc-textarea rows="6" v-model="cv.work_process"/>
-              </div>
-            </vc-col>
-          </vc-row>
-
-          <vc-row :gutter="20" class="full-width no-margin-left">
-            <vc-col :lg="3" :md="3" :sm="3" :xs="3"  class="border no-pading-right label-style-custom">
-              <div class="full-width full-height center-item">
-                <el-text class="w-150px mb-2" truncated>
-                  {{ tl('Curriculum vitae', 'Note') }}
-                </el-text>
-              </div>
-            </vc-col>
-            <vc-col :lg="21" :md="21" :sm="21" :xs="21"  class="no-pading-left">
-              <div class="full-width center-item">
-                <vc-textarea rows="6" v-model="cv.note"/>
-              </div>
-            </vc-col>
-          </vc-row>
-        </vc-row>
-
-        <!-- Technology/Experience -->
-        <el-text class="w-150px mb-2 mt-4" tag="b" truncated>
-          [Technology/Experience]
-        </el-text>
-        <vc-row :gutter="20">
-          <!-- <div class="full-width center-item">
-            <el-text class="mx-1" truncated>
-              {{ tl('Curriculum vitae', '◎: Familiarity ○: Can be performed ☆: Can be performed as instructed ●: During education and training') }}
-            </el-text>
-          </div> -->
-          <div v-for="item in technicals">
-            <vc-card class="pa-4">
-              <vc-card-content>
-                <vc-row style="padding-left: 10px; padding-right: 10px">
-                  <vc-col :lg="12" :md="12" :sm="12" :xs="12" class="pa-2 pl-7 label-style-custom">
-                    <span class="mb-2 center-item bold-item" >
-                      {{ item.name }}
-                    </span>
-                  </vc-col>
-                  <vc-col :lg="12" :md="12" :sm="12" :xs="12" class="pa-2 pl-7 label-style-custom">
-                    <span class="mb-2 center-item bold-item" >
-                      Year experience
-                    </span>
-                  </vc-col>
-                </vc-row>
-                <vc-col v-for= "(childItem, index) in item.technicals" :key="index">
-                  <vc-row class=" label-style-custom">
-                    <vc-input-group-custom required :prop="`technicals.${childItem.name}.${index}`" :labelWidth="leftLabelWidth" :layout="'horizontal'" :label="tl('Curriculum vitae', childItem.name)">
-                      <div class="vertical-item pr-2">
-                        <!-- <vc-select v-model="childItem.rank" :items="rankTechnicals" fieldValue="key" fieldText="value"></vc-select> -->
-                        <!-- <vc-input v-model="childItem.value" /> -->
-                        <el-input-number
-                          v-model="childItem.value"  
-                          :min="1"
-                          :controls="false"
-                          :disabled="type == POPUP_TYPE.VIEW"
-                        />
-                      </div>
-                    </vc-input-group-custom>
-                  </vc-row>
-                </vc-col>
-              </vc-card-content>
-              <vc-confirm ref="confirmDialog"></vc-confirm>
-            </vc-card>
-          </div>
-        </vc-row>
-        
-        <!-- Business content -->
-        <vc-col :md="24" class="d-flex space-between">
-          <el-text class="w-150px" tag="b" truncated>
-          [Business content]
-        </el-text>
-        <vc-button v-if="props.type != POPUP_TYPE.VIEW" class="ml-2" @click="BizAddNew" type="primary" :icon="'Plus'" :loading="isLoading" >
-          {{ tl("Common", "BtnAddNew") }} 
-        </vc-button>
-        </vc-col>
-        <vc-row :gutter="20">
-          <vc-col :span="24">
-            <el-scrollbar>
-              <vc-table :datas="bizInfos" :tableConfig="tableConfig" :colConfigs="colConfig">
-                <template #action="{ data }">
-                  <div class="d-flex flex-center">
-                    <vc-button type="warning" size="small" class="btn-acttion" @click="onViewTable(data)" :icon="'View'"></vc-button>
-                    <vc-button type="primary" size="small" class="btn-acttion" @click="onEditTable(data)" :icon="'Edit'"></vc-button>
-                    <vc-button type="danger" code="F00015" size="small" class="btn-acttion" @click="onDeleteItem(data)"
-                    :icon="'Delete'">
-                    </vc-button>
-                  </div>
-                </template>
-                <template #system_analysis="{ data }">
-                  <span v-if="data.system_analysis" class="text-center">○</span>
-                </template>
-                <template #overview_design="{ data }">
-                  <span v-if="data.overview_design" class="text-center">○</span>
-                </template>
-                <template #basic_design="{ data }">
-                  <span v-if="data.basic_design">○</span>
-                </template>
-                <template #function_design="{ data }">
-                  <span v-if="data.function_design">○</span>
-                </template>
-                <template #detail_design="{ data }">
-                  <span v-if="data.detail_design">○</span>
-                </template>
-                <template #coding="{ data }">
-                  <span v-if="data.coding">○</span>
-                </template>
-                <template #unit_test="{ data }">
-                  <span v-if="data.unit_test">○</span>
-                </template>
-                <template #operation="{ data }">
-                  <span v-if="data.operation">○</span>
-                </template>
-              </vc-table>
-            </el-scrollbar>
           </vc-col>
         </vc-row>
-    </el-form>
-    <vc-confirm ref="confirmDialog"></vc-confirm>
-    <detail-modal ref="detailRef" :type="popupType" @submit="handlePopupSubmit"></detail-modal>
-  </div>
+
+        <vc-row :gutter="20" class="full-width no-margin-left">
+          <vc-col :lg="3" :md="3" :sm="3" :xs="3" class="border no-pading-right label-style-custom">
+            <div class="full-width full-height center-item">
+              <el-text class="w-150px mb-2 " truncated>
+                {{ tl('Curriculum vitae', $t('education')) }}
+              </el-text>  
+            </div>
+          </vc-col>
+          <vc-col :lg="6" :md="6" :sm="6" :xs="6" class=" no-pading">
+            <vc-row class="border">
+              <div class="full-width full-height center-item label-style-custom">
+                  <el-text class="w-150px mb-2" truncated>
+                    {{ tl('Curriculum vitae', $t('university')) }}
+                  </el-text>
+                </div>
+            </vc-row>
+            <vc-row>
+              <vc-input v-model="cv.last_university_name"/>
+            </vc-row>
+          </vc-col>
+          <vc-col :lg="5" :md="5" :sm="5" :xs="5" class="no-pading">
+            <vc-row class="border">
+              <div class="full-width full-height center-item label-style-custom">
+                  <el-text class="w-150px mb-2" truncated>
+                    {{ tl('Curriculum vitae', $t('department')) }}
+                  </el-text>
+                </div>
+            </vc-row>
+            <vc-row>
+              <vc-input v-model="cv.subject"/>
+            </vc-row>
+          </vc-col>
+          <vc-col :lg="5" :md="5" :sm="5" :xs="5" class="no-pading">
+            <vc-row class="border">
+              <div class="full-width full-height center-item label-style-custom">
+                  <el-text class="w-150px mb-2" truncated>
+                    {{ tl('Curriculum vitae', $t('graduation')) }}
+                  </el-text>
+                </div>
+            </vc-row>
+            <vc-row>
+              <el-input-number
+                v-model="cv.graduation_year"  
+                :min="1"
+                class="full-width"
+                :controls="false"
+              />
+              <!-- <vc-input v-model="cv.graduation_year"/> -->
+            </vc-row>
+          </vc-col>
+          <vc-col :lg="5" :md="5" :sm="5" :xs="5" class="no-pading-left">
+            <vc-row class="border">
+              <div class="full-width full-height center-item label-style-custom">
+                  <el-text class="w-150px mb-2" truncated>
+                    {{ tl('Curriculum vitae', $t('final_education')) }}
+                  </el-text>
+                </div>
+            </vc-row>
+            <vc-row>
+              <vc-input v-model="cv.final_education"/>
+            </vc-row>
+          </vc-col>
+        </vc-row>
+
+        <vc-row :gutter="20" class="full-width no-margin-left">
+          <vc-col :lg="3" :md="3" :sm="3" :xs="3" class="border no-pading-right label-style-custom">
+            <div class="full-width full-height center-item">
+              <el-text class="w-150px mb-2">
+                {{ tl('Curriculum vitae', $t('other_qualification')) }}
+              </el-text>
+            </div>
+          </vc-col>
+          <vc-col :lg="21" :md="21" :sm="21" :xs="21" class="no-pading-left"> 
+            <vc-row>
+              <vc-col :lg="14" :md="14" :sm="14" :xs="14" class="border no-pading">
+                <div class="full-width full-height center-item label-style-custom">
+                  <el-text class="w-150px mb-2" truncated>
+                    {{ tl('Curriculum vitae', $t('qualification')) }}
+                  </el-text>
+                </div>
+              </vc-col>
+              <vc-col :lg="10" :md="10" :sm="10" :xs="10" class="border">
+                <div class="full-width full-height center-item label-style-custom">
+                  <el-text class="w-150px mb-2" truncated>
+                    {{ tl('Curriculum vitae', $t('acquisition_date')) }}
+                  </el-text>
+                </div>
+              </vc-col>
+            </vc-row>
+            <vc-row class="no-pading">
+              <vc-col :lg="14" :md="14" :sm="14" :xs="14" >
+                <div class="full-width center-item">
+                  <vc-input v-model="cv.certificate1_name"/>
+                </div>
+              </vc-col>
+              <vc-col :lg="10" :md="10" :sm="10" :xs="10">
+                <div class="full-width center-item">
+                  <!-- <el-date-picker
+                    v-model="cv.certificate1_year"
+                    type="date"
+                    placeholder="Pick a day"
+                  /> -->
+                  <el-input-number
+                    v-model="cv.certificate1_year"  
+                    :min="1"
+                    class="full-width"
+                    :controls="false"
+                  />
+                  <!-- <vc-input v-model="cv.certificate1_year" /> -->
+                </div>
+              </vc-col>
+            </vc-row>
+            <vc-row>
+              <vc-col :lg="14" :md="14" :sm="14" :xs="14">
+                <div class="full-width center-item">
+                  <vc-input v-model="cv.certificate2_name"/>
+                </div>
+              </vc-col>
+              <vc-col :lg="10" :md="10" :sm="10" :xs="10">
+                <div class="full-width center-item">
+                  <el-input-number
+                    v-model="cv.certificate2_year"  
+                    :min="1"
+                    class="full-width"
+                    :controls="false"
+                  />
+                  <!-- <vc-input v-model="cv.certificate2_year"/> -->
+                </div>
+              </vc-col>
+            </vc-row>
+            <vc-row>
+              <vc-col :lg="14" :md="14" :sm="14" :xs="14">
+                <div class="full-width center-item">
+                  <vc-input v-model="cv.certificate3_name"/>
+                </div>
+              </vc-col>
+              <vc-col :lg="10" :md="10" :sm="10" :xs="10">
+                <div class="full-width center-item">
+                  <el-input-number
+                    v-model="cv.certificate3_year"  
+                    :min="1"
+                    class="full-width"
+                    :controls="false"
+                  />
+                  <!-- <vc-input v-model="cv.certificate3_year"/> -->
+                </div>
+              </vc-col>
+            </vc-row>
+            <vc-row>
+              <vc-col :lg="14" :md="14" :sm="14" :xs="14">
+                <div class="full-width center-item">
+                  <vc-input v-model="cv.certificate4_name"/>
+                </div>
+              </vc-col>
+              <vc-col :lg="10" :md="10" :sm="10" :xs="10">
+                <div class="full-width center-item">
+                  <el-input-number
+                    v-model="cv.certificate4_year"  
+                    :min="1"
+                    class="full-width"
+                    :controls="false"
+                  />
+                  <!-- <vc-input v-model="cv.certificate4_year"/> -->
+                </div>
+              </vc-col>
+            </vc-row>
+          </vc-col>
+          
+        </vc-row>
+
+        <vc-row :gutter="20" class="full-width no-margin-left">
+          <vc-col :lg="3" :md="3" :sm="3" :xs="3" class="border no-pading-right label-style-custom">
+            <div class="full-width full-height center-item">
+              <el-text class="w-150px mb-2">
+                {{ tl('Curriculum vitae', $t('development_process')) }}
+              </el-text>
+            </div>
+          </vc-col>
+          <vc-col :lg="21" :md="21" :sm="21" :xs="21" class="no-pading-left">
+            <div class="full-width center-item">
+              <vc-textarea rows="6" v-model="cv.work_process"/>
+            </div>
+          </vc-col>
+        </vc-row>
+
+        <vc-row :gutter="20" class="full-width no-margin-left">
+          <vc-col :lg="3" :md="3" :sm="3" :xs="3"  class="border no-pading-right label-style-custom">
+            <div class="full-width full-height center-item">
+              <el-text class="w-150px mb-2" truncated>
+                {{ tl('Curriculum vitae', $t('note')) }}
+              </el-text>
+            </div>
+          </vc-col>
+          <vc-col :lg="21" :md="21" :sm="21" :xs="21"  class="no-pading-left">
+            <div class="full-width center-item">
+              <vc-textarea rows="6" v-model="cv.note"/>
+            </div>
+          </vc-col>
+        </vc-row>
+      </vc-row>
+
+      <!-- Technology/Experience -->
+      <el-text class="w-150px mb-2 mt-4" tag="b" truncated>
+        {{$t('technical_experience')}}
+      </el-text>
+      <vc-row :gutter="20">
+        <!-- <div class="full-width center-item">
+          <el-text class="mx-1" truncated>
+            {{ tl('Curriculum vitae', '◎: Familiarity ○: Can be performed ☆: Can be performed as instructed ●: During education and training') }}
+          </el-text>
+        </div> -->
+        <div v-for="item in technicals">
+          <vc-card class="pa-4">
+            <vc-card-content>
+              <vc-row style="padding-left: 10px; padding-right: 10px">
+                <vc-col :lg="12" :md="12" :sm="12" :xs="12" class="pa-2 pl-7 label-style-custom">
+                  <span class="mb-2 center-item bold-item" >
+                    {{ item.name }}
+                  </span>
+                </vc-col>
+                <vc-col :lg="12" :md="12" :sm="12" :xs="12" class="pa-2 pl-7 label-style-custom">
+                  <span class="mb-2 center-item bold-item" >
+                    {{$t('year_experience')}}
+                  </span>
+                </vc-col>
+              </vc-row>
+              <vc-col v-for= "(childItem, index) in item.technicals" :key="index">
+                <vc-row class=" label-style-custom">
+                  <vc-input-group-custom required :prop="`technicals.${childItem.name}.${index}`" :labelWidth="leftLabelWidth" :layout="'horizontal'" :label="tl('Curriculum vitae', childItem.name)">
+                    <div class="vertical-item pr-2">
+                      <!-- <vc-select v-model="childItem.rank" :items="rankTechnicals" fieldValue="key" fieldText="value"></vc-select> -->
+                      <!-- <vc-input v-model="childItem.value" /> -->
+                      <el-input-number
+                        v-model="childItem.value"  
+                        :min="1"
+                        :controls="false"
+                        :disabled="type == POPUP_TYPE.VIEW"
+                      />
+                    </div>
+                  </vc-input-group-custom>
+                </vc-row>
+              </vc-col>
+            </vc-card-content>
+            <vc-confirm ref="confirmDialog"></vc-confirm>
+          </vc-card>
+        </div>
+      </vc-row>
+      
+      <!-- Business content -->
+      <vc-col :md="24" class="d-flex space-between">
+        <el-text class="w-150px" tag="b" truncated>
+        {{ $t('business_content') }}
+      </el-text>
+      <vc-button v-if="props.type != POPUP_TYPE.VIEW" class="ml-2" @click="BizAddNew" type="primary" :icon="'Plus'" :loading="isLoading" >
+        {{ tl("Common", "BtnAddNew") }} 
+      </vc-button>
+      </vc-col>
+      <vc-row :gutter="20">
+        <vc-col :span="24">
+          <el-scrollbar>
+            <vc-table :datas="bizInfos" :tableConfig="tableConfig" :colConfigs="colConfig">
+              <template #action="{ data }">
+                <div class="d-flex flex-center">
+                  <vc-button type="warning" size="small" class="btn-acttion" @click="onViewTable(data)" :icon="'View'"></vc-button>
+                  <vc-button type="primary" size="small" class="btn-acttion" @click="onEditTable(data)" :icon="'Edit'"></vc-button>
+                  <vc-button type="danger" code="F00015" size="small" class="btn-acttion" @click="onDeleteItem(data)"
+                  :icon="'Delete'">
+                  </vc-button>
+                </div>
+              </template>
+              <template #system_analysis="{ data }">
+                <span v-if="data.system_analysis" class="text-center">○</span>
+              </template>
+              <template #overview_design="{ data }">
+                <span v-if="data.overview_design" class="text-center">○</span>
+              </template>
+              <template #basic_design="{ data }">
+                <span v-if="data.basic_design">○</span>
+              </template>
+              <template #function_design="{ data }">
+                <span v-if="data.function_design">○</span>
+              </template>
+              <template #detail_design="{ data }">
+                <span v-if="data.detail_design">○</span>
+              </template>
+              <template #coding="{ data }">
+                <span v-if="data.coding">○</span>
+              </template>
+              <template #unit_test="{ data }">
+                <span v-if="data.unit_test">○</span>
+              </template>
+              <template #operation="{ data }">
+                <span v-if="data.operation">○</span>
+              </template>
+            </vc-table>
+          </el-scrollbar>
+        </vc-col>
+      </vc-row>
+  </el-form>
+  <vc-confirm ref="confirmDialog"></vc-confirm>
+  <detail-modal ref="detailRef" :type="popupType" @submit="handlePopupSubmit"></detail-modal>
+</div>
 </template>
 
 <script setup lang="ts">
@@ -523,7 +525,8 @@ import technicalCategoryService from "@master/services/technical-category.servic
 import cvService from "@master/services/cv-info.service";
 import DetailModal from './DetailBizModal.vue'
 import { useToastStore } from '@/stores/toast.store'
-
+// import { useI18n } from "vue-i18n";
+import { i18n } from '../../../../lang/i18n'
 
 const router = useRouter();
 const route = useRoute();
@@ -786,9 +789,6 @@ const onSave = async (formEl: FormInstance | undefined) => {
   getBizInfoData()
   
   if (_id) {
-    const nowBirthDay = new Date(cv.birthday)
-    const offSet = Math.abs(nowBirthDay.getTimezoneOffset()/60)
-    cv.birthday = new Date(nowBirthDay.setHours(offSet))
     await cvService.update(cv).finally(() => {
       isLoading.value = false;
     });
