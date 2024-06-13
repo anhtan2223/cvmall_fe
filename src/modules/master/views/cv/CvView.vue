@@ -3,10 +3,17 @@
     <vc-row class="mt-4 mb-4">
         <vc-col :span="6" class="d-flex">
         </vc-col>
-        <vc-col :md="18" class="d-flex flex-end">
+
+        <vc-col :md="18" class="d-flex flex-end" >
           <select v-model="$i18n.locale">
             <option v-for="locale in $i18n.availableLocales" :key="`locale-${locale}`" :value="locale">{{ locale }}</option>
           </select>
+
+          <input type="file" @change="handleFileUpload" accepted=".xlxs" id="Import" style="display: none;">
+          <vc-button class="ml-2" @click="onImport" type="success" :icon="'Upload'" :loading="isLoading" v-if="!_id" >
+            {{ tl("Common", "BtnImportExcel") }}
+          </vc-button>
+
           <vc-button class="ml-2" @click="onSave" type="primary" :icon="'FolderChecked'" :loading="isLoading" >
             {{ tl("Common", "BtnSave") }} 
           </vc-button>
@@ -516,6 +523,7 @@
 <script setup lang="ts">
 import tl from "@/utils/locallize";
 import validate from "@/utils/validate_elp";
+import * as XLSX from 'xlsx';
 import { POPUP_TYPE } from "@/commons/const";
 import { onBeforeMount, reactive, ref } from "vue";
 import { colConfig, tableConfig } from "@/commons/config/biz-info.config";
@@ -525,8 +533,7 @@ import technicalCategoryService from "@master/services/technical-category.servic
 import cvService from "@master/services/cv-info.service";
 import DetailModal from './DetailBizModal.vue'
 import { useToastStore } from '@/stores/toast.store'
-// import { useI18n } from "vue-i18n";
-import { i18n } from '../../../../lang/i18n'
+
 
 const router = useRouter();
 const route = useRoute();
@@ -564,6 +571,210 @@ const getListTechnicalCategory = async () => {
     })
 };
 
+const sheet = ref([])
+const json = ref([])
+
+const handleFileUpload = (event) => {
+    const file = event.target.files[0];
+    const reader = new FileReader();
+  
+    reader.onload = (e) => {
+      const data = new Uint8Array(e.target.result);
+      const workbook = XLSX.read(data, { type: 'array' });
+      const firstSheetName = workbook.SheetNames[0];
+      const worksheet = workbook.Sheets[firstSheetName];
+      sheet.value = worksheet
+
+      const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+      json.value = jsonData
+      mappingFromFile()
+    };
+  
+    reader.readAsArrayBuffer(file);
+  };
+const onImport = async () => {
+  await document.getElementById("Import").click()
+}
+const mappingValueLanguage = {
+  "○" : 1 ,
+  "☆" : 2 ,
+  "△" : 3 
+}
+const mappingFromFile = () => {
+  mappingInfoCV()
+  mappingBiz()
+  mappingTech()
+}
+const mappingInfoCV = () => {
+  const index_sheet = {
+    furigana : "J2",
+    name: "J4",
+    gender: "AF4",
+    birthday: "AJ4",
+    lang1_hearing: "AT5",
+    lang1_speaking: "AW5",
+    lang1_reading: "BA5",
+    lang1_writing: "BE5",
+    lang2_hearing: "AT6",
+    lang2_speaking: "AW6",
+    lang2_reading: "BA6",
+    lang2_writing: "BE6",
+    last_university_name: "J8",
+    subject: "AD8",
+    graduation_year: "AP8",
+    final_education: "AW8",
+    certificate1_name: "K10",
+    certificate1_year: "AW10",
+    certificate2_name: "K11",
+    certificate2_year: "AW11",
+    certificate3_name: "K12",
+    certificate3_year: "AW12",
+    // certificate4_name: null,
+    // certificate4_year: null,
+    work_process: "J13",
+    note: "J22"
+  }
+  // alert(cv)
+  for(const i in index_sheet){
+    const cell = index_sheet[i]
+    let value = sheet.value[cell] ? sheet.value[cell].v : null
+    if(i == "birthday"){
+        const nowYear = new Date().getFullYear()
+        value = new Date(nowYear-value , 0 , 1)
+    }
+    if(i == "gender"){
+      if(["male","男"].includes(value.trim().toLowerCase()))
+        continue ;
+      else value = 1
+    }
+    if( ["lang1_speaking" , "lang1_hearing" , "lang1_reading" , "lang1_writing" , "lang2_speaking" , "lang2_hearing" , "lang2_reading" , "lang2_writing"].includes(i) ){
+      value = mappingValueLanguage[value]
+    }
+    cv[i] = value 
+  }
+}
+const mappingBiz = () => {
+  const biz_columns = {
+    prj_name: 3,
+    prj_content: 15,
+    period: 28 ,
+    system_analysis: 31,
+    overview_design: 33,
+    basic_design: 35,
+    function_design: 37,
+    detail_design: 39,
+    coding: 41,
+    unit_test: 43,
+    operation: 45,
+    os_db: 47,
+    language: 51,
+    role: 60
+  }
+  const _biz = {
+      id: "00000000-0000-0000-0000-000000000000",
+      prj_name: null,
+      prj_content: null,
+      period: 1,
+      system_analysis: false,
+      overview_design: false,
+      basic_design: false,
+      function_design: false,
+      detail_design: false,
+      coding: false,
+      unit_test: false,
+      operation: false,
+      os_db: null,
+      language: null,
+      role: "Dev",
+  }
+  bizInfos.value = []
+  for (let index = 56; index < json.value.length; index++) {
+    if( json.value[index].length == 0 || json.value[index][2] == null ) continue ;
+      const OneBiz = {..._biz}
+      for(let j in biz_columns)
+      {
+        if(j == "period" )
+        {
+          let value = json.value[index+2][biz_columns["period"]-2]
+          if(typeof value == "string")
+            value = parseInt(value.replace(/[a-zA-Z]/g, ''))
+          OneBiz[j] = value
+        }
+        else if( json.value[index][biz_columns[j]-1] )
+        {
+          if([  "system_analysis" ,
+                "overview_design" , 
+                "basic_design"    ,
+                "function_design" ,
+                "detail_design"   ,
+                "coding"          ,
+                "unit_test"       ,
+                "operation"       
+              ].includes(j))
+              {
+                OneBiz[j] = true
+              }
+          else OneBiz[j] = json.value[index][biz_columns[j]-1]+""
+        }
+      }
+      bizInfos.value.push(OneBiz)
+  }
+}
+const mappingTech = () => {
+  let Arr = []
+  let experience = []
+  let tech = []
+  for (let index = 30; index < 50; index++){
+    Arr.push(json.value[index].filter(i => i!=null))
+  }
+  for(let value of [...Arr])
+  {
+    for(let index in [...value]){
+      // if(value[index] == "Y" && (typeof value[index-1] == 'number' || typeof value[index+1] == 'number')  )
+      if( value[index]=="M" )
+      {  
+        const exp = {
+          name : null ,
+          year : 0 ,
+          month : 0
+        }
+        if(typeof value[index-1] == 'number'){
+          if(typeof value[index*1-3] == "number"){
+            exp.name = value[index*1-4]
+            exp.year = value[index*1-3]
+          }
+          else {
+            exp.name = value[index*1-3]
+          }
+          exp.month = value[index*1-1]
+          experience.push(exp)
+        }
+        else{
+          if(typeof value[index-2] == 'number'){
+            exp.year = value[index-2]
+            exp.name = value[index-3]
+            experience.push(exp)
+          }
+        }        
+      }
+    }
+  }
+  tech.push(experience)
+  for(let techCat in technicals.value){
+    for(let i in technicals.value[techCat].technicals){
+      const name = technicals.value[techCat].technicals[i].name
+      const time = experience.find(i => i.name == name)
+      if(time){
+        const year = (time.month >= 6) ? time.year+1 : time.year
+        technicals.value[techCat].technicals[i].value = year ? year : null 
+        tech.push(time)
+      tech.push(year)
+      }
+      // tech.push(technicals.value[techCat].technicals[i])
+    }
+  }
+
+}
 const getCvDetail = async () => {
   await cvService
     .detail(_id)
@@ -788,12 +999,15 @@ const onSave = async (formEl: FormInstance | undefined) => {
   
   getBizInfoData()
   
+  //Update
   if (_id) {
     await cvService.update(cv).finally(() => {
       isLoading.value = false;
     });
     onReload();
-  } else {
+  } 
+  //Create
+  else {
     await cvService.create(cv).finally(() => {
       isLoading.value = false;
     });
