@@ -364,24 +364,6 @@
                 </div>
               </vc-col>
             </vc-row>
-            <vc-row>
-              <vc-col :lg="14" :md="14" :sm="14" :xs="14">
-                <div class="full-width center-item">
-                  <vc-input v-model="cv.certificate4_name"/>
-                </div>
-              </vc-col>
-              <vc-col :lg="10" :md="10" :sm="10" :xs="10">
-                <div class="full-width center-item">
-                  <el-input-number
-                    v-model="cv.certificate4_year"  
-                    :min="1"
-                    class="full-width"
-                    :controls="false"
-                  />
-                  <!-- <vc-input v-model="cv.certificate4_year"/> -->
-                </div>
-              </vc-col>
-            </vc-row>
           </vc-col>
           
         </vc-row>
@@ -629,8 +611,6 @@ const mappingInfoCV = () => {
     certificate2_year: "AW11",
     certificate3_name: "K12",
     certificate3_year: "AW12",
-    // certificate4_name: null,
-    // certificate4_year: null,
     work_process: "J13",
     note: "J22"
   }
@@ -649,6 +629,9 @@ const mappingInfoCV = () => {
     }
     if( ["lang1_speaking" , "lang1_hearing" , "lang1_reading" , "lang1_writing" , "lang2_speaking" , "lang2_hearing" , "lang2_reading" , "lang2_writing"].includes(i) ){
       value = mappingValueLanguage[value]
+    }
+    if(["certificate1_year","certificate2_year","certificate3_year"].includes(i)){
+      value = value ? (new Date((new Date(1900,0,1)).getTime() + value * 24 * 60 * 60 * 1000)).getFullYear() : null
     }
     cv[i] = value 
   }
