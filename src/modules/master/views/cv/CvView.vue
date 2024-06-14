@@ -997,10 +997,10 @@ const onSave = async (formEl: FormInstance | undefined) => {
   
   //Update
   if (_id) {
+    const nowBirthDay = new Date(cv.birthday)
+    const offSet = Math.abs(nowBirthDay.getTimezoneOffset()/60)
+    cv.birthday = new Date(nowBirthDay.setHours(offSet))
     await cvService.update(cv).finally(() => {
-      const nowBirthDay = new Date(cv.birthday)
-      const offSet = Math.abs(nowBirthDay.getTimezoneOffset()/60)
-      cv.birthday = new Date(nowBirthDay.setHours(offSet))
       isLoading.value = false;
     });
     onReload();
