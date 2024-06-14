@@ -96,7 +96,7 @@
 import tl from "@/utils/locallize";
 import validate from "@/utils/validate_elp";
 import { POPUP_TYPE } from "@/commons/const";
-import { reactive, ref, defineEmits } from "vue";
+import { reactive, ref } from "vue";
 import { useCvInfoStore } from '@master/stores/cv-info.store'
 import type { FormInstance } from "element-plus";
 

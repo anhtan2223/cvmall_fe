@@ -703,60 +703,73 @@ const mappingBiz = () => {
       bizInfos.value.push(OneBiz)
   }
 }
+
+interface Experience {
+  name: string | null;
+  year: number;
+  month: number;
+}
+
+interface TechnicalDetail {
+  name: string;
+  value?: number | null;
+}
+
 const mappingTech = () => {
-  let Arr = []
-  let experience = []
-  let tech = []
-  for (let index = 30; index < 50; index++){
-    Arr.push(json.value[index].filter(i => i!=null))
+  let Arr: any[] = [];
+  let experience: Experience[] = [];
+  let tech: Array<Experience | number> = [];
+  
+  for (let index = 30; index < 50; index++) {
+    Arr.push(json.value[index].filter((i: any) => i != null));
   }
-  for(let value of [...Arr])
-  {
-    for(let index in [...value]){
-      // if(value[index] == "Y" && (typeof value[index-1] == 'number' || typeof value[index+1] == 'number')  )
-      if( value[index]=="M" )
-      {  
-        const exp = {
-          name : null ,
-          year : 0 ,
-          month : 0
-        }
-        if(typeof value[index-1] == 'number'){
-          if(typeof value[index*1-3] == "number"){
-            exp.name = value[index*1-4]
-            exp.year = value[index*1-3]
+
+  for (let value of Arr) {
+    for (let index in value) {
+      if (value[index] == "M") {  
+        const exp: Experience = {
+          name: null,
+          year: 0,
+          month: 0,
+        };
+
+        if (typeof value[index - 1] == 'number') {
+          if (typeof value[index * 1 - 3] == "number") {
+            exp.name = value[index * 1 - 4];
+            exp.year = value[index * 1 - 3];
+          } else {
+            exp.name = value[index * 1 - 3];
           }
-          else {
-            exp.name = value[index*1-3]
-          }
-          exp.month = value[index*1-1]
-          experience.push(exp)
-        }
-        else{
-          if(typeof value[index-2] == 'number'){
-            exp.year = value[index-2]
-            exp.name = value[index-3]
-            experience.push(exp)
+          exp.month = value[index * 1 - 1];
+          experience.push(exp);
+        } else {
+          if (typeof value[index - 2] == 'number') {
+            exp.year = value[index - 2];
+            exp.name = value[index - 3];
+            experience.push(exp);
           }
         }        
       }
     }
   }
-  tech.push(experience)
-  for(let techCat in technicals.value){
-    for(let i in technicals.value[techCat].technicals){
-      const name = technicals.value[techCat].technicals[i].name
-      const time = experience.find(i => i.name == name)
-      if(time){
-        const year = (time.month >= 6) ? time.year+1 : time.year
-        technicals.value[techCat].technicals[i].value = year ? year : null 
-        tech.push(time)
-      tech.push(year)
-      }
-      // tech.push(technicals.value[techCat].technicals[i])
-    }
-  }
 
+  tech.push(experience);
+
+  for (const techCat in technicals.value) {
+    technicals.value[techCat].technicals.forEach((techItem: TechnicalDetail) => {
+      if (techItem.name) {
+        const name = techItem.name.toUpperCase();
+        const time = experience.find(item => item && item.name && item.name.toUpperCase() === name);
+
+        if (time) {
+          const year = (time.month >= 6) ? time.year + 1 : time.year;
+          techItem.value = year || null;
+          tech.push(time);
+          tech.push(year);
+        }
+      }
+    });
+  }
 }
 const getCvDetail = async () => {
   await cvService
