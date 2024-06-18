@@ -1066,23 +1066,23 @@
     value?: number | null
   }
 
-  const mappingTech = () => {
-    let Arr: any[] = []
-    let experience: Experience[] = []
-    let tech: Array<Experience | number> = []
+const mappingTech = () => {
+  const Arr: any[] = [];
+  const experience: Experience[] = [];
+  const tech: Array<Experience | number> = [];
+  
+  for (let index = 30; index < 50; index++) {
+    Arr.push(json.value[index].filter((i: any) => i != null));
+  }
 
-    for (let index = 30; index < 50; index++) {
-      Arr.push(json.value[index].filter((i: any) => i != null))
-    }
-
-    for (let value of Arr) {
-      for (let index in value) {
-        if (value[index] == 'M') {
-          const exp: Experience = {
-            name: null,
-            year: 0,
-            month: 0,
-          }
+  for (const value of Arr) {
+    for (const index in value) {
+      if (value[index] == "M") {  
+        const exp: Experience = {
+          name: null,
+          year: 0,
+          month: 0,
+        };
 
           if (typeof value[index - 1] == 'number') {
             if (typeof value[index * 1 - 3] == 'number') {
@@ -1412,31 +1412,29 @@
 
     isLoading.value = true
 
-    getTechnicalDataToCv()
+  getTechnicalDataToCv()
+  
+  getBizInfoData()
 
-    getBizInfoData()
-
-    //Update
-    if (_id) {
-      const nowBirthDay = new Date(cv.birthday)
-      const offSet = Math.abs(nowBirthDay.getTimezoneOffset() / 60)
-      cv.birthday = new Date(nowBirthDay.setHours(offSet))
-      await cvService.update(cv).finally(() => {
-        isLoading.value = false
-      })
-      onReload()
-    }
-    //Create
-    else {
-      const nowBirthDay = new Date(cv.birthday)
-      const offSet = Math.abs(nowBirthDay.getTimezoneOffset() / 60)
-      cv.birthday = new Date(nowBirthDay.setHours(offSet))
-      await cvService.create(cv).finally(() => {
-        isLoading.value = false
-      })
-      router.go(-1)
-    }
+  const nowBirthDay = new Date(cv.birthday)
+  const offSet = Math.abs(nowBirthDay.getTimezoneOffset()/60)
+  cv.birthday = new Date(nowBirthDay.setHours(offSet))
+  
+  //Update
+  if (_id) {
+    await cvService.update(cv).finally(() => {
+      isLoading.value = false;
+    });
+    onReload();
+  } 
+  //Create
+  else {
+    await cvService.create(cv).finally(() => {
+      isLoading.value = false;
+    });
+    router.go(-1)
   }
+};
 
   const checkValidateForm = () => {
     let isValid = false
