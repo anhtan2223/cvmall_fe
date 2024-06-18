@@ -89,10 +89,12 @@ const colConfigDashboard = ref<any>([]);
 onBeforeMount(async () => {
   isLoading.value = true;
   isTableLoading.value = true;
+  isExportAllCVsLoading.value = true;
   cvGoSort.value = "user_code.asc";
   await fetchData();
   isLoading.value = false;
   isTableLoading.value = false;
+  isExportAllCVsLoading.value = false;
 });
 
 const onPageChanged = async (page: any) => {
