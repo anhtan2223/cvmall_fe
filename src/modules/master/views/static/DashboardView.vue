@@ -11,7 +11,7 @@
         <vc-button class="ml-2" @click="onAddNew" type="primary" :icon="'Plus'" :loading="isLoading">
           {{ tl("Common", "BtnAddNew") }}
         </vc-button>
-        <vc-button class="ml-2" @click="onExport" type="success" :icon="'Download'" :loading="isLoading">
+        <vc-button class="ml-2" @click="onExport" type="success" :icon="'Download'" :loading="isExportAllCVsLoading">
           {{ tl("Common", "BtnExportExcel") }}
         </vc-button>
         <vc-button
@@ -30,7 +30,7 @@
       <vc-col :span="24">
         <el-scrollbar>
           <vc-table :datas="dataGrid" :tableConfig="tableConfig" :colConfigs="colConfigDashboard" :page="cvPageConfig"
-            :loading="isLoading" :total="cvPageConfig.total" @pageChanged="onPageChanged" @sizeChanged="onSizeChanged">
+            :loading="isTableLoading" :total="cvPageConfig.total" @pageChanged="onPageChanged" @sizeChanged="onSizeChanged" @sorted="onSortChange">
             <template #action="{ data }">
               <div class="d-flex flex-center">
                 <vc-button type="primary" size="small" class="btn-acttion" @click="onEdit(data)"
@@ -82,29 +82,34 @@ const dataGrid = ref<any[]>([]);
 const confirmDialog = ref<any>(null);
 const router = useRouter();
 const isLoading = ref<boolean>(false);
+const isExportAllCVsLoading = ref<boolean>(false);
+const isTableLoading = ref<boolean>(false);
 const colConfigDashboard = ref<any>([]);
 
 onBeforeMount(async () => {
   isLoading.value = true;
+  isTableLoading.value = true;
+  cvGoSort.value = "user_code.asc";
   await fetchData();
   isLoading.value = false;
+  isTableLoading.value = false;
 });
 
 const onPageChanged = async (page: any) => {
-  isLoading.value = true;
+  isTableLoading.value = true;
   cvPageConfig.value.page = page.page;
   cvPageConfig.value.size = page.size;
   await fetchData();
-  isLoading.value = false;
+  isTableLoading.value = false;
 };
 
 const onSizeChanged = async (size: number) => {
-  isLoading.value = true;
+  isTableLoading.value = true;
   cvPageConfig.value.size = size;
   cvPageConfig.value.page = 1;
   await fetchData();
   console.log(cvPageConfig);  
-  isLoading.value = false;
+  isTableLoading.value = false;
 };
 
 const onAddNew = () => {
@@ -112,7 +117,9 @@ const onAddNew = () => {
 };
 
 const onExport = async () => {
+  isExportAllCVsLoading.value = true;
   await cvInfoStore.exportAll()
+  isExportAllCVsLoading.value = false;
 }
 
 const onExportDetail = async (item: any) => {
@@ -144,6 +151,25 @@ const onDeleteItem = (item: any) => {
   );
 };
 
+const onSortChange = async (sort: any, config: any) => {
+  isTableLoading.value = true;
+  cvDataGrid.value = [];
+  techCatDataGrid.value = [];
+  if (config.order == null) {
+    cvGoSort.value = "user_code.asc";
+  }
+  else {
+    cvGoSort.value = sort;
+  }
+  await cvInfoStore.getList();
+  await technicalCategoryStore.getList();
+  cleanData();
+  configColumnTable();
+  bindingDataToTable();
+  isTableLoading.value = false;
+
+}
+
 const fetchData = async () => {
   await getData();
   cleanData();
@@ -154,7 +180,6 @@ const fetchData = async () => {
 const getData = async () => {
   cvDataGrid.value = [];
   techCatDataGrid.value = [];
-  cvGoSort.value = "user_code.asc";
   await cvInfoStore.getList();
   await technicalCategoryStore.getList();
 };
@@ -174,6 +199,7 @@ const configColumnTable = () => {
       let columnChildObject: ColConfig = {
         key: childElement.id,
         title: tl(FUNC_NAME, childElement.name),
+        sort: 'custom'
       };
       columnObject.child.push(columnChildObject);
     });
@@ -209,10 +235,11 @@ const bindingDataToTable = () => {
 }
 
 const search = async () => {
-  isLoading.value = true;
+  isTableLoading.value = true;
   cvPageConfig.value.page = 1;
+  cvGoSort.value = "user_code.asc";
   await fetchData();
-  isLoading.value = false;
+  isTableLoading.value = false;
 };
 
 const cleanData = () => {
