@@ -11,9 +11,17 @@
         <vc-button class="ml-2" @click="onAddNew" type="primary" :icon="'Plus'" :loading="isLoading">
           {{ tl("Common", "BtnAddNew") }}
         </vc-button>
-        <vc-button class="ml-2" @click="onExport" type="success" :icon="'Download'" :loading="isLoading"
-          :disabled="true">
+        <vc-button class="ml-2" @click="onExport" type="success" :icon="'Download'" :loading="isLoading">
           {{ tl("Common", "BtnExportExcel") }}
+        </vc-button>
+        <vc-button
+          class="ml-2"
+          @click="onExportTemplate"
+          type="success"
+          :icon="'Download'"
+          :loading="isLoading"
+        >
+          {{ tl('Common', 'BtnExportExcelTemplate') }}
         </vc-button>
       </vc-col>
     </vc-row>
@@ -30,8 +38,7 @@
                 <vc-button type="danger" code="F00015" size="small" class="btn-acttion" @click="onDeleteItem(data)"
                   :icon="'Delete'">
                 </vc-button>
-                <vc-button type="success" size="small" class="btn-acttion" @click="onExport" :icon="'Download'"
-                  :disabled="true"></vc-button>
+                <vc-button type="success" size="small" class="btn-acttion" @click="onExportDetail(data)" :icon="'Download'"></vc-button>
               </div>
             </template>
             <template #is_actived="{ data }">
@@ -104,8 +111,17 @@ const onAddNew = () => {
   router.push({ name: 'CvAddNew' })
 };
 
-const onExport = () => { };
+const onExport = async () => {
+  await cvInfoStore.exportAll()
+}
 
+const onExportDetail = async (item: any) => {
+  await cvInfoStore.exportDetail(item)
+}
+
+const onExportTemplate = async () => {
+  await cvInfoStore.exportTemplate()
+}
 const onSuccess = async () => { };
 
 const onEdit = (item: any) => {
