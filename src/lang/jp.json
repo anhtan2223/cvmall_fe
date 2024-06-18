@@ -2,7 +2,7 @@
   "user_code": "利用者符号",
   "branch": "支店",
   "furigana": "フリガナ",
-  "gender" : "性別",
+  "gender": "性別",
   "birthday": "誕生日",
   "language": "言語/能力",
   "evaluate": "○：問題なし　☆：通じる　△：初級",
@@ -42,5 +42,9 @@
   "coding": "製　　造",
   "unit_test": "試　　験",
   "operation": "運　　用",
-  "role": "役　　割"
+  "role": "役　　割",
+  "AddTechnicalCategory": "技術カテゴリを追加",
+  "TechnicalCategory": "技術カテゴリ",
+  "AddTechnical": "技術を追加",
+  "Technical": "技術"
 }
