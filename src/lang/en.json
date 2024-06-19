@@ -2,7 +2,7 @@
   "user_code": "UserCode",
   "branch": "Branch",
   "furigana": "Furigana",
-  "gender" : "Gender",
+  "gender": "Gender",
   "birthday": "Birthday",
   "language": "Language",
   "evaluate": "○: No problem ☆: Connected △: Elementary",
@@ -42,5 +42,9 @@
   "coding": "Coding",
   "unit_test": "Unit Test",
   "operation": "Operation",
-  "role": "Role"
+  "role": "Role",
+  "AddTechnicalCategory": "Add Technical Category",
+  "TechnicalCategory": "Technical Category",
+  "AddTechnical": "Add Technical",
+  "Technical": "Technical"
 }
