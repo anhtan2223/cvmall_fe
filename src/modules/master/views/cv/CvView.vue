@@ -406,7 +406,8 @@
               </div>
             </vc-row>
             <vc-row>
-              <vc-input v-model="cv.last_university_name" />
+              <vc-input v-if="$i18n.locale=='en'" v-model="cv.last_university_name" />
+              <vc-input v-else v-model="cv.last_university_name_jp"/>
             </vc-row>
           </vc-col>
           <vc-col :lg="5" :md="5" :sm="5" :xs="5" class="no-pading">
@@ -420,7 +421,8 @@
               </div>
             </vc-row>
             <vc-row>
-              <vc-input v-model="cv.subject" />
+              <vc-input v-if="$i18n.locale=='en'" v-model="cv.subject" />
+              <vc-input v-else v-model="cv.subject_jp"/>
             </vc-row>
           </vc-col>
           <vc-col :lg="5" :md="5" :sm="5" :xs="5" class="no-pading">
@@ -503,7 +505,8 @@
             <vc-row class="no-pading">
               <vc-col :lg="14" :md="14" :sm="14" :xs="14">
                 <div class="full-width center-item">
-                  <vc-input v-model="cv.certificate1_name" />
+                  <vc-input v-if="$i18n.locale=='en'" v-model="cv.certificate1_name"/>
+                  <vc-input v-else v-model="cv.certificate1_name_jp"/>
                 </div>
               </vc-col>
               <vc-col :lg="10" :md="10" :sm="10" :xs="10">
@@ -526,7 +529,8 @@
             <vc-row>
               <vc-col :lg="14" :md="14" :sm="14" :xs="14">
                 <div class="full-width center-item">
-                  <vc-input v-model="cv.certificate2_name" />
+                  <vc-input v-if="$i18n.locale=='en'" v-model="cv.certificate2_name"/>
+                  <vc-input v-else v-model="cv.certificate2_name_jp"/>
                 </div>
               </vc-col>
               <vc-col :lg="10" :md="10" :sm="10" :xs="10">
@@ -544,7 +548,8 @@
             <vc-row>
               <vc-col :lg="14" :md="14" :sm="14" :xs="14">
                 <div class="full-width center-item">
-                  <vc-input v-model="cv.certificate3_name" />
+                  <vc-input v-if="$i18n.locale=='en'" v-model="cv.certificate3_name"/>
+                  <vc-input v-else v-model="cv.certificate3_name_jp"/>
                 </div>
               </vc-col>
               <vc-col :lg="10" :md="10" :sm="10" :xs="10">
@@ -578,7 +583,8 @@
           </vc-col>
           <vc-col :lg="21" :md="21" :sm="21" :xs="21" class="no-pading-left">
             <div class="full-width center-item">
-              <vc-textarea rows="6" v-model="cv.work_process" />
+              <vc-textarea v-if="$i18n.locale=='en'" rows="6" v-model="cv.work_process"/>
+              <vc-textarea v-else rows="6" v-model="cv.work_process_jp"/>
             </div>
           </vc-col>
         </vc-row>
@@ -599,7 +605,8 @@
           </vc-col>
           <vc-col :lg="21" :md="21" :sm="21" :xs="21" class="no-pading-left">
             <div class="full-width center-item">
-              <vc-textarea rows="6" v-model="cv.note" />
+              <vc-textarea v-if="$i18n.locale=='en'" rows="6" v-model="cv.note"/>
+              <vc-textarea v-else rows="6" v-model="cv.note_jp"/>
             </div>
           </vc-col>
         </vc-row>
@@ -845,6 +852,8 @@
   import { useToastStore } from '@/stores/toast.store'
   import technicalCategoryService from '@master/services/technical-category.service'
   import { useI18n } from 'vue-i18n'
+  import i18n from "@/lang/i18n"
+  import { computed } from "vue"
 
   const router = useRouter()
   const route = useRoute()
@@ -1188,18 +1197,25 @@ const mappingTech = () => {
         lang2_reading: cvData.lang2_reading,
         lang2_writing: cvData.lang2_writing,
         last_university_name: cvData.last_university_name,
+        last_university_name_jp: cvData.last_university_name_jp,
         subject: cvData.subject,
+        subject_jp: cvData.subject_jp,
         graduation_year: cvData.graduation_year,
         certificate1_name: cvData.certificate1_name,
+        certificate1_name_jp: cvData.certificate1_name_jp,
         certificate1_year: cvData.certificate1_year,
         certificate2_name: cvData.certificate2_name,
+        certificate2_name_jp: cvData.certificate2_name_jp,
         certificate2_year: cvData.certificate2_year,
         certificate3_name: cvData.certificate3_name,
+        certificate3_name_jp: cvData.certificate3_name_jp,
         certificate3_year: cvData.certificate3_year,
         certificate4_name: cvData.certificate4_name,
         certificate4_year: cvData.certificate4_year,
         work_process: cvData.work_process,
+        work_process_jp: cvData.work_process_jp,
         note: cvData.note,
+        note_jp: cvData.note_jp,
         cvTechInfos: cvData.cvTechInfos,
         bizInfos: cvData.bizInfos,
       }
@@ -1377,19 +1393,26 @@ const mappingTech = () => {
     lang2_reading: null,
     lang2_writing: null,
     last_university_name: null,
+    last_university_name_jp: null,
     subject: null,
+    subject_jp: null,
     graduation_year: null,
     final_education: null,
     certificate1_name: null,
+    certificate1_name_jp: null,
     certificate1_year: null,
     certificate2_name: null,
+    certificate2_name_jp: null,
     certificate2_year: null,
     certificate3_name: null,
+    certificate3_name_jp: null,
     certificate3_year: null,
     certificate4_name: null,
     certificate4_year: null,
     work_process: null,
+    work_process_jp: null,
     note: null,
+    note_jp: null,
     cvTechInfos: [],
     bizInfos: [],
   })
@@ -1617,16 +1640,16 @@ const mappingTech = () => {
       },
     ]
 
-    genders.value = [
-      {
-        key: 0,
-        value: tl('Curriculum vitae', 'Male'),
+    genders.value = computed(() => [
+    {
+        key : 0,
+        value : tl("Curriculum vitae", i18n.global.t('gender_male'))
       },
       {
-        key: 1,
-        value: tl('Curriculum vitae', 'Female'),
-      },
-    ]
+        key : 1,
+        value :  tl("Curriculum vitae", i18n.global.t('gender_male'))
+      }
+    ])
   }
 
   // onMounted(() => {
