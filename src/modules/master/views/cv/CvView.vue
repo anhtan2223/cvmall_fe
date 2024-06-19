@@ -1647,7 +1647,7 @@ const mappingTech = () => {
       },
       {
         key : 1,
-        value :  tl("Curriculum vitae", i18n.global.t('gender_male'))
+        value :  tl("Curriculum vitae", i18n.global.t('gender_female'))
       }
     ])
   }
