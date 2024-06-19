@@ -478,10 +478,10 @@
                 <span v-if="data.basic_design">○</span>
               </template>
               <template #function_design="{ data }">
-                <span v-if="data.function_design">○</span>
+                <span v-if="data.functional_design">○</span>
               </template>
               <template #detail_design="{ data }">
-                <span v-if="data.detail_design">○</span>
+                <span v-if="data.detailed_design">○</span>
               </template>
               <template #coding="{ data }">
                 <span v-if="data.coding">○</span>
@@ -644,8 +644,8 @@ const mappingBiz = () => {
     system_analysis: 31,
     overview_design: 33,
     basic_design: 35,
-    function_design: 37,
-    detail_design: 39,
+    functional_design: 37,
+    detailed_design: 39,
     coding: 41,
     unit_test: 43,
     operation: 45,
@@ -661,8 +661,8 @@ const mappingBiz = () => {
       system_analysis: false,
       overview_design: false,
       basic_design: false,
-      function_design: false,
-      detail_design: false,
+      functional_design: false,
+      detailed_design: false,
       coding: false,
       unit_test: false,
       operation: false,
@@ -688,8 +688,8 @@ const mappingBiz = () => {
           if([  "system_analysis" ,
                 "overview_design" , 
                 "basic_design"    ,
-                "function_design" ,
-                "detail_design"   ,
+                "functional_design" ,
+                "detailed_design"   ,
                 "coding"          ,
                 "unit_test"       ,
                 "operation"       
@@ -866,8 +866,8 @@ const mapDataBizInfo = (data: any) => {
         system_analysis: item.system_analysis,
         overview_design: item.overview_design,
         basic_design: item.basic_design,
-        function_design: item.functional_design,
-        detail_design: item.detailed_design,
+        functional_design: item.functional_design,
+        detailed_design: item.detailed_design,
         coding: item.coding,
         unit_test: item.unit_test,
         operation: item.operation,
@@ -908,8 +908,8 @@ const handlePopupSubmit = (data: any, index: number) => {
     system_analysis: data.system_analysis,
     overview_design: data.overview_design,
     basic_design: data.basic_design,
-    function_design: data.function_design,
-    detail_design: data.detail_design,
+    functional_design: data.functional_design,
+    detailed_design: data.detailed_design,
     coding: data.coding,
     unit_test: data.unit_test,
     operation: data.operation,
