@@ -27,6 +27,7 @@ interface DashboardColConfig {
   key : string | null,
   title: string | null,
   is_sort: boolean | null,
+  sort?: string,
   linked: boolean | null,
   width?: number
   child?: DashboardColConfig[] | null
@@ -46,6 +47,7 @@ export const colConfig : DashboardColConfig[] = [
     key: "user_code",
     title: tl(FUNC_NAME, "ID"),
     is_sort: true,
+    sort: 'custom',
     linked: false,
   },
   {
@@ -53,6 +55,7 @@ export const colConfig : DashboardColConfig[] = [
     title: tl(FUNC_NAME, "Chi nhánh"),
     width: 120,
     is_sort: true,
+    sort: 'custom',
     linked: false,
   },
   {
@@ -67,6 +70,7 @@ export const colConfig : DashboardColConfig[] = [
     key: "name",
     title: tl(FUNC_NAME, "Họ tên"),
     is_sort: true,
+    sort: 'custom',
     width: 200,
     linked: false,
   }

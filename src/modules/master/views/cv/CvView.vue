@@ -1137,13 +1137,8 @@ const mappingTech = () => {
     const oldTechnicals = technicals.value
     technicals.value = []
 
-    technicalData?.forEach((item: any) => {
-      let technicalList: {
-        id: any
-        name: any
-        cvTechInfoId: any
-        value: null
-      }[] = []
+  technicalData?.forEach((item: any) => {
+    let technicalList: { id: any; name: any; cvTechInfoId: any; value: null; }[] = []
 
       item.technicals.forEach((childItem: any) => {
         let cvTechInfo: null
@@ -1240,6 +1235,30 @@ const mappingTech = () => {
       })
     }
   }
+  if(data.bizInfos != null){
+    data.bizInfos.forEach(item => {
+      let bizData = {
+        id : item.id,
+        cvInfoId : item.cvInfoId,
+        prj_name : item.prj_name,
+        prj_content : item.prj_content,
+        period : item.period,
+        system_analysis: item.system_analysis,
+        overview_design: item.overview_design,
+        basic_design: item.basic_design,
+        function_design: item.functional_design,
+        detail_design: item.detailed_design,
+        coding: item.coding,
+        unit_test: item.unit_test,
+        operation: item.operation,
+        os_db: item.os_db,
+        language: item.language,
+        role: item.role,
+      }
+      bizInfos.value.push(bizData)
+    });
+  }
+}
 
   const getTechnicalDataToCv = () => {
     cv.cvTechInfos = []

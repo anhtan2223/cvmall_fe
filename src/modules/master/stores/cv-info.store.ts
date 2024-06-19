@@ -39,5 +39,17 @@ export const useCvInfoStore = defineStore('useCvInfoStore', {
         this.getList()
       })
     },
+
+    async exportAll() {
+      await cvInfoService.exportAll();
+    },
+
+    async exportTemplate() {
+      await cvInfoService.exportTemplate();
+    },
+
+    async exportDetail(data: any) {
+      await cvInfoService.exportDetail(data);
+    }
   }
 })
