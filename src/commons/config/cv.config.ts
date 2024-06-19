@@ -22,6 +22,9 @@ export const API = {
   DETAIL: (id: string) => `${FUNC_NAME}/${id}`,
   UPDATE: (id: string) => `${FUNC_NAME}/${id}`,
   DELETE: (id: string | string[]) => `${FUNC_NAME}/${id}`,
+  EXPORT_DETAIL: (id: string) => `${FUNC_NAME}/${id}/export`,
+  EXPORT_TEMPLATE: () => `${FUNC_NAME}/export_template`,
+  EXPORT_ALL: () => `${FUNC_NAME}/export_all`,
 }
 
 // ========================== CONFIG TABLE ==========================

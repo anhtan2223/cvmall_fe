@@ -21,12 +21,12 @@
 
       <!-- DATA -->
       <template v-for="(col, index) in colConfigs" :key="index">
-        <el-table-column :prop="col.key" :width="col.width" :label="col.title" :sortable="col.is_sort"
+        <el-table-column :prop="col.key" :width="col.width" :label="col.title" :sortable="col.sort ?? col.is_sort"
           v-if="!col.is_custom">
           <template v-for="(colChild, indexChild) in col.child" :key="indexChild" v-if="col.child != null">
             <el-table-column :prop="colChild.key" :width="colChild.width" :label="colChild.title"
-              :sortable="colChild.is_sort" v-if="!colChild.is_custom" />
-            <el-table-column :width="colChild.width" :label="colChild.title" :sortable="colChild.is_sort"
+              :sortable="colChild.sort ?? colChild.is_sort" v-if="!colChild.is_custom" />
+            <el-table-column :width="colChild.width" :label="colChild.title" :sortable="colChild.sort ?? colChild.is_sort"
               v-if="colChild.is_custom">
               <template #default="scope">
                 <div class="d-flex flex-start">
@@ -140,7 +140,7 @@ const onSortChange = (config: any) => {
 
   emit(
     'sorted',
-    `${config.prop}.${config.order == 'ascending' ? 'asc' : 'desc'}`
+    `${config.prop}.${config.order == 'ascending' ? 'asc' : 'desc'}`, config
   )
 }
 </script>

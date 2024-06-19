@@ -44,6 +44,35 @@ const cvInfoService = {
         return response
       })
   },
+  async exportAll() {
+    return await apiClient
+      .get(API.EXPORT_ALL(), {
+        responseType: 'blob',
+      })
+      .then((response: any) => {
+        fileService.resolveAndDownloadBlob(response, `All_CVs.zip`)
+      })
+  },
+
+  async exportDetail(data: any) {
+    return await apiClient
+      .get(API.EXPORT_DETAIL(data.id), {
+        responseType: 'blob',
+      })
+      .then((response: any) => {
+        fileService.resolveAndDownloadBlob(response, `CV_${data.name}.zip`)
+      })
+  },
+
+  async exportTemplate() {
+    return await apiClient
+      .get(API.EXPORT_TEMPLATE(), {
+        responseType: 'blob',
+      })
+      .then((response: any) => {
+        fileService.resolveAndDownloadBlob(response, `CV_templates.zip`)
+      })
+  },
 }
 
 export default cvInfoService
