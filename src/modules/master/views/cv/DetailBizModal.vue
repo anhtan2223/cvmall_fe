@@ -44,14 +44,14 @@
             <vc-row>
               <vc-checkbox :label="tl('BizInfo', $t('basic_design'))" v-model="biz.basic_design"
                 class="checkbox-width"></vc-checkbox>
-              <vc-checkbox :label="tl('BizInfo', $t('function_design'))" v-model="biz.function_design"
+              <vc-checkbox :label="tl('BizInfo', $t('function_design'))" v-model="biz.functional_design"
                 class="checkbox-width"></vc-checkbox>
             </vc-row>
           </vc-col>
 
           <vc-col :lg="12" :md="12" :sm="12" :xs="12">
             <vc-row>
-              <vc-checkbox :label="tl('BizInfo', $t('detail_design'))" v-model="biz.detail_design" class="checkbox-width">
+              <vc-checkbox :label="tl('BizInfo', $t('detail_design'))" v-model="biz.detailed_design" class="checkbox-width">
               </vc-checkbox>
               <vc-checkbox :label="tl('BizInfo', $t('coding'))" v-model="biz.coding" class="checkbox-width">
               </vc-checkbox>
@@ -118,8 +118,8 @@ const biz = reactive({
   system_analysis: null,
   overview_design: null,
   basic_design: null,
-  function_design: null,
-  detail_design: null,
+  functional_design: null,
+  detailed_design: null,
   coding: null,
   unit_test: null,
   operation: null,
@@ -149,8 +149,8 @@ const open = async (item: any, index: number) => {
       system_analysis: false,
       overview_design: false,
       basic_design: false,
-      function_design: false,
-      detail_design: false,
+      functional_design: false,
+      detailed_design: false,
       coding: false,
       unit_test: false,
       operation: false,
@@ -191,8 +191,8 @@ const close = () => {
     system_analysis: false,
     overview_design: false,
     basic_design: false,
-    function_design: false,
-    detail_design: false,
+    functional_design: false,
+    detailed_design: false,
     coding: false,
     unit_test: false,
     operation: false,
