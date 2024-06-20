@@ -51,7 +51,7 @@
 
     <!-- PAGING -->
     <div class="table-footer pa-2 pt-3" v-if="tableConfig?.showPaging">
-      <vc-pagination :pageConfig="pageConfig" :total="total" @changed="onPageChanged"
+      <vc-pagination :pageConfig="pageConfig" :total="total||0" @changed="onPageChanged"
         @sizeChanged="onSizeChanged"></vc-pagination>
     </div>
     <!-- PAGING -->
@@ -71,7 +71,7 @@ const props = defineProps<{
   page: MetaResponse
   height?: string
   loading?: boolean
-  total: number
+  total?: number
 }>()
 
 const {

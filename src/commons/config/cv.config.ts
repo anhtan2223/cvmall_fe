@@ -7,11 +7,13 @@ export const ROUTER_CV = [
     path: "/cv/new",
     name: "CvAddNew",
     component: () => import("@master/views/cv/CvView.vue"),
+    props: {type: "new"},
   },
   {
     path: "/cv/:id/edit",
     name: "CvEditById",
     component: () => import("@master/views/cv/CvView.vue"),
+    props: {type: "edit"},
   },
 ]
 

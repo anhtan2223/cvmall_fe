@@ -4,7 +4,7 @@
     <RouterView />
   </component>
   <vc-toast></vc-toast>
-  <vc-import ref="importDialog"></vc-import>
+  <vc-import ref="importDialog" :urlImport="''" :onSuccess="() => {}"></vc-import>
 </template>
 <script lang="ts" setup>
 import VcImport from "@/components/dialog/vc-import.vue";

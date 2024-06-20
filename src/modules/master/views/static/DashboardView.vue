@@ -30,7 +30,7 @@
       <vc-col :span="24">
         <el-scrollbar>
           <vc-table :datas="dataGrid" :tableConfig="tableConfig" :colConfigs="colConfigDashboard" :page="cvPageConfig"
-            :loading="isTableLoading" :total="cvPageConfig.total" @pageChanged="onPageChanged" @sizeChanged="onSizeChanged" @sorted="onSortChange">
+            :loading="isTableLoading" :total="cvPageConfig.total||0" @pageChanged="onPageChanged" @sizeChanged="onSizeChanged" @sorted="onSortChange">
             <template #action="{ data }">
               <div class="d-flex flex-center">
                 <vc-button type="primary" size="small" class="btn-acttion" @click="onEdit(data)"

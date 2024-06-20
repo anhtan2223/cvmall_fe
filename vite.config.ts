@@ -22,4 +22,8 @@ export default defineConfig({
       '@app': fileURLToPath(new URL('./src/modules/app', import.meta.url)),
     },
   },
+  define: {
+    // enable hydration mismatch details in production build
+    __VUE_PROD_HYDRATION_MISMATCH_DETAILS__: 'false'
+  }
 })

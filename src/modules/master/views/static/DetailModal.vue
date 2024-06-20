@@ -387,7 +387,7 @@
         <vc-row :gutter="20">
           <vc-col :span="24">
             <el-scrollbar>
-              <vc-table :datas="dataGrid" :tableConfig="tableConfig" :colConfigs="colConfig">
+              <vc-table :datas="dataGrid" :tableConfig="tableConfig" :colConfigs="colConfig" :total=0>
                 <template #prj_name="{ dataGrid }">
                   <vc-input/>
                 </template>
