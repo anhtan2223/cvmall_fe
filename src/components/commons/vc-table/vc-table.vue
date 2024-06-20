@@ -21,28 +21,30 @@
 
       <!-- DATA -->
       <template v-for="(col, index) in colConfigs" :key="index">
-        <el-table-column :prop="col.key" :width="col.width" :label="col.title" :sortable="col.sort ?? col.is_sort"
-          v-if="!col.is_custom">
-          <template v-for="(colChild, indexChild) in col.child" :key="indexChild" v-if="col.child != null">
-            <el-table-column :prop="colChild.key" :width="colChild.width" :label="colChild.title"
-              :sortable="colChild.sort ?? colChild.is_sort" v-if="!colChild.is_custom" />
-            <el-table-column :width="colChild.width" :label="colChild.title" :sortable="colChild.sort ?? colChild.is_sort"
-              v-if="colChild.is_custom">
-              <template #default="scope">
-                <div class="d-flex flex-start">
-                  <slot :name="colChild.key" :data="scope.row" :scope="scope"></slot>
-                </div>
-              </template>
-            </el-table-column>
-          </template>
-        </el-table-column>
-        <el-table-column :width="col.width" :label="col.title" :sortable="col.is_sort" v-if="col.is_custom">
-          <template #default="scope">
-            <div class="d-flex flex-start">
-              <slot :name="col.key" :data="scope.row" :scope="scope"></slot>
-            </div>
-          </template>
-        </el-table-column>
+        <template v-if="col.is_hidden != true">
+          <el-table-column :prop="col.key" :width="col.width" :label="col.title" :sortable="col.sort ?? col.is_sort"
+            v-if="!col.is_custom">
+            <template v-for="(colChild, indexChild) in col.child" :key="indexChild" v-if="col.child != null">
+              <el-table-column :prop="colChild.key" :width="colChild.width" :label="colChild.title"
+                :sortable="colChild.sort ?? colChild.is_sort" v-if="!colChild.is_custom" />
+              <el-table-column :width="colChild.width" :label="colChild.title" :sortable="colChild.sort ?? colChild.is_sort"
+                v-if="colChild.is_custom">
+                <template #default="scope">
+                  <div class="d-flex flex-start">
+                    <slot :name="colChild.key" :data="scope.row" :scope="scope"></slot>
+                  </div>
+                </template>
+              </el-table-column>
+            </template>
+          </el-table-column>
+          <el-table-column :width="col.width" :label="col.title" :sortable="col.is_sort" v-if="col.is_custom">
+            <template #default="scope">
+              <div class="d-flex flex-start">
+                <slot :name="col.key" :data="scope.row" :scope="scope"></slot>
+              </div>
+            </template>
+          </el-table-column>
+        </template>
       </template>
 
     </el-table>

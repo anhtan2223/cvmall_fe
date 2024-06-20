@@ -1233,7 +1233,9 @@ const mappingTech = () => {
           id: item.id,
           cvInfoId: item.cvInfoId,
           prj_name: item.prj_name,
+          prj_name_jp: item.prj_name_jp,
           prj_content: item.prj_content,
+          prj_content_jp: item.prj_content_jp,
           period: item.period,
           system_analysis: item.system_analysis,
           overview_design: item.overview_design,
@@ -1246,6 +1248,7 @@ const mappingTech = () => {
           os_db: item.os_db,
           language: item.language,
           role: item.role,
+          role_jp: item.role_jp,
         }
         bizInfos.value.push(bizData)
       })
@@ -1275,7 +1278,9 @@ const mappingTech = () => {
       id: data.id,
       cvInfoId: _id,
       prj_name: data.prj_name,
+      prj_name_jp: data.prj_name_jp,
       prj_content: data.prj_content,
+      prj_content_jp: data.prj_content_jp,
       period: data.period,
       system_analysis: data.system_analysis,
       overview_design: data.overview_design,
@@ -1288,6 +1293,7 @@ const mappingTech = () => {
       os_db: data.os_db,
       language: data.language,
       role: data.role,
+      role_jp: data.role_jp,
     }
 
     if (Number.isInteger(index) && index >= -1) {
@@ -1426,13 +1432,13 @@ const mappingTech = () => {
   }
 
   const onSave = async (formEl: FormInstance | undefined) => {
+    getTechnicalDataToCv()
+    
+    getBizInfoData()
+
     if (checkValidateForm()) return
 
     isLoading.value = true
-
-  getTechnicalDataToCv()
-  
-  getBizInfoData()
 
   const nowBirthDay = new Date(cv.birthday)
   const offSet = Math.abs(nowBirthDay.getTimezoneOffset()/60)
@@ -1482,6 +1488,13 @@ const mappingTech = () => {
       toastStore.push({
         type: 'warning',
         message: tl('Common', 'Furigana là bắt buộc'),
+      })
+      isValid = true
+    }
+    if (cv.bizInfos.some((x) => !x.prj_name || !x.role)) { 
+      toastStore.push({
+        type: 'warning',
+        message: tl('Common', 'Tất cả Business content phải có Project Name và Role tiếng anh'),
       })
       isValid = true
     }

@@ -21,12 +21,13 @@ const getTitle = (key: string) => {
 }
 
 interface BizColConfig {
-  key : string | null,
-  title: string | null,
-  is_sort?: boolean | null,
-  linked?: boolean | null,
+  key: string | null
+  title: string | null
+  is_sort?: boolean | null
+  linked?: boolean | null
   width?: number
   is_custom?: boolean | null
+  is_hidden?: boolean | null
 }
 
 export const tableConfig = {
@@ -45,6 +46,7 @@ export const colConfig : BizColConfig[] = computed(() => [
     title: getTitle('project'),
     linked: true,
     width: 300,
+    is_hidden: i18n.global.locale.value != 'en',
   },
   {
     key: "prj_content",
@@ -53,9 +55,28 @@ export const colConfig : BizColConfig[] = computed(() => [
     title: getTitle('duties_comments'),
     linked: false,
     width: 300,
+    is_hidden: i18n.global.locale.value != 'en',
   },
   {
-    key: "period",
+    key: 'prj_name_jp',
+    // title: tl(FUNC_NAME, "Project"),
+    // title: tl(FUNC_NAME, i18n.global.t('project')),
+    title: getTitle('project_jp'),
+    linked: true,
+    width: 300,
+    is_hidden: i18n.global.locale.value != 'jp',
+  },
+  {
+    key: 'prj_content_jp',
+    // title: tl(FUNC_NAME, "Duties / Comments"),
+    // title: tl(FUNC_NAME, i18n.global.t('duties_comments')),
+    title: getTitle('duties_comments_jp'),
+    linked: false,
+    width: 300,
+    is_hidden: i18n.global.locale.value != 'jp',
+  },
+  {
+    key: 'period',
     // title: tl(FUNC_NAME, "Period"),
     // title: tl(FUNC_NAME, i18n.global.t('period')),
     title: getTitle('period'),
@@ -120,7 +141,7 @@ export const colConfig : BizColConfig[] = computed(() => [
     key: "operation",
     // title: tl(FUNC_NAME, "Operation"),
     // title: tl(FUNC_NAME, i18n.global.t('operation')),
-    title: getTitle('operation'), 
+    title: getTitle('operation'),
     width: 95,
     is_custom: true
   },
@@ -142,7 +163,16 @@ export const colConfig : BizColConfig[] = computed(() => [
     // title: tl(FUNC_NAME, i18n.global.t('role')),
     title: getTitle('role'),
     width: 120,
-  }
-]);
+    is_hidden: i18n.global.locale.value != 'en',
+  },
+  {
+    key: 'role_jp',
+    // title: tl(FUNC_NAME, "Role_jp"),
+    // title: tl(FUNC_NAME, i18n.global.t('role_jp')),
+    title: getTitle('role_jp'),
+    width: 120,
+    is_hidden: i18n.global.locale.value != 'jp',
+  },
+])
 
 export default { tableConfig, colConfig };

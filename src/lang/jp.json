@@ -31,7 +31,9 @@
   "business_content": "【業務内容】",
   "business_content_details": "業務内容詳細",
   "project": "システム概要",
+  "project_jp": "システム概要",
   "duties_comments": "職務内容・コメント",
+  "duties_comments_jp": "職務内容・コメント",
   "period": "期　間",
   "month": "月",
   "system_analysis": "調査分析",
@@ -46,5 +48,6 @@
   "AddTechnicalCategory": "技術カテゴリを追加",
   "TechnicalCategory": "技術カテゴリ",
   "AddTechnical": "技術を追加",
-  "Technical": "技術"
+  "Technical": "技術",
+  "role_jp": "役　　割"
 }

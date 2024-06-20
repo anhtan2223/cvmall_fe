@@ -12,6 +12,7 @@ export type ColConfig = {
   width?: number
   is_color_map_border: boolean
   child: ColConfig[]
+  is_hidden: boolean
 }
 
 export type TableConfig = {

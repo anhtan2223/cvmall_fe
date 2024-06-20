@@ -6,8 +6,15 @@
 
         <vc-row :gutter="10">
           <vc-col :lg="18" :md="24" :sm="24" :xs="24">
-            <vc-input-group required prop="prj_name" :label="tl('BizInfo', $t('project'))">
-              <vc-input v-model="biz.prj_name" :disabled="type == POPUP_TYPE.VIEW" />
+            <vc-input-group
+              required
+              :prop="$i18n.locale == 'en' ? 'prj_name' : 'prj_name_jp'"
+              :label="tl('BizInfo', $t('project'))"
+            >
+              <vc-input
+                v-model="biz[$i18n.locale == 'en' ? 'prj_name' : 'prj_name_jp']"
+                :disabled="type == POPUP_TYPE.VIEW"
+              />
             </vc-input-group>
           </vc-col>
           <vc-col :lg="6" :md="24" :sm="24" :xs="24">
@@ -19,8 +26,12 @@
 
         <vc-row :gutter="10">
           <vc-col :lg="24" :md="24" :sm="24" :xs="24">
-            <vc-input-group required prop="prj_content" :label="tl('BizInfo', $t('duties_comments'))">
-              <vc-textarea v-model="biz.prj_content" />
+            <vc-input-group
+              required
+              :prop="$i18n.locale == 'en' ? 'prj_content' : 'prj_content_jp'"
+              :label="tl('BizInfo', $t('duties_comments'))"
+            >
+              <vc-textarea v-model="biz[$i18n.locale == 'en' ? 'prj_content' : 'prj_content_jp']" />
             </vc-input-group>
           </vc-col>
         </vc-row>
@@ -75,8 +86,12 @@
 
         <vc-row :gutter="10">
           <vc-col :lg="24" :md="24" :sm="24" :xs="24">
-            <vc-input-group required prop="role" :label="tl('BizInfo', $t('role'))">
-              <vc-input v-model="biz.role" />
+            <vc-input-group
+              required
+              :prop="$i18n.locale == 'en' ? 'role' : 'role_jp'"
+              :label="tl('BizInfo', $t('role'))"
+            >
+              <vc-input v-model="biz[$i18n.locale == 'en' ? 'role' : 'role_jp']" />
             </vc-input-group>
           </vc-col>
         </vc-row>
@@ -126,6 +141,9 @@ const biz = reactive({
   os_db: null,
   language: null,
   role: null,
+  prj_name_jp: null,
+  prj_content_jp: null,
+  role_jp: null,
 })
 
 const rules = reactive({
@@ -157,6 +175,9 @@ const open = async (item: any, index: number) => {
       os_db: null,
       language: null,
       role: null,
+      prj_name_jp: null,
+      prj_content_jp: null,
+      role_jp: null,
     }
 
     Object.assign(biz, bizInfo)
@@ -199,6 +220,9 @@ const close = () => {
     os_db: null,
     language: null,
     role: null,
+    prj_name_jp: null,
+    prj_content_jp: null,
+    role_jp: null,  
   }
 
   Object.assign(biz, bizInfo)

@@ -31,7 +31,9 @@
   "business_content": "[Business content]",
   "business_content_details": "Business content details",
   "project": "Project",
+  "project_jp": "Project",
   "duties_comments": "Duties/Comments",
+  "duties_comments_jp": "Duties/Comments",
   "period": "Period",
   "month": "month",
   "system_analysis": "System Analysis",
@@ -46,5 +48,6 @@
   "AddTechnicalCategory": "Add Technical Category",
   "TechnicalCategory": "Technical Category",
   "AddTechnical": "Add Technical",
-  "Technical": "Technical"
+  "Technical": "Technical",
+  "role_jp": "Role"
 }
