@@ -6,6 +6,9 @@
         <vc-button class="ml-2" @click="search" :icon="'Search'" :loading="isLoading">
           {{ tl("Common", "BtnSearch") }}
         </vc-button>
+        <vc-button class="ml-2" @click="reloadTable" :icon="'Refresh'" :loading="isLoading">
+          {{ tl("Common", "") }}
+        </vc-button>
       </vc-col>
       <vc-col :md="18" class="d-flex flex-end">
         <vc-button class="ml-2" @click="onAddNew" type="primary" :icon="'Plus'" :loading="isLoading">
@@ -247,6 +250,10 @@ const search = async () => {
 const cleanData = () => {
   dataGrid.value = [];
   colConfigDashboard.value = [];
+};
+const reloadTable = async () => {
+  cvSearch.value = '';
+  await search();
 };
 </script>
 

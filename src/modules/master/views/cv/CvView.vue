@@ -887,6 +887,7 @@
   const { t } = useI18n()
 
   onBeforeMount(async () => {
+    i18n.global.locale.value = "en"
     await onReload()
   })
 
