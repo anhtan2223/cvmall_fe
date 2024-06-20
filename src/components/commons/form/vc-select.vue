@@ -1,5 +1,5 @@
 <template>
-  <el-select v-model="modelValue" class="m-2" @change="onSelected">
+  <el-select v-model="modelValue" class="m-2" @change="onSelected" :items="items">
     <el-option v-if="!customText" v-for="item in data" :key="item[fieldValue]" :label="item[fieldText]"
       :value="item[fieldValue]" />
 
@@ -15,7 +15,7 @@ import _ from 'lodash';
 import { ref, toRef, watch, useAttrs, computed } from 'vue'
 
 const props = defineProps<{
-  items: any[]
+  items: any
   rules?: []
   modelValue: any
 }>()

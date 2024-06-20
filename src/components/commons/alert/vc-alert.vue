@@ -1,5 +1,5 @@
 <template>
-  <el-alert class="vc-alert mt-2" v-show="is_show" :type="type" show-icon>
+  <el-alert class="vc-alert mt-2" v-show="is_show" :type="type" :message="message.toString" show-icon>
     {{ message }}
   </el-alert>
 </template>

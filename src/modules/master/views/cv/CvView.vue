@@ -758,6 +758,7 @@
               :datas="bizInfos"
               :tableConfig="tableConfig"
               :colConfigs="colConfig"
+              :page="cvPageConfig"
             >
               <template #action="{ data }">
                 <div class="d-flex flex-center">
@@ -854,6 +855,11 @@
   import { useI18n } from 'vue-i18n'
   import i18n from "@/lang/i18n"
   import { computed } from "vue"
+  import { storeToRefs } from "pinia";
+  import { useCvInfoStore } from '@master/stores/cv-info.store'
+
+  const cvInfoStore = useCvInfoStore()
+  const { cvDataGrid, cvSearch, cvGoSort, cvPageConfig } = storeToRefs(cvInfoStore);
 
   const router = useRouter()
   const route = useRoute()

@@ -66,7 +66,7 @@
   const rules = reactive({
     name: [
       {
-        label: tl('Technology/Experience', t('technical_category')),
+        label: tl('Technology/Experience', t('TechnicalCategory')),
         required: true,
         validator: validate.required,
         trigger: ['change'],
