@@ -113,7 +113,7 @@ const onSizeChanged = async (size: number) => {
   cvPageConfig.value.size = size;
   cvPageConfig.value.page = 1;
   await fetchData();
-  console.log(cvPageConfig);  
+  //console.log(cvPageConfig);  
   isTableLoading.value = false;
 };
 

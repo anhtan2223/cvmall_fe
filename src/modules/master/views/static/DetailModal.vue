@@ -583,7 +583,7 @@ const open = async (techCatData: any, cvData: any) => {
 
   // techCatDataGrid.value = techCatData;
 
-  console.log(cvData);
+  //console.log(cvData);
   
   modal.value.open();
 };
@@ -597,7 +597,7 @@ const onSave = async (formEl: FormInstance | undefined) => {
   //   isLoading.value = true;
     
   // });
-  console.log(techCatDataGrid.value);
+  //console.log(techCatDataGrid.value);
 
 };
 
@@ -639,7 +639,7 @@ const bizMapData = (item: any) => {
   })
 
   // cv.bizInfos = dataGrid;
-  // console.log(dataGrid);
+  // //console.log(dataGrid);
 }
 
 const onAddNewBiz = () => {

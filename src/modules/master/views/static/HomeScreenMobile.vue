@@ -92,7 +92,7 @@ const getApi = async () => {
   await userService
     .getList()
     .then((data: any) => {
-      console.log(data);
+      //console.log(data);
     })
     .finally(() => {
       loading.value = false;
@@ -110,13 +110,13 @@ const pushToast = (type: string) => {
 
 const confirms = () => {
   confirmDialog.value.confirm("Logout", "Are your sure ?", (res: any) => {
-    console.log(res);
+    //console.log(res);
   });
 };
 
 const onAlert = () => {
   confirmDialog.value.alert("Logout", "Are your sure ?", (res: any) => {
-    console.log(res);
+    //console.log(res);
   });
 };
 </script>

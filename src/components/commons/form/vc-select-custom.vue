@@ -62,7 +62,7 @@ const handleDbRowClick = (item: any) => {
       user.value = item.name
     }
   } catch (err) {
-    console.log(err);
+    //console.log(err);
   }
 
 };

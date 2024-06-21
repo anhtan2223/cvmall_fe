@@ -12,7 +12,7 @@ const userManager = new UserManager(ssoSettings as UserManagerSettings)
 userManager.events.addUserLoaded((newUser) => {
   userManager.storeUser(newUser)
   userManager.getUser().then(() => {
-    // console.log('usr',usr)
+    // //console.log('usr',usr)
   })
 })
 
@@ -23,7 +23,7 @@ userManager.events.addAccessTokenExpired(() => {
 })
 
 userManager.events.addSilentRenewError((error) => {
-  console.log(error)
+  //console.log(error)
 })
 
 export default {
@@ -67,7 +67,7 @@ export default {
 
       userManager.clearStaleState()
     } catch (error) {
-      console.log(error)
+      //console.log(error)
     }
   },
 }

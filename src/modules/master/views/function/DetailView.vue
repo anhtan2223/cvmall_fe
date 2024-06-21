@@ -164,7 +164,7 @@ const onSave = async () => {
   if (!valid) return;
   isLoading.value = true;
 
-  console.log(func);
+  //console.log(func);
   if (_id) {
     await functionService.update(func).finally(() => {
       isLoading.value = false;
@@ -172,7 +172,7 @@ const onSave = async () => {
   } else {
     await functionService.create(func).finally(() => {
       isLoading.value = false;
-      console.log(func);
+      //console.log(func);
     });
   }
 };
