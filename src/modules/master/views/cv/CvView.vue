@@ -52,7 +52,6 @@
         </vc-button>
       </vc-col>
     </vc-row>
-
     <el-form
       ref="cvForm"
       :model="cv"
@@ -951,17 +950,24 @@
       lang2_reading: 'BA6',
       lang2_writing: 'BE6',
       last_university_name: 'J8',
+      last_university_name_jp: 'J8',
       subject: 'AD8',
+      subject_jp: 'AD8',
       graduation_year: 'AP8',
       final_education: 'AW8',
       certificate1_name: 'K10',
+      certificate1_name_jp: 'K10',
       certificate1_year: 'AW10',
       certificate2_name: 'K11',
+      certificate2_name_jp: 'K11',
       certificate2_year: 'AW11',
       certificate3_name: 'K12',
+      certificate3_name_jp: 'K12',
       certificate3_year: 'AW12',
       work_process: 'J13',
+      work_process_jp: 'J13',
       note: 'J22',
+      note_jp: 'J22',
     }
     // alert(cv)
     for (const i in index_sheet) {
@@ -1002,13 +1008,48 @@
             ).getFullYear()
           : null
       }
+      if(i18n.global.locale.value == 'en' && [
+        'last_university_name_jp' ,
+        'subject_jp'              , 
+        'certificate1_name_jp'    ,
+        'certificate2_name_jp'    ,
+        'certificate3_name_jp'    ,
+        'work_process_jp'         ,
+        'note_jp'                 
+      ].includes(i)){
+        continue ;
+      }
+
+      if(i18n.global.locale.value == 'jp' && [
+        'last_university_name' ,
+        'subject'              , 
+        'certificate1_name'    ,
+        'certificate2_name'    ,
+        'certificate3_name'    ,
+        'work_process'         ,
+        'note'                 
+      ].includes(i)){
+        continue ;
+      }
+
       cv[i] = value
     }
   }
+  interface multilLangueBiz {
+    prj_name? : string 
+    prj_name_jp? : string
+    prj_content? : string  
+    prj_content_jp? : string  
+    role? : string
+    role_jp? : string
+  }
+
   const mappingBiz = () => {
     const biz_columns = {
       prj_name: 3,
+      prj_name_jp: 3,
       prj_content: 15,
+      prj_content_jp: 15,
       period: 28,
       system_analysis: 31,
       overview_design: 33,
@@ -1021,11 +1062,14 @@
       os_db: 47,
       language: 53,
       role: 60,
+      role_jp: 60,
     }
     const _biz = {
       id: '00000000-0000-0000-0000-000000000000',
       prj_name: null,
+      prj_name_jp: null,
       prj_content: null,
+      prj_content_jp: null,
       period: 1,
       system_analysis: false,
       overview_design: false,
@@ -1037,38 +1081,104 @@
       operation: false,
       os_db: null,
       language: null,
-      role: 'Dev',
+      role: null,
+      role_jp: null,
     }
+    const numberBiz = bizInfos.value.length
+
+    const listMultiLanguage : multilLangueBiz[] = []
+    if(numberBiz != 0){
+
+      //checkNumber
+      let newBiz = 0
+      for (let index = 56; index < json.value.length; index++) {
+        if (json.value[index].length == 0 || json.value[index][2] == null)
+          continue
+        newBiz++ 
+      }
+      if(newBiz != numberBiz){
+          toastStore.push({
+          type: 'warning',
+          message: tl('Common', 'Business content không tương thích !!!'),
+        })
+        return
+      }
+      
+      //update
+      for(const i of bizInfos.value){
+        listMultiLanguage.push({
+          prj_content : i.prj_content ,
+          prj_content_jp : i.prj_content_jp ,
+          prj_name : i.prj_name ,
+          prj_name_jp : i.prj_name_jp ,
+          role : i.role ,
+          role_jp : i.role_jp 
+        })
+      }
+    }
+
+    // alert(JSON.stringify(listMultilange))
     bizInfos.value = []
     for (let index = 56; index < json.value.length; index++) {
-      if (json.value[index].length == 0 || json.value[index][2] == null)
-        continue
-      const OneBiz = { ..._biz }
-      for (let j in biz_columns) {
-        if (j == 'period') {
-          let value = json.value[index + 2][biz_columns['period'] - 2]
-          if (typeof value == 'string')
-            value = parseInt(value.replace(/[a-zA-Z]/g, ''))
-          OneBiz[j] = value
-        } else if (json.value[index][biz_columns[j] - 1]) {
-          if (
-            [
-              'system_analysis',
-              'overview_design',
-              'basic_design',
-              'functional_design',
-              'detailed_design',
-              'coding',
-              'unit_test',
-              'operation',
-            ].includes(j)
-          ) {
-            OneBiz[j] = true
-          } else OneBiz[j] = json.value[index][biz_columns[j] - 1] + ''
-        }
-      }
-      bizInfos.value.push(OneBiz)
-    }
+        if (json.value[index].length == 0 || json.value[index][2] == null)
+          continue
+        const OneBiz = { ..._biz }
+        const mutilLanguageBiz : multilLangueBiz = listMultiLanguage.shift()
+  
+          for (let j in biz_columns) {
+            if (j == 'period') { //Handle period remove all string 
+              let value = json.value[index + 2][biz_columns['period'] - 2]
+              if (typeof value == 'string')
+                value = parseInt(value.replace(/[a-zA-Z ]/g, ''))
+              OneBiz[j] = value
+            } else if (json.value[index][biz_columns[j] - 1]) {
+              if (
+                [
+                  'system_analysis',
+                  'overview_design',
+                  'basic_design',
+                  'functional_design',
+                  'detailed_design',
+                  'coding',
+                  'unit_test',
+                  'operation',
+                ].includes(j)
+              ) {
+                OneBiz[j] = true
+              } else{
+                if(i18n.global.locale.value == 'en' && [
+                    'prj_name_jp'     ,
+                    'prj_content_jp'  ,
+                    'role_jp'     
+                  ].includes(j)){
+                    try{
+                      OneBiz[j] = mutilLanguageBiz[j]
+                    }catch{}
+                    
+                    continue ;
+                  }
+                if(i18n.global.locale.value == 'jp' && [
+                    'prj_name'     ,
+                    'prj_content'  ,
+                    'role'     
+                  ].includes(j)){
+                    try{
+                      OneBiz[j] = mutilLanguageBiz[j]
+                    }catch{}
+
+                    continue ;
+                  }
+    
+                OneBiz[j] = json.value[index][biz_columns[j] - 1] + ''
+              }  
+            }
+          }
+
+        
+
+          bizInfos.value.push(OneBiz)
+      } 
+
   }
 
   interface Experience {
