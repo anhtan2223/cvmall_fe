@@ -15,7 +15,18 @@
 
         <el-col :span="6" class="col-right">
           <el-link type="primary" :underline="false">
-            <span> {{ account?.full_name }} </span>
+            <el-dropdown class="el-dropdown-link" v-if="account?.full_name">
+              <span> {{ account?.full_name }}
+                <el-icon class="el-icon--right">
+                  <CaretBottom />
+                </el-icon>
+              </span>
+              <template #dropdown>
+                <el-dropdown-menu>
+                  <el-dropdown-item @click="onLogout">Logout</el-dropdown-item>
+                </el-dropdown-menu>
+              </template>
+            </el-dropdown>
             <!-- <el-icon class="el-icon--right">
               <CaretBottom />
             </el-icon> -->
@@ -60,6 +71,11 @@ const goPage = async (name: string) => {
   })
 }
 
+const onLogout = () => {
+  authStore.logout()
+  goPage("Login")
+}
+
 const toogleSidebar = () => {
   showNav.value = !showNav.value
   emit('toogleSidebar', showNav.value)
@@ -68,4 +84,11 @@ const toogleSidebar = () => {
 
 <style lang="scss" scoped>
 @import '@/assets/styles/commons/navbar.scss';
+
+.el-dropdown-link {
+  cursor: pointer;
+  color: var(--el-color-primary);
+  display: flex;
+  align-items: center;
+}
 </style>
