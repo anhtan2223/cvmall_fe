@@ -22,14 +22,14 @@
       <!-- DATA -->
       <template v-for="(col, index) in colConfigs" :key="index">
         <template v-if="col.is_hidden != true">
-          <el-table-column :prop="col.key" :column-key="col.key" :width="col.width" :label="col.title" :sortable="col.sort ?? col.is_sort"
-            v-if="!col.is_custom" :filters="col.filters" :filter-method="col.filterHandler">
+          <el-table-column :prop="col.key" :width="col.width" :label="col.title" :sortable="col.sort ?? col.is_sort"
+            :filters="col.filters" :filter-method="col.filterMethod" :formatter="col.formatter" v-if="!col.is_custom"
+            :column-key="col.key">
             <template v-for="(colChild, indexChild) in col.child" :key="indexChild" v-if="col.child != null">
               <el-table-column :prop="colChild.key" :width="colChild.width" :label="colChild.title"
-                :sortable="colChild.sort ?? colChild.is_sort" v-if="!colChild.is_custom" 
-                :filters="colChild.filters" :filter-method="colChild.filterHandler"/>
-              <el-table-column :width="colChild.width" :label="colChild.title" :sortable="colChild.sort ?? colChild.is_sort"
-                v-if="colChild.is_custom">
+                :sortable="colChild.sort ?? colChild.is_sort" v-if="!colChild.is_custom" />
+              <el-table-column :width="colChild.width" :label="colChild.title"
+                :sortable="colChild.sort ?? colChild.is_sort" v-if="colChild.is_custom">
                 <template #default="scope">
                   <div class="d-flex flex-start">
                     <slot :name="colChild.key" :data="scope.row" :scope="scope"></slot>
@@ -53,7 +53,7 @@
 
     <!-- PAGING -->
     <div class="table-footer pa-2 pt-3" v-if="tableConfig?.showPaging">
-      <vc-pagination :pageConfig="pageConfig" :total="total||0" @changed="onPageChanged"
+      <vc-pagination :pageConfig="pageConfig" :total="total || 0" @changed="onPageChanged"
         @sizeChanged="onSizeChanged"></vc-pagination>
     </div>
     <!-- PAGING -->
@@ -121,6 +121,10 @@ const onPageChanged = (page: any) => {
 
 const onSizeChanged = (size: number) => {
   emit('sizeChanged', size)
+}
+
+const onFilterChanged = (filters: any) => {
+  emit('filterChanged', filters)
 }
 
 const onRowDbClick = (item: any) => {

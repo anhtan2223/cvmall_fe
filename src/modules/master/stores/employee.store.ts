@@ -1,104 +1,55 @@
 import { defineStore } from 'pinia'
+import employeeService from '@master/services/employee.service'
 
 export const useEmployeeStore = defineStore('useEmployeeStore', {
   state: () => ({
-    employees: <any>[],
-    teamLeadEmployees: <any>[],
-    branchs: <any>[],
+    employeeDataGrid: <any>[],
+    employeeFormData: <any>{},
+    employeeGoSort: <any>[],
+    employeeSearch: <any>[],
+    employeePageConfig: <any>[],
+    employeeLoading: <any>[],
   }),
-  getters: {},
-  actions: {
-    async getEmployeesList() {
-      this.employees = [
-        {
-          employee_code: 'VHEC0001',
-          branch: 'Can Tho :v',
-          full_name: 'Lam Chan V',
-          initial_name: 'vulam',
-          current_group: 'd1a1c9d2-902d-435e-a2c7-1961c04b6947',
-          state: 1,
-          company_email: 'cemail@mail.com',
-          personal_email: 'pemail@mail.com',
-          phone: '0123456789',
-          birthday: '2022-01-01T00:00:00',
-          permanent_address: 'dia chi nha',
-          current_address: 'dia chi hien tai',
-          id_number: '084202009999',
-          date_issue: '2019-12-02T00:00:00',
-          location_issue: 'Tra Vinh',
-          is_married: false,
-          timesheets: null,
-          employeeDepartments: null,
-          employeePositions: null,
-          id: 'd1a1c9d2-902d-435e-a2c7-1961c04b6947',
-          created_at: '2000-01-01T00:00:00',
-          created_by: 'd1a1c9d2-902d-435e-a2c7-1961c04b6947',
-          updated_at: '2000-01-01T00:00:00',
-          updated_by: 'd1a1c9d2-902d-435e-a2c7-1961c04b6947',
-          del_flg: false,
-        },
-        {
-          employee_code: 'VHEC0002',
-          branch: 'Can Tho :v',
-          full_name: 'Lam Chan V2',
-          initial_name: 'vulam2',
-          current_group: 'd1a1c9d2-902d-435e-a2c7-1961c04b6947',
-          state: 1,
-          company_email: 'cemail@mail.com2',
-          personal_email: 'pemail@mail.com2',
-          phone: '01234567892',
-          birthday: '2022-01-01T00:00:00',
-          permanent_address: 'dia chi nha2',
-          current_address: 'dia chi hien tai2',
-          id_number: '084202009992',
-          date_issue: '2019-12-02T00:00:00',
-          location_issue: 'Tra Vinh',
-          is_married: false,
-          timesheets: null,
-          employeeDepartments: null,
-          employeePositions: null,
-          id: 'd1a1c9d2-902d-435e-a2c7-1961c04b6948',
-          created_at: '2000-01-01T00:00:00',
-          created_by: 'd1a1c9d2-902d-435e-a2c7-1961c04b6947',
-          updated_at: '2000-01-01T00:00:00',
-          updated_by: 'd1a1c9d2-902d-435e-a2c7-1961c04b6947',
-          del_flg: false,
-        },
-      ]
-    },
-    async getTeamLeadEmployeesList() {
-      this.teamLeadEmployees = [
-        {
-          employee_code: 'VHEC0001',
-          branch: 'Can Tho :v',
-          full_name: 'Lam Chan V',
-          initial_name: 'vulam',
-          current_group: 'd1a1c9d2-902d-435e-a2c7-1961c04b6947',
-          state: 1,
-          company_email: 'cemail@mail.com',
-          personal_email: 'pemail@mail.com',
-          phone: '0123456789',
-          birthday: '2022-01-01T00:00:00',
-          permanent_address: 'dia chi nha',
-          current_address: 'dia chi hien tai',
-          id_number: '084202009999',
-          date_issue: '2019-12-02T00:00:00',
-          location_issue: 'Tra Vinh',
-          is_married: false,
-          timesheets: null,
-          employeeDepartments: null,
-          employeePositions: null,
-          id: 'd1a1c9d2-902d-435e-a2c7-1961c04b6947',
-          created_at: '2000-01-01T00:00:00',
-          created_by: 'd1a1c9d2-902d-435e-a2c7-1961c04b6947',
-          updated_at: '2000-01-01T00:00:00',
-          updated_by: 'd1a1c9d2-902d-435e-a2c7-1961c04b6947',
-          del_flg: false,
-        },
-      ]
-    },
-    async getBranchsList() {
-      this.branchs = ['Branch 1', 'Branch 2', 'Branch 3']
+  getters: {
+    getData(state) {
+      return state.employeeDataGrid
     },
   },
+  actions: {
+    async getList() {
+      this.employeeLoading = true
+      await employeeService
+        .getList({
+          sort: this.employeeGoSort,
+          is_actived: true,
+          search: this.employeeSearch,
+          ...this.employeePageConfig,
+        })
+        .then((data) => {
+          this.employeeDataGrid = data.data ?? []
+          this.employeePageConfig.total = data.total
+        })
+        .finally(() => {
+          this.employeeLoading = false
+        })
+    }, 
+
+    async delete(data: any) {
+      await employeeService.delete(data.id).then(() => {
+        this.getList()
+      })
+    },
+
+    async create(data: any) {
+      await employeeService.create(data).then(() => {
+        this.getList()
+      })
+    },
+
+    async update(data: any) {
+      await employeeService.update(data).then(() => {
+        this.getList()
+      })
+    },
+  }
 })
