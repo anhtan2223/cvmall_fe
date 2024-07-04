@@ -13,6 +13,8 @@ export type ColConfig = {
   is_color_map_border: boolean
   child: ColConfig[]
   is_hidden: boolean
+  filters: any[]
+  filterHandler: any
 }
 
 export type TableConfig = {

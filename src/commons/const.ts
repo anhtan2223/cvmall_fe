@@ -49,6 +49,12 @@ export enum POPUP_TYPE {
   EDIT = 'EDIT',
 }
 
+export enum EMPLOYEE_STATE {
+  WORKING,
+  PROBATION,
+  INTERNING,
+  RESIGNED,
+}
+
 export const ERROR_TEXT = 'error'
 export const LIMITED_TIME = 3600000 //  1 * 60 * 60 * 1000
-

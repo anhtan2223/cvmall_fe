@@ -31,7 +31,7 @@
 
     <vc-row>
       <vc-col :span="24">
-        <el-scrollbar>
+        <!-- <el-scrollbar> -->
           <vc-table :datas="dataGrid" :tableConfig="tableConfig" :colConfigs="colConfigDashboard" :page="cvPageConfig"
             :loading="isTableLoading" :total="cvPageConfig.total||0" @pageChanged="onPageChanged" @sizeChanged="onSizeChanged" @sorted="onSortChange">
             <template #action="{ data }">
@@ -49,7 +49,7 @@
               <el-tag v-if="!data.is_actived" size="small" type="danger">{{ tl("Common", "Resigned") }}</el-tag>
             </template>
           </vc-table>
-        </el-scrollbar>
+        <!-- </el-scrollbar> -->
       </vc-col>
     </vc-row>
     <vc-confirm ref="confirmDialog"></vc-confirm>

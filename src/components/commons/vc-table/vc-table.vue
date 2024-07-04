@@ -2,7 +2,7 @@
   <!-- <vc-card class="pb-3"> -->
   <div class="vc-table">
     <el-table stripe style="width: 100%" v-loading="loading" :height="height ?? defaultHeight" :data="datas" border
-      @selection-change="onRowSelected" @sort-change="onSortChange" @row-dblclick="onRowDbClick">
+      @selection-change="onRowSelected" @sort-change="onSortChange" @row-dblclick="onRowDbClick" @filter-change="onFilterChanged">
       <!-- INDEX -->
       <el-table-column label="#" width="50" type="index" align="center" header-align="center"
         v-if="tableConfig.index" />
@@ -22,11 +22,12 @@
       <!-- DATA -->
       <template v-for="(col, index) in colConfigs" :key="index">
         <template v-if="col.is_hidden != true">
-          <el-table-column :prop="col.key" :width="col.width" :label="col.title" :sortable="col.sort ?? col.is_sort"
-            v-if="!col.is_custom">
+          <el-table-column :prop="col.key" :column-key="col.key" :width="col.width" :label="col.title" :sortable="col.sort ?? col.is_sort"
+            v-if="!col.is_custom" :filters="col.filters" :filter-method="col.filterHandler">
             <template v-for="(colChild, indexChild) in col.child" :key="indexChild" v-if="col.child != null">
               <el-table-column :prop="colChild.key" :width="colChild.width" :label="colChild.title"
-                :sortable="colChild.sort ?? colChild.is_sort" v-if="!colChild.is_custom" />
+                :sortable="colChild.sort ?? colChild.is_sort" v-if="!colChild.is_custom" 
+                :filters="colChild.filters" :filter-method="colChild.filterHandler"/>
               <el-table-column :width="colChild.width" :label="colChild.title" :sortable="colChild.sort ?? colChild.is_sort"
                 v-if="colChild.is_custom">
                 <template #default="scope">
@@ -37,7 +38,8 @@
               </el-table-column>
             </template>
           </el-table-column>
-          <el-table-column :width="col.width" :label="col.title" :sortable="col.is_sort" v-if="col.is_custom">
+          <el-table-column :prop="col.key" :column-key="col.key" :width="col.width" :label="col.title" :sortable="col.is_sort" v-if="col.is_custom"
+          :filters="col.filters" :filter-method="col.filterHandler">
             <template #default="scope">
               <div class="d-flex flex-start">
                 <slot :name="col.key" :data="scope.row" :scope="scope"></slot>
@@ -90,7 +92,8 @@ const emit = defineEmits([
   'sorted',
   'rowSelected',
   'pageChanged',
-  'sizeChanged'
+  'sizeChanged',
+  'filterChanged',
 ])
 
 const colSettings = ref<ColConfig[]>([])
@@ -109,6 +112,9 @@ const updateTableHeight = () => {
   defaultHeight.value = window.innerHeight - 210;
 }
 
+const onFilterChanged = (filter: any) => {
+  emit('filterChanged', filter)
+}
 const onPageChanged = (page: any) => {
   emit('pageChanged', page)
 }
@@ -135,6 +141,7 @@ const onRowSelected = (items: any[]) => {
  */
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const onSortChange = (config: any) => {
+  console.log("config",config)
   if (config.column == null) {
     emit('sorted', null)
     return
