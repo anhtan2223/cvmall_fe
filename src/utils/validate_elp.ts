@@ -2,7 +2,7 @@ import tl from '@/utils/locallize'
 
 export default {
   required: (rule: any, value: any, callback: any) => {
-    if (value === '' || value === null || value === undefined) {
+    if (value === '' || value === null || value === undefined || value.length === 0) {
       callback(new Error(tl('Common', 'ValidateFieldRequied', [rule.label ? rule.field : rule.label])))
     } else {
       callback()
@@ -17,7 +17,7 @@ export default {
     )
   },
   maxLengthRule: (rule: any, value: any, callback: any) => {
-    if (!value && value.length > rule.max) {
+    if (value && value.length > rule.max) {
       callback(new Error(tl('Common', 'ValidateMaxLength', [rule.label ? rule.field : rule.label, `${rule.max}`])))
     } else {
       callback()
@@ -110,7 +110,7 @@ export default {
   },
   numberValidator: (rule: any, value: any, callback: any) => {
     const regex = /^\d*$/
-    if (regex.test(value)) {
+    if (regex.test(value) || !value) {
       callback()
     } else {
       callback(new Error('数字のみを入力してください'))
