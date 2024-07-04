@@ -38,7 +38,8 @@
               </el-table-column>
             </template>
           </el-table-column>
-          <el-table-column :width="col.width" :label="col.title" :sortable="col.is_sort" v-if="col.is_custom">
+          <el-table-column :prop="col.key" :column-key="col.key" :width="col.width" :label="col.title" :sortable="col.is_sort" v-if="col.is_custom"
+          :filters="col.filters" :filter-method="col.filterHandler">
             <template #default="scope">
               <div class="d-flex flex-start">
                 <slot :name="col.key" :data="scope.row" :scope="scope"></slot>
@@ -92,7 +93,7 @@ const emit = defineEmits([
   'rowSelected',
   'pageChanged',
   'sizeChanged',
-  'filterChanged'
+  'filterChanged',
 ])
 
 const colSettings = ref<ColConfig[]>([])
@@ -111,6 +112,9 @@ const updateTableHeight = () => {
   defaultHeight.value = window.innerHeight - 210;
 }
 
+const onFilterChanged = (filter: any) => {
+  emit('filterChanged', filter)
+}
 const onPageChanged = (page: any) => {
   emit('pageChanged', page)
 }
@@ -141,6 +145,7 @@ const onRowSelected = (items: any[]) => {
  */
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const onSortChange = (config: any) => {
+  console.log("config",config)
   if (config.column == null) {
     emit('sorted', null)
     return

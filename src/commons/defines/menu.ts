@@ -1,5 +1,11 @@
 export default [
   { routerName: 'Dashboard', path: '/', text: 'Danh sách CV', icon: 'Sunrise' },
+  {
+    routerName: 'TimesheetList',
+    path: '/timesheet',
+    text: 'Quản lý chỉ số',
+    icon: 'Odometer',
+  },
   // { routerName: 'CV', path: '/cv', text: 'Danh sách CV', icon: 'Plus' },
   // {
   //   text: 'Quản lý danh mục',
