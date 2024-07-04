@@ -17,6 +17,7 @@ export default [
   //     }
   //   ],
   // },
+  { routerName: 'EmployeeList', path: '/employee', text: 'Danh sách nhân viên', icon: 'User'},
   {
     text: 'Quản trị hệ thống',
     icon: 'Setting',
