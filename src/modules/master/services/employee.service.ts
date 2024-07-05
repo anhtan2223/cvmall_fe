@@ -1,3 +1,4 @@
+import { BRANCH } from './../../../commons/const';
 import apiClient from '@/utils/httpClient'
 import type { APIResponse } from '@/interfaces/response.interface'
 import { useToastStore } from '@/stores/toast.store'
@@ -8,6 +9,9 @@ const employeeService = {
     return await apiClient.get(API.LIST, {
       params: params,
     })
+  },
+  async getGroups(): Promise<APIResponse<any[]>> {
+    return await apiClient.get(API.GROUPS)
   },
 
   async detail(id: string): Promise<APIResponse<any>> {

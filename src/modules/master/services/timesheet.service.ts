@@ -27,6 +27,15 @@ const timesheetService = {
     })
   },
 
+  async updateMulti(data: any[]) {
+    const toastStore = useToastStore()
+    return await apiClient
+      .put(API.UPDATE_MULTI, data)
+      .then((response: any) => {
+        toastStore.fromApiResponse(response)
+        return response
+      })
+  },
   async update(data: any) {
     const toastStore = useToastStore()
     return await apiClient

@@ -22,8 +22,8 @@
       <!-- DATA -->
       <template v-for="(col, index) in colConfigs" :key="index">
         <template v-if="col.is_hidden != true">
-          <el-table-column :prop="col.key" :width="col.width" :label="col.title" :sortable="col.sort ?? col.is_sort"
-            :filters="col.filters" :filter-method="col.filterMethod" :formatter="col.formatter" v-if="!col.is_custom"
+          <el-table-column :prop="col.key" :width="col.width" :label="col.title" :sortable="col.sort ?? col.is_sort" :sort-method="col.sort_method"
+            :filters="col.filters" :filter-method="col.filter_method" :formatter="col.formatter" v-if="!col.is_custom"
             :column-key="col.key">
             <template v-for="(colChild, indexChild) in col.child" :key="indexChild" v-if="col.child != null">
               <el-table-column :prop="colChild.key" :width="colChild.width" :label="colChild.title"
@@ -38,8 +38,8 @@
               </el-table-column>
             </template>
           </el-table-column>
-          <el-table-column :prop="col.key" :column-key="col.key" :width="col.width" :label="col.title" :sortable="col.is_sort" v-if="col.is_custom"
-          :filters="col.filters" :filter-method="col.filterHandler">
+          <el-table-column :prop="col.key" :column-key="col.key" :width="col.width" :label="col.title" :sortable="col.is_sort"  :sort-method="col.sort_method" v-if="col.is_custom"
+          :filters="col.filters" :filter-method="col.filter_method">
             <template #default="scope">
               <div class="d-flex flex-start">
                 <slot :name="col.key" :data="scope.row" :scope="scope"></slot>
@@ -112,9 +112,6 @@ const updateTableHeight = () => {
   defaultHeight.value = window.innerHeight - 210;
 }
 
-const onFilterChanged = (filter: any) => {
-  emit('filterChanged', filter)
-}
 const onPageChanged = (page: any) => {
   emit('pageChanged', page)
 }
