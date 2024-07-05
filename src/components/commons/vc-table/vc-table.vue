@@ -120,10 +120,6 @@ const onSizeChanged = (size: number) => {
   emit('sizeChanged', size)
 }
 
-const onFilterChanged = (filters: any) => {
-  emit('filterChanged', filters)
-}
-
 const onRowDbClick = (item: any) => {
   if (tableConfig.value.dbClick) emit('dbClick', item)
 }

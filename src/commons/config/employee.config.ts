@@ -1,5 +1,6 @@
 import tl from "@/utils/locallize";
 import { layouts } from "chart.js";
+import { EMPLOYEE_STATES } from "../const";
 export const FUNC_NAME = 'employee'
 
 // ========================== ROUTER =============================
@@ -20,16 +21,15 @@ export const API = {
   UPDATE: (id: string) => `${FUNC_NAME}/${id}`,
   DELETE: (id: string | string[]) => `${FUNC_NAME}/${id}`,
   DELETE_MULTI: `${FUNC_NAME}/delete-multi`,
-  EXPORT: `${FUNC_NAME}/export-excel`
+  EXPORT: `${FUNC_NAME}/export-excel`,
+  GET_GROUP: `/${FUNC_NAME}/group`
 }
 
 // ========================== CONFIG TABLE ==========================
 interface Filter {
   text: string;
-  value: string;
+  value: string | number;
 }
-
-const EMPLOYEE_STATE = ["Đang làm việc", "Đang thử việc", "Đang thực tập", "Đã nghĩ việc"]
 
 export const tableConfig = {
   checkbox: false,
@@ -43,6 +43,7 @@ export const colConfig: {
   key: string;
   title: string;
   is_sort?: boolean;
+  sort?: string
   linked?: boolean;
   width?: number;
   filters?: Filter[] | null;
@@ -55,28 +56,29 @@ export const colConfig: {
     is_sort: true,
     linked: true,
     width: 100,
+    sort: 'custom',
   },
   {
     key: "full_name",
     title: tl(FUNC_NAME, "Họ và tên"),
     is_sort: true,
     width: 200,
+    sort: 'custom',
   },
   {
     key: "initial_name",
     title: tl(FUNC_NAME, "Tên viết tắt"),
     is_sort: true,
     width: 120,
+    sort: 'custom',
   },
   {
     key: "branch",
     title: tl(FUNC_NAME, "Chi nhánh"),
-    is_sort: true,
   },
   {
     key: "department",
     title: tl(FUNC_NAME, "Phòng ban"),
-    is_sort: true,
     width: 150,
     formatter: (data: any) =>
       data.employeeDepartments
@@ -86,12 +88,10 @@ export const colConfig: {
   {
     key: "current_group",
     title: tl(FUNC_NAME, "Nhóm"),
-    is_sort: true,
   },
   {
     key: "position",
     title: tl(FUNC_NAME, "Vị trí"),
-    is_sort: true,
     formatter: (data: any) =>
       data.employeePositions
       .map((dept: any) => `• ${dept.position.name}`)
@@ -100,10 +100,9 @@ export const colConfig: {
   {
     key: "state",
     title: tl(FUNC_NAME, "Thực trạng"),
-    is_sort: true,
     width: 120,
     formatter: (data: any) => 
-      EMPLOYEE_STATE[data.state]
+      EMPLOYEE_STATES[data.state]
   },
   {
     key: "phone",
@@ -159,8 +158,8 @@ export const colConfig: {
     key: "is_married",
     title: tl(FUNC_NAME, "Tình trạng hôn nhân"),
     width: 150,
-    formatter: (value:boolean) =>
-      value ? "Đã kết hôn" : "Độc thân"
+    formatter: (data:any) =>
+      data.is_married ? "Đã kết hôn" : "Độc thân"
   },
 ];
 

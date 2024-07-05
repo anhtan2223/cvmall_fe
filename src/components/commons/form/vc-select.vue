@@ -1,5 +1,5 @@
 <template>
-  <el-select v-model="modelValue" class="m-2" @change="onSelected" :items="items">
+  <el-select v-model="localModelValue" class="m-2" @change="onSelected" :items="items">
     <el-option v-if="!customText" v-for="item in data" :key="item[fieldValue]" :label="item[fieldText]"
       :value="item[fieldValue]" />
 
@@ -7,6 +7,9 @@
       :value="item[fieldValue]">
       <span>{{ buildCustomOpt(item) }}</span>
     </el-option>
+    <template #footer>
+      <slot name="footer"></slot>
+    </template>
   </el-select>
 </template>
 
@@ -23,6 +26,8 @@ const props = defineProps<{
 const selectedItem = ref<any>({})
 const data = toRef(props, 'items')
 const modelValue = toRef(props, 'modelValue')
+const localModelValue = ref<any>()
+localModelValue.value = modelValue.value
 
 type ObjectKeys = keyof (typeof data.value)[0]
 
@@ -35,6 +40,7 @@ const customText = (attrs['customText'] ?? false) as ObjectKeys
 const emit = defineEmits(['update:modelValue', 'selected'])
 
 watch(modelValue, (newVal) => {
+  localModelValue.value = newVal
   selectedItem.value = getItemFromValue(newVal)
   emit('selected', selectedItem.value)
 })
@@ -71,4 +77,8 @@ const getValue = (obj: any, key: any) => {
 
 <style lang="scss">
 @import '@/assets/styles/commons/vc-select.scss';
+.option-input {
+  width: 100%;
+  margin-bottom: 8px;
+}
 </style>
