@@ -125,4 +125,14 @@ export default {
       callback(new Error('金額は 10 桁以内で入力してください'))
     }
   },
+  numberWithPrefix: (prefix: any) => {
+    return (rule: any, value: any, callback: any) => {
+      const regex = new RegExp(`^${prefix}\\d+$`);
+      if (regex.test(value) || !value) {
+        callback();
+      } else {
+        callback(new Error(`Invalid format.`));
+      }
+    };
+  }
 }

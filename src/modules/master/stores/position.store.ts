@@ -23,5 +23,10 @@ export const usePositionStore = defineStore('usePositionStore', {
           this.positionLoading = false
         })
     }, 
+    async create(data: any) {
+      await positionService.create(data).then(async () => {
+        await this.getList()
+      })
+    },
   }
 })

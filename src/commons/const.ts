@@ -58,3 +58,6 @@ export enum EMPLOYEE_STATE {
 
 export const ERROR_TEXT = 'error'
 export const LIMITED_TIME = 3600000 //  1 * 60 * 60 * 1000
+
+export const BRANCHES = ["Hà Nội", "Nha Trang", "Cần Thơ"]
+export const EMPLOYEE_STATES = ["Đang làm việc", "Đang thử việc", "Đang thực tập", "Đã nghĩ việc"]

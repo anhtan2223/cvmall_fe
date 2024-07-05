@@ -39,7 +39,7 @@
             </template>
           </el-table-column>
           <el-table-column :prop="col.key" :column-key="col.key" :width="col.width" :label="col.title" :sortable="col.is_sort" v-if="col.is_custom"
-          :filters="col.filters" :filter-method="col.filterHandler">
+          :filters="col.filters" :filter-method="col.filterMethod">
             <template #default="scope">
               <div class="d-flex flex-start">
                 <slot :name="col.key" :data="scope.row" :scope="scope"></slot>
@@ -121,10 +121,6 @@ const onPageChanged = (page: any) => {
 
 const onSizeChanged = (size: number) => {
   emit('sizeChanged', size)
-}
-
-const onFilterChanged = (filters: any) => {
-  emit('filterChanged', filters)
 }
 
 const onRowDbClick = (item: any) => {

@@ -2,11 +2,13 @@ import apiClient from '@/utils/httpClient'
 import type { APIResponse } from '@/interfaces/response.interface'
 import { useToastStore } from '@/stores/toast.store'
 import { API } from '@/commons/config/employee.config'
+import qs from 'qs'
 
 const employeeService = {
   async getList(params?: unknown): Promise<APIResponse<any[]>> {
     return await apiClient.get(API.LIST, {
       params: params,
+      paramsSerializer: params => qs.stringify(params, { indices: false })
     })
   },
 
@@ -42,7 +44,12 @@ const employeeService = {
         toastStore.fromApiResponse(response)
         return response
       })
-  }
+  },
+
+  async getGroups(): Promise<any[]> {
+    return await apiClient.get(API.GET_GROUP)
+  },
+
 }
 
 export default employeeService

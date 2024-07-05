@@ -1,14 +1,14 @@
 <template>
   <vc-modal ref="modal" :title="tl('Employee', 'DetailTitle')" width="80%" @close="close">
     <template #content>
-      <el-form ref="userForm" :model="employee" :rules="rules" label-width="150px" label-position="right"
+      <el-form ref="employeeForm" :model="employee" :rules="rules" label-width="150px" label-position="right"
         require-asterisk-position="right" :disabled="type == POPUP_TYPE.VIEW">
         <vc-row :gutter="20">
           <!-- COL 1 -->
           <vc-col :lg="8" :md="12" :sm="24" :xs="24">
-            <vc-input-group required prop="employee_code" :label="tl('Employee', 'Mã nhân sự')">
-              <vc-input v-model="employee.employee_code" :formatter="(value: string) => `VHEC-${value}`"
-                :parser="(value: any) => value.replaceAll(/VHEC-\s?|VHEC\s?/g, '')" :disabled="type != POPUP_TYPE.CREATE" />
+            <vc-input-group required prop="tempEmployee_code" :label="tl('Employee', 'Mã nhân sự')">
+              <vc-input v-model="employee.tempEmployee_code" :formatter="(value: string) => value ? value : 'VHEC-'"
+                :parser="(value: any) => 'VHEC-' + value.replaceAll(/VHEC-\s?|VHEC\s?/g, '')" :disabled="type != POPUP_TYPE.CREATE" />
             </vc-input-group>
 
             <vc-input-group required prop="full_name" :label="tl('Employee', 'Họ và tên')">
@@ -43,15 +43,19 @@
               </vc-select>
             </vc-input-group>
 
-            <vc-input-group required prop="employeeDepartments" :label="tl('Employee', 'Phòng ban')">
-              <vc-select v-model="employee.employeeDepartments" :items="departments" fieldValue="value" fieldText="text" multiple
-                filterable allow-create>
+            <vc-input-group required prop="tempDepartments" :label="tl('Employee', 'Phòng ban')">
+              <vc-select v-model="employee.tempDepartments" :items="departments" fieldValue="value" fieldText="text" multiple>
+                <template #footer>
+                  <select-footer :label="'Thêm phòng ban'" :placeholder="'Nhập phòng ban'" @create:department="onCreateDepartment"></select-footer>
+                </template>
               </vc-select>
             </vc-input-group>
 
-            <vc-input-group required prop="employeePositions" :label="tl('Employee', 'Vị trí')">
-              <vc-select v-model="employee.employeePositions" :items="positions" fieldValue="value" fieldText="text" multiple
-                filterable allow-create>
+            <vc-input-group required prop="tempPositions" :label="tl('Employee', 'Vị trí')">
+              <vc-select v-model="employee.tempPositions" :items="positions" fieldValue="value" fieldText="text" multiple>
+                <template #footer>
+                  <select-footer :label="'Thêm vị trí'" :placeholder="'Nhập vị trí'" @create:department="onCreatePosition"></select-footer>
+                </template>
               </vc-select>
             </vc-input-group>
 
@@ -98,11 +102,11 @@
     </template>
 
     <template #acttion>
-      <vc-button class="ml-2" @click="reloadTable" :icon="'Refresh'">
+      <vc-button class="ml-2" @click="resetTable" :icon="'Refresh'">
         {{ tl("Common", "") }}
       </vc-button>
       <vc-button v-if="props.type != POPUP_TYPE.VIEW" type="primary" class="ml-2" code="F00004"
-        @click="onSave(userForm)" :loading="isLoading" :icon="'FolderChecked'">
+        @click="onSave(employeeForm)" :loading="isLoading" :icon="'FolderChecked'">
         {{ tl('Common', 'BtnSave') }}
       </vc-button>
     </template>
@@ -116,13 +120,14 @@ import { onBeforeMount, ref, reactive } from 'vue'
 import validate from '@/utils/validate_elp'
 import tl from '@/utils/locallize'
 import type { FormInstance } from 'element-plus'
-import { POPUP_TYPE } from '@/commons/const'
-import { useEmployeeStore } from '../../stores/employee.store'
+import { POPUP_TYPE, BRANCHES, EMPLOYEE_STATES } from '@/commons/const'
+import { useEmployeeStore } from '@master/stores/employee.store'
 import { useDepartmentStore } from '@master/stores/department.store'
 import { usePositionStore } from '@master/stores/position.store'
+import SelectFooter from '@master/views/employee/SelectFooter.vue'
 
 const rules = reactive({
-  employee_code: [
+  tempEmployee_code: [
     {
       label: tl('Employee', 'Mã nhân sự'),
       required: true,
@@ -131,7 +136,7 @@ const rules = reactive({
     },
     {
       label: tl('Employee', 'Mã nhân sự'),
-      validator: validate.numberValidator,
+      validator: validate.numberWithPrefix('VHEC-'),
       trigger: ['change'],
     },
   ],
@@ -179,8 +184,9 @@ const rules = reactive({
   birthday: [
     {
       label: tl('Employee', 'Ngày sinh'),
-      validator: validate.dateRule,
-      trigger: ['change'],
+      validator: validate.required,
+      required: true,
+      trigger: ['blur'],
     },
   ],
   permanent_address: [
@@ -207,7 +213,7 @@ const rules = reactive({
       trigger: ['change'],
     }
   ],
-  employeeDepartments: [
+  tempDepartments: [
     {
       label: tl('Employee', 'Phòng ban'),
       required: true,
@@ -215,7 +221,7 @@ const rules = reactive({
       trigger: ['change'],
     }
   ],
-  employeePositions: [
+  tempPositions: [
     {
       label: tl('Employee', 'Vị trí'),
       required: true,
@@ -272,13 +278,6 @@ const rules = reactive({
       trigger: ['change'],
     }
   ],
-  date_issue: [
-    {
-      label: tl('Employee', 'Ngày cấp CCCD'),
-      validator: validate.dateRule,
-      trigger: ['change'],
-    },
-  ],
   location_issue: [
     {
       label: tl('Employee', 'Nơi cấp CCCD'),
@@ -301,140 +300,207 @@ const props = defineProps<{
   type: POPUP_TYPE
 }>()
 
-const userForm = ref<FormInstance>()
+const employeeForm = ref<FormInstance>()
 const isLoading = ref(false)
 const confirmDialog = ref<any>(null)
 const modal = ref<any>(null)
 
-// ###########TEST
 const employeeStore = useEmployeeStore()
 const departmentStore = useDepartmentStore()
 const positionStore = usePositionStore()
 
-const branches = ref<any>([])
-const departments = ref<any>([])
-const groups = ref<any>([])
-const positions = ref<any>([])
-const statuses = ref<any>([])
-const marital_statuses = ref<any>([])
+const branches = ref<any[]>([])
+const departments = ref<any[]>([])
+const groups = ref<any[]>([])
+const positions = ref<any[]>([])
+const statuses = ref<any[]>([])
+const marital_statuses = ref<any[]>([])
 
 const employee = reactive({
-  id: '',
-  employee_code: null,
+  id: <any>null,
+  employee_code: <any>null,
+  tempEmployee_code: <any>null,
   full_name: null,
   initial_name: null,
   branch: null,
-  employeeDepartments: [],
+  tempDepartments: <any[]>[],
+  employeeDepartments: <any[]>[],
   current_group: null,
-  employeePositions: [],
+  tempPositions: <any[]>[],
+  employeePositions: <any[]>[],
   state: null,
   phone: null,
   company_email: null,
   personal_email: null,
-  birthday: null,
+  birthday: <any>null,
   permanent_address: null,
   current_address: null,
   id_number: null,
-  date_issue: null,
+  date_issue: <any>null,
   location_issue: null,
   is_married: null,
 })
 
-onBeforeMount(async () => {
-  await init()
-
-  // if (employee.id) await getUserDetail()
-})
-
-const getUserDetail = async () => {
-  // const response = await userService.detail(employee.id)
-  // Object.assign(user, response?.data)
+const resetEmployee = () => {
+  employee.tempEmployee_code = null
+  employee.full_name = null
+  employee.initial_name = null
+  employee.branch = null
+  employee.tempDepartments = []
+  employee.employeeDepartments = []
+  employee.current_group = null
+  employee.tempPositions = []
+  employee.employeePositions = []
+  employee.state = null
+  employee.phone = null
+  employee.company_email = null
+  employee.personal_email = null
+  employee.birthday = null
+  employee.permanent_address = null
+  employee.current_address = null
+  employee.id_number = null
+  employee.date_issue = null
+  employee.location_issue = null
+  employee.is_married = null
 }
 
-const init = async () => {
-  // genders.value = (await masterCodeService.getByType('GENDER'))?.data
-  // branches.value = (await brancheservice.getList({ page: 1, size: 100 }))?.data
+const onCreateDepartment = async (name: string) => {
+  if (name) {
+    await departmentStore.create({name: name})
+      getListFilters()
+      emits("update:fields")
+  }
 }
+
+const onCreatePosition = async (name: string) => {
+  if (name) {
+    await positionStore.create({name: name})
+      getListFilters()
+      emits("update:fields")
+  }
+}
+
+const emits = defineEmits(["update:fields"])
 
 const onSave = async (formEl: FormInstance | undefined) => {
   if (!formEl) return
 
+  let isValid = true
+
   await formEl.validate(async (valid) => {
-    if (!valid) return
+    isValid = valid
   })
 
-  //   isLoading.value = true
-  //   employee.role_cds = employee.role_cds ?? []
+  if (!isValid) return
+  employee.employee_code = employee.tempEmployee_code
 
-  //   if (employee.id) {
-  //     await userService.update(user).finally(() => {
-  //       isLoading.value = false
-  //     })
-  //   } else {
-  //     await userService.create(user).finally(() => {
-  //       isLoading.value = false
-  //     })
-  //   }
-  // })
+  employee.employeeDepartments = employee.tempDepartments.map((department) => {
+    const selectDepartment = departmentStore.getData.find((x:any) => x.name == department)
+    return {
+      department_id: selectDepartment.id
+    }
+  })
+
+  employee.employeePositions = employee.tempPositions.map((position) => {
+    const selectPosition = positionStore.getData.find((x:any) => x.name == position)
+    return {
+      position_id: selectPosition.id
+    }
+  })
+
+  isLoading.value = true
+
+  if (employee.id) {
+    await employeeStore.update(employee).finally(() => {
+      isLoading.value = false
+    })
+  } else {
+    await employeeStore.create(employee).finally(() => {
+      isLoading.value = false
+    })
+  }
+
+  close()
 }
 
 const open = async (employeeSource: any) => {
-  employeeSource.id = Number.parseInt(employeeSource.employee_code.replace("VHEC-", ""))
-  console.log(employeeSource.id)
-  if (employeeSource)
-    Object.assign(employee, employeeSource)
+  if (employeeSource) {
+    employee.tempEmployee_code = employeeSource.employee_code
+
+    employee.date_issue = new Date(employeeSource.date_issue)
+      .toLocaleDateString('vi-VN', {day: '2-digit', month: '2-digit', year: 'numeric'})
+
+    employee.tempDepartments = employeeSource.employeeDepartments
+      .map((employeeDepartment: any) => employeeDepartment.department.name)
+
+    employee.tempPositions = employeeSource.employeePositions
+      .map((employeePosition: any) => employeePosition.position.name)
+  }
+  
+  Object.assign(employee, employeeSource)
 
   modal.value.open()
 }
 
 const close = () => {
-  console.log({...employee})
-  if (userForm.value) userForm.value.resetFields()
+  resetTable()
+  employee.id = null
+  employee.employee_code = null
+  employee.tempEmployee_code = null
   modal.value.close()
 }
 
-const reloadTable = async () => {
-  if (userForm.value) userForm.value.resetFields()
+const resetTable = async () => {
+  if (employeeForm.value) employeeForm.value.resetFields()
+  resetEmployee()
+  if (props.type == POPUP_TYPE.EDIT) {
+    employee.tempEmployee_code = employee.employee_code
+  }
 };
 
 onBeforeMount(async () => {
   await departmentStore.getList()
   await positionStore.getList()
+  await employeeStore.getGroups()
 
-  branches.value = [
-    { value: 'Hà Nội', text: 'Hà Nội' },
-    { value: 'Nha Trang', text: 'Nha Trang' },
-    { value: 'Cần Thơ', text: 'Cần Thơ' },
-  ]
+  getListFilters()
 
-  departments.value = [...departmentStore.getData].map(department => ({
-    value: department.name,
-    text: department.name,
-  }))
+  branches.value = BRANCHES.map(branch => ({value: branch, text: branch}))
 
-  groups.value = [
-    { value: 'Nguyen Van A', text: 'NV' },
-    { value: 'Nguyen Van B', text: 'GS' },
-    { value: 'Nguyen Van C', text: 'QL' },
-  ]
-
-  positions.value = [...positionStore.getData].map(position => ({
-    value: position.name,
-    text: position.name,
-  }))
-
-  statuses.value = [
-    { value: 0, text: "Đang làm việc" },
-    { value: 1, text: "Đang thử việc" },
-    { value: 2, text: "Đang thực tập" },
-    { value: 3, text: "Đã nghĩ việc" }
-  ]
+  statuses.value = EMPLOYEE_STATES.map((state, index) => ({value: index, text: state})) 
 
   marital_statuses.value = [
     { value: false, text: 'Độc thân' },
     { value: true, text: 'Đã kết hôn' },
   ]
 })
+
+const getListFilters = () => {
+  departments.value = [...departmentStore.getData].map(department => ({
+    value: department.name,
+    text: department.name,
+  }))
+
+  positions.value = [...positionStore.getData].map(position => ({
+    value: position.name,
+    text: position.name,
+  }))
+
+  
+  groups.value = [...employeeStore.getGroupsData].map(group => ({
+    value: group.initial_name,
+    text: group.initial_name,
+  }))
+
+  if(groups.value.length == 0) {
+    groups.value = [
+      {
+        value: "Không có",
+        text: "Không có"
+      }
+    ]
+  }
+}
 
 defineExpose({
   open,

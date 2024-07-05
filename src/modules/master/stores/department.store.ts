@@ -23,5 +23,10 @@ export const useDepartmentStore = defineStore('useDepartmentStore', {
           this.departmentLoading = false
         })
     }, 
+    async create(data: any) {
+      await departmentService.create(data).then(async () => {
+        await this.getList()
+      })
+    },
   }
 })
