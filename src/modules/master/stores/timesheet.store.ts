@@ -3,7 +3,7 @@ import timesheetService from '@master/services/timesheet.service'
 
 export const useTimesheetStore = defineStore('useTimesheetStore', {
   state: () => ({
-    timesheets: <any>[],
+    timesheetGridData: <any>[],
     timesheetFormData: <any>{},
     timesheetGoSort: <any>[],
     timesheetMonthYear: new Date(),
@@ -18,7 +18,10 @@ export const useTimesheetStore = defineStore('useTimesheetStore', {
   }),
   getters: {
     getData(state) {
-      return state.timesheets
+      return state.timesheetGridData
+    },
+    timesheets(state) {
+      return state.timesheetGridData
     },
   },
   actions: {
@@ -37,7 +40,7 @@ export const useTimesheetStore = defineStore('useTimesheetStore', {
           ...this.timesheetPageConfig,
         })
         .then((data) => {
-          this.timesheets = data.data ?? []
+          this.timesheetGridData = data.data ?? []
           this.timesheetPageConfig.total = data.total
         })
         .finally(() => {
@@ -47,6 +50,12 @@ export const useTimesheetStore = defineStore('useTimesheetStore', {
 
     async delete(data: any) {
       await timesheetService.delete(data.id).then(() => {
+        this.getList()
+      })
+    },
+
+    async updateMulti(data: any[]) {
+      await timesheetService.updateMulti(data).then(() => {
         this.getList()
       })
     },

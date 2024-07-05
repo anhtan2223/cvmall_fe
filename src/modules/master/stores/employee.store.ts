@@ -11,6 +11,7 @@ export const useEmployeeStore = defineStore('useEmployeeStore', {
     employeeLoading: <any>[],
     employeeFilters: <any>[],
     employeeGroup: <any>[],
+    groups: <any>[],
   }),
   getters: {
     getData(state) {
@@ -18,6 +19,9 @@ export const useEmployeeStore = defineStore('useEmployeeStore', {
     },
     getGroupsData(state) {
       return state.employeeGroup
+    },
+    employees(state) {
+      return state.employeeDataGrid
     }
   },
   actions: {
@@ -34,6 +38,18 @@ export const useEmployeeStore = defineStore('useEmployeeStore', {
         .then((data) => {
           this.employeeDataGrid = data.data ?? []
           this.employeePageConfig.total = data.total
+        })
+        .finally(() => {
+          this.employeeLoading = false
+        })
+    }, 
+
+    async getGroups() {
+      this.employeeLoading = true
+      await employeeService
+        .getGroups()
+        .then((data) => {
+          this.groups = data ?? []
         })
         .finally(() => {
           this.employeeLoading = false

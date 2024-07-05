@@ -20,7 +20,7 @@
         />
       </vc-col>
       <vc-col :md="12" class="d-flex flex-end">
-        <vc-button class="ml-2" @click="onExport" type="primary" :icon="'FolderChecked'" :loading="isExportAllTimeSheetsLoading">
+        <vc-button class="ml-2" @click="onSaveAll" type="primary" :icon="'FolderChecked'" :loading="isExportAllTimeSheetsLoading">
           {{ tl("Common", "BtnSave") }}
         </vc-button>
         <vc-button class="ml-2" @click="onExport" type="success" :icon="'Download'" :loading="isExportAllTimeSheetsLoading">
@@ -35,30 +35,39 @@
           <template #group="{ data }">
             <vc-select  
             v-model="data.group" 
-            placeholder="Please input"
+            placeholder=""
             fieldValue="id"
             fieldText="full_name"
-            :items="teamLeadEmployees"/>
+            :items="groups"/>
           </template>
           <template #state="{ data }">
-            <el-tag v-if="data.state" size="small">{{ tl("Common", ([
-              'Đang làm việc',
-              'Đang thử việc',
-              'Đang thực tập',
-              'Đã nghỉ việc ',
-            ])[data.state] )}}</el-tag>
+            <el-tag v-if="data.state != null" size="small"
+              :type="[
+                'success',
+                'primary',
+                'warning',
+                'danger',
+              ][data.state]"
+            >
+              {{ tl("Common", ([
+                'Đang làm việc',
+                'Đang thử việc',
+                'Đang thực tập',
+                'Đã nghỉ việc ',
+              ])[data.state] )}}
+            </el-tag>
           </template>
           <template #project_participation_hours="{ data }">
-            <vc-input v-model="data.project_participation_hours" type="number" placeholder="Please input" />
+            <vc-input v-model="data.project_participation_hours" type="number" placeholder="" />
           </template>
           <template #consumed_hours="{ data }">
-            <vc-input v-model="data.consumed_hours" type="number" placeholder="Please input" />
+            <vc-input v-model="data.consumed_hours" type="number" placeholder="" />
           </template>
-          <template #late_early_departure="{ data }">
-            <vc-input v-model="data.late_early_departure" type="number" placeholder="Please input" />
+          <template #late_early_departures="{ data }">
+            <vc-input v-model="data.late_early_departures" type="number" placeholder="" />
           </template>
           <template #absence_hours="{ data }">
-            <vc-input v-model="data.absence_hours" type="number" placeholder="Please input" />
+            <vc-input v-model="data.absence_hours" type="number" placeholder="" />
           </template>
         </vc-table>
       </vc-col>
@@ -81,6 +90,8 @@
   import { useTimesheetStore } from '@master/stores/timesheet.store'
   import { useRouter } from 'vue-router'
   import { useEmployeeStore } from '@master/stores/employee.store'
+import { BRANCH } from '@/commons/const'
+import { useToastStore } from '@/stores/toast.store'
 
   const timesheetStore = useTimesheetStore()
   const {
@@ -93,8 +104,9 @@
   } = storeToRefs(timesheetStore)
   // const confirmDialog = ref<any>(null);
   const router = useRouter()
+  const toastStore = useToastStore()
   const employeeStore = useEmployeeStore()
-  const { employees, teamLeadEmployees, branchs } = storeToRefs(employeeStore)
+  const { employees, groups } = storeToRefs(employeeStore)
   const isLoading = ref<boolean>(false)
   const isExportAllTimeSheetsLoading = ref<boolean>(false)
   const isTableLoading = ref<boolean>(false)
@@ -152,8 +164,34 @@
     isTableLoading.value = false
   }
 
-  const onUpdate = (data) => {
-    timesheetStore.update(data)
+  // const onUpdate = (data) => {
+  //   timesheetStore.update(data)
+  // }
+
+  const onSaveAll = async () => {
+
+    if (checkValidate()) {
+      return
+    }
+
+    isExportAllTimeSheetsLoading.value = true
+    const monthYear = new Date(timesheetMonthYear.value)
+    monthYear.setDate(15)
+
+    const timesheets = dataGrid.value.map((item) => {
+      return {
+        id: item.id,
+        employee_id: item.employee_id,
+        group: item.group,
+        project_participation_hours: Number(item.project_participation_hours),
+        consumed_hours: Number(item.consumed_hours),
+        late_early_departures: Number(item.late_early_departures),
+        absence_hours: Number(item.absence_hours),
+        month_year: monthYear,
+      }
+    })
+    await timesheetStore.updateMulti(timesheets)
+    isExportAllTimeSheetsLoading.value = false
   }
 
   const onExport = async () => {
@@ -162,37 +200,10 @@
     isExportAllTimeSheetsLoading.value = false
   }
 
-  // const onExportDetail = async (item: any) => {
-  //   await timesheetStore.exportDetail(item)
-  // }
-
-  // const onExportTemplate = async () => {
-  //   await timesheetStore.exportTemplate()
-  // }
-  // const onSuccess = async () => { };
-
-  // const onEdit = (item: any) => {
-  //   router.push({
-  //     name: "TimesheetEditById",
-  //     params: { id: item.id },
-  //   });
-  // };
-
-  // const onDeleteItem = (item: any) => {
-  //   confirmDialog.value.confirm(
-  //     tl("Common", "Delete"),
-  //     tl("Common", "ConfirmDelete", [item.id]),
-  //     async (res: any) => {
-  //       if (res) {
-  //         await timesheetStore.delete(item);
-  //         search();
-  //       }
-  //     }
-  //   );
-  // };
-
   const onSortChange = async (sort: any, config: any) => {
     isTableLoading.value = true
+    console.log(timesheetGoSort.value)
+    console.log(sort)
     timesheetGoSort.value = sort
     await fetchData()
     mapGridData()
@@ -200,7 +211,6 @@
   }
 
   const fetchData = async () => {
-    timesheets.value = []
     await timesheetStore.getList()
     // await employeeStore.getEmployeesList()
   }
@@ -216,21 +226,20 @@
 
   const mapGridData = () => {
     dataGrid.value = timesheets.value.map(t => ({
-      ...t,
       ...t.employee,
+      ...t,
       })
     )
   }
 
   const getAndMapFilterData = async () => {
-    await employeeStore.getTeamLeadEmployeesList()
-    await employeeStore.getBranchsList()
+    await employeeStore.getGroups()
 
     timesheetColConfig.value = [...colConfig]
 
     const groupCol = timesheetColConfig.value.find((col) => col.key === 'group')
     if (groupCol) {
-      groupCol.filters = teamLeadEmployees.value.map((item) => {
+      groupCol.filters = groups.value.map((item) => {
         return {
           value: item.id,
           text: item.full_name,
@@ -248,7 +257,7 @@
     }
     const branch = timesheetColConfig.value.find((col) => col.key === 'branch')
     if (branch) {
-      branch.filters = branchs.value.map((item) => {
+      branch.filters = Object.values(BRANCH).map((item) => {
         return {
           value: item,
           text: item,
@@ -263,7 +272,29 @@
 
   const reloadTable = async () => {
     timesheetSearch.value = ''
-    await search()
+    await fetchData()
+    mapGridData()
+  }
+
+  const checkValidate = () => {
+    let isValid = false
+
+    if (dataGrid.value.some(t => {
+      return t.group == null &&
+        (t.group != null ||
+        t.project_participation_hours != null ||
+        t.consumed_hours != null ||
+        t.late_early_departures != null ||
+        t.absence_hours != null)
+    })) {
+      toastStore.push({
+        type: 'warning',
+        message: tl('Common', 'Không thể lưu công số khi không thuộc nhóm'),
+      })
+      isValid = true
+    }
+
+    return isValid
   }
 </script>
 

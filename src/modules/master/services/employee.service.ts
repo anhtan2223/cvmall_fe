@@ -1,3 +1,4 @@
+import { BRANCH } from './../../../commons/const';
 import apiClient from '@/utils/httpClient'
 import type { APIResponse } from '@/interfaces/response.interface'
 import { useToastStore } from '@/stores/toast.store'
@@ -10,6 +11,9 @@ const employeeService = {
       params: params,
       paramsSerializer: params => qs.stringify(params, { indices: false })
     })
+  },
+  async getGroups(): Promise<APIResponse<any[]>> {
+    return await apiClient.get(API.GROUPS)
   },
 
   async detail(id: string): Promise<APIResponse<any>> {

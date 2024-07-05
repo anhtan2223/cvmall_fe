@@ -14,8 +14,9 @@ export type ColConfig = {
   child: ColConfig[]
   is_hidden: boolean
   filters?: any[]
-  filterMethod?: any
+  filter_method?: any
   formatter?: (row: any, column: any, cellValue: any, index: number) => string
+  sort_method?: any
 }
 
 export type TableConfig = {
