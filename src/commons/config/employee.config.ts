@@ -14,6 +14,7 @@ export const ROUTER_EMPLOYEE = [
 // ========================== PATH API =============================
 export const API = {
   LIST: `/${FUNC_NAME}`,
+  GROUPS: `/${FUNC_NAME}/group`,
   CREATE: `/${FUNC_NAME}`,
   DETAIL: (id: string) => `${FUNC_NAME}/${id}`,
   UPDATE: (id: string) => `${FUNC_NAME}/${id}`,
@@ -45,7 +46,7 @@ export const colConfig: {
   linked?: boolean;
   width?: number;
   filters?: Filter[] | null;
-  filterMethod?: Function | null;
+  filter_method?: Function | null;
   formatter?: Function | null;
 }[] = [
   {

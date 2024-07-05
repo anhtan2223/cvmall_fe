@@ -56,5 +56,11 @@ export enum EMPLOYEE_STATE {
   RESIGNED,
 }
 
+export enum BRANCH {
+    "CAN_THO" = "Cần Thơ",
+    "NHA_TRANG" = "Nha Trang",
+    "HA_NOI" = "Hà Nội",
+}
+
 export const ERROR_TEXT = 'error'
 export const LIMITED_TIME = 3600000 //  1 * 60 * 60 * 1000
