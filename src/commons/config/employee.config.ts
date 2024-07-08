@@ -149,7 +149,7 @@ export const colConfig: {
     title: tl(FUNC_NAME, "Ngày cấp CCCD"),
     width: 100,
     formatter: (data: any) => 
-      new Date(data?.birthday)?.toLocaleDateString('vi-VN', {day: '2-digit', month: '2-digit', year: 'numeric'})
+      data?.date_issue ? new Date(data?.date_issue)?.toLocaleDateString('vi-VN', {day: '2-digit', month: '2-digit', year: 'numeric'}) : null
   },
   {
     key: "location_issue",
