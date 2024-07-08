@@ -418,8 +418,8 @@ const open = async (employeeSource: any) => {
   if (employeeSource) {
     employee.tempEmployee_code = employeeSource.employee_code
 
-    employee.date_issue = new Date(employeeSource.date_issue)
-      .toLocaleDateString('vi-VN', {day: '2-digit', month: '2-digit', year: 'numeric'})
+    employee.date_issue = employeeSource.date_issue ? new Date(employeeSource.date_issue)
+      .toLocaleDateString('vi-VN', {day: '2-digit', month: '2-digit', year: 'numeric'}) : null
 
     employee.tempDepartments = employeeSource.employeeDepartments
       .map((employeeDepartment: any) => employeeDepartment.department.name)
