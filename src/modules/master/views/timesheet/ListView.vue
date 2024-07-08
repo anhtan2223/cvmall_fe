@@ -14,6 +14,9 @@
         <el-date-picker
           v-model="timesheetMonthYear"
           @change="onDateChanged"
+          :end="new Date()"
+          :disabled-date="disabledDate"
+          :clearable="false"
           type="month"
           placeholder="Chọn Tháng" 
           class="ml-2"
@@ -34,10 +37,11 @@
           :loading="isTableLoading" :total="timesheetPageConfig.total||0" @pageChanged="onPageChanged" @sizeChanged="onSizeChanged" @sorted="onSortChange" @filterChanged="onFilterChanged">
           <template #group="{ data }">
             <vc-select  
-            v-model="data.group" 
-            placeholder=""
-            fieldValue="id"
-            fieldText="full_name"
+            v-model="data.group"
+            :placeholder="timesheetMonthYearIsCurrentMonth ? data.current_group : ''"
+            fieldValue="initial_name"
+            fieldText="initial_name"
+            :disabled="!timesheetMonthYearIsCurrentMonth"
             :items="groups"/>
           </template>
           <template #state="{ data }">
@@ -80,6 +84,7 @@
   import { onBeforeMount, ref } from 'vue'
   import { storeToRefs } from 'pinia'
   import tl from '@/utils/locallize'
+  import { isNullOrEmpty } from '@/utils/string'
   import {
     colConfig,
     tableConfig,
@@ -90,8 +95,8 @@
   import { useTimesheetStore } from '@master/stores/timesheet.store'
   import { useRouter } from 'vue-router'
   import { useEmployeeStore } from '@master/stores/employee.store'
-import { BRANCH } from '@/commons/const'
-import { useToastStore } from '@/stores/toast.store'
+  import { BRANCH } from '@/commons/const'
+  import { useToastStore } from '@/stores/toast.store'
 
   const timesheetStore = useTimesheetStore()
   const {
@@ -100,6 +105,7 @@ import { useToastStore } from '@/stores/toast.store'
     timesheetGoSort,
     timesheetPageConfig,
     timesheetMonthYear,
+    timesheetMonthYearIsCurrentMonth,
     timesheetFilters,
   } = storeToRefs(timesheetStore)
   // const confirmDialog = ref<any>(null);
@@ -179,6 +185,15 @@ import { useToastStore } from '@/stores/toast.store'
     monthYear.setDate(15)
 
     const timesheets = dataGrid.value.map((item) => {
+      if(isNullOrEmpty(item.group) && (
+        !isNullOrEmpty(item.project_participation_hours) ||
+        !isNullOrEmpty(item.consumed_hours) ||
+        !isNullOrEmpty(item.late_early_departures) ||
+        !isNullOrEmpty(item.absence_hours) 
+      )) {
+        item.group = item.current_group
+      }
+
       return {
         id: item.id,
         employee_id: item.employee_id,
@@ -191,6 +206,8 @@ import { useToastStore } from '@/stores/toast.store'
       }
     })
     await timesheetStore.updateMulti(timesheets)
+    await fetchData()
+    mapGridData()
     isExportAllTimeSheetsLoading.value = false
   }
 
@@ -241,8 +258,8 @@ import { useToastStore } from '@/stores/toast.store'
     if (groupCol) {
       groupCol.filters = groups.value.map((item) => {
         return {
-          value: item.id,
-          text: item.full_name,
+          value: item.initial_name,
+          text: item.initial_name,
         }
       })
     }
@@ -280,12 +297,12 @@ import { useToastStore } from '@/stores/toast.store'
     let isValid = false
 
     if (dataGrid.value.some(t => {
-      return t.group == null &&
-        (t.group != null ||
-        t.project_participation_hours != null ||
-        t.consumed_hours != null ||
-        t.late_early_departures != null ||
-        t.absence_hours != null)
+      return t.group == null &&  t.current_group == null &&
+        ((t.group != null && t.group != "") ||
+        (t.project_participation_hours != null && t.project_participation_hours != "") ||
+        (t.consumed_hours != null && t.consumed_hours != "") ||
+        (t.late_early_departures != null && t.late_early_departures != "") ||
+        (t.absence_hours != null && t.absence_hours != ""))
     })) {
       toastStore.push({
         type: 'warning',
@@ -295,6 +312,11 @@ import { useToastStore } from '@/stores/toast.store'
     }
 
     return isValid
+  }
+
+  
+  const disabledDate = (time: Date) => {
+    return time.getTime() > Date.now()
   }
 </script>
 

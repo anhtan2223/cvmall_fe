@@ -71,34 +71,31 @@ export const colConfig : any[] = [
   {
     key: 'project_participation_hours',
     title: tl(FUNC_NAME, 'Công số tham gia dự án'),
+    sort: "custom",
     is_sort: true,
     width: 120,
     is_custom: true,
-    // sort_method: () => true,
   },
   {
     key: 'consumed_hours',
     title: tl(FUNC_NAME, 'Công số tiêu thụ'),
-    is_sort: true,
+    sort: "custom",
     width: 120,
     is_custom: true,
-    // sort_method: () => true,
   },
   {
     key: 'late_early_departures',
     title: tl(FUNC_NAME, 'Số buổi đi muộn / về sớm '),
-    is_sort: true,
+    sort: "custom",
     width: 140,
     is_custom: true,
-    // sort_method: () => true,
   },
   {
     key: 'absence_hours',
     title: tl(FUNC_NAME, 'Số giờ xin nghỉ'),
-    is_sort: true,
+    sort: "custom",
     width: 120,
     is_custom: true,
-    // sort_method: () => true,
   },
 ]
 

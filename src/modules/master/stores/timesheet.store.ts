@@ -23,6 +23,14 @@ export const useTimesheetStore = defineStore('useTimesheetStore', {
     timesheets(state) {
       return state.timesheetGridData
     },
+    timesheetMonthYearIsCurrentMonth: (state) => {
+      const currentMonth = new Date().getMonth();
+      const currentYear = new Date().getFullYear();
+      return (
+        state.timesheetMonthYear.getMonth() === currentMonth &&
+        state.timesheetMonthYear.getFullYear() === currentYear
+      );
+    },
   },
   actions: {
     async getList() {

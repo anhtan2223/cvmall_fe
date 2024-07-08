@@ -49,11 +49,6 @@ const employeeService = {
         return response
       })
   },
-
-  async getGroups(): Promise<any[]> {
-    return await apiClient.get(API.GET_GROUP)
-  },
-
 }
 
 export default employeeService

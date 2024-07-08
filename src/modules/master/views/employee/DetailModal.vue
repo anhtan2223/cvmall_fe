@@ -486,7 +486,7 @@ const getListFilters = () => {
     text: position.name,
   }))
 
-  
+  console.log(employeeStore.getGroupsData)
   groups.value = [...employeeStore.getGroupsData].map(group => ({
     value: group.initial_name,
     text: group.initial_name,
