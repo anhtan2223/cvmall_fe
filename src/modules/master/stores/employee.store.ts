@@ -50,6 +50,7 @@ export const useEmployeeStore = defineStore('useEmployeeStore', {
         .getGroups()
         .then((data) => {
           this.groups = data ?? []
+          this.employeeGroup = data ?? []
         })
         .finally(() => {
           this.employeeLoading = false
@@ -72,9 +73,9 @@ export const useEmployeeStore = defineStore('useEmployeeStore', {
       })
     },
 
-    async getGroups() {
-      await employeeService.getGroups()
-      .then((data) => this.employeeGroup = data ?? [])
-    }
+    // async getGroups() {
+    //   await employeeService.getGroups()
+    //   .then((data) => this.employeeGroup = data ?? [])
+    // }
   }
 })

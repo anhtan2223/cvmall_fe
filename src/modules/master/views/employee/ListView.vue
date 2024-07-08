@@ -40,6 +40,23 @@
               </vc-button>
             </div>
           </template>
+          <template #state="{ data }" >
+            <el-tag v-if="data.state != null" size="small"
+              :type="[
+                'success',
+                'primary',
+                'warning',
+                'danger',
+              ][data.state]"
+            >
+              {{ tl("Common", ([
+                'Đang làm việc',
+                'Đang thử việc',
+                'Đang thực tập',
+                'Đã nghỉ việc ',
+              ])[data.state] )}}
+            </el-tag>
+          </template>
         </vc-table>
       </vc-col>
     </vc-row>
@@ -96,30 +113,6 @@ onBeforeMount(async () => {
 
   await fetchData()
 
-  const branchFilters = BRANCHES.map(branch => ({
-    text: branch,
-    value: branch
-  }));
-
-  const branchCol = colConfig.find(obj => obj.key == "branch")
-  if (branchCol) {
-    if (branchFilters.length > 0) {
-      branchCol["filters"] = branchFilters
-    }
-  }
-
-  const stateFilters = EMPLOYEE_STATES.map((state, index) => ({
-    text: state,
-    value: index
-  }));
-
-  const stateCol = colConfig.find(obj => obj.key == "state")
-  if (stateCol) {
-    if (stateFilters.length > 0) {
-      stateCol["filters"] = stateFilters
-    }
-  }
-
   updateListFilters()
   tableKey.value += 1 // Force update table
 });
@@ -133,8 +126,6 @@ const fetchData = async () => {
   await positionStore.getList()
 
   updateListFilters()
-
-  tableKey.value += 1 // Force update table
 };
 
 const onRowSelected = (selected: any) => {
@@ -164,6 +155,9 @@ const onFilterChanged = async (filters: any[]) => {
     ...employeeFilters.value,
     ...filters
   }
+
+  employeeFilters.value["group"] = employeeFilters.value["current_group"]
+  delete employeeFilters.value["current_group"]
   
   await fetchData();
   employeeLoading.value = false;
@@ -216,6 +210,30 @@ const onDeleteItem = (item: any) => {
 };
 
 const updateListFilters = () => {
+  const branchFilters = BRANCHES.map(branch => ({
+    text: branch,
+    value: branch
+  }));
+
+  const branchCol = colConfig.find(obj => obj.key == "branch")
+  if (branchCol) {
+    if (branchFilters.length > 0) {
+      branchCol["filters"] = branchFilters
+    }
+  }
+
+  const stateFilters = EMPLOYEE_STATES.map((state, index) => ({
+    text: state,
+    value: index
+  }));
+
+  const stateCol = colConfig.find(obj => obj.key == "state")
+  if (stateCol) {
+    if (stateFilters.length > 0) {
+      stateCol["filters"] = stateFilters
+    }
+  }
+
   // Get list department to filter in column "department"
   const departmentList = [...departmentStore.getData]
   const departmentFilters = departmentList.map(department => ({

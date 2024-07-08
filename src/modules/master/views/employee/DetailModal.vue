@@ -59,9 +59,8 @@
               </vc-select>
             </vc-input-group>
 
-            <vc-input-group required prop="current_group" :label="tl('Employee', 'Nhóm')">
-              <vc-select v-model="employee.current_group" :items="groups" fieldValue="value" fieldText="text">
-              </vc-select>
+            <vc-input-group v-if="type != POPUP_TYPE.CREATE"  required prop="current_group" :label="tl('Employee', 'Nhóm')">
+              <vc-input disabled v-model="employee.current_group"></vc-input>
             </vc-input-group>
 
             <vc-input-group required prop="state" :label="tl('Employee', 'Thực trạng')">
@@ -137,7 +136,7 @@ const rules = reactive({
     {
       label: tl('Employee', 'Mã nhân sự'),
       validator: validate.numberWithPrefix('VHEC-'),
-      trigger: ['change'],
+      trigger: ['change', 'blur'],
     },
   ],
   full_name: [
@@ -224,14 +223,6 @@ const rules = reactive({
   tempPositions: [
     {
       label: tl('Employee', 'Vị trí'),
-      required: true,
-      validator: validate.required,
-      trigger: ['change'],
-    }
-  ],
-  current_group: [
-    {
-      label: tl('Employee', 'Nhóm'),
       required: true,
       validator: validate.required,
       trigger: ['change'],
@@ -325,7 +316,7 @@ const employee = reactive({
   branch: null,
   tempDepartments: <any[]>[],
   employeeDepartments: <any[]>[],
-  current_group: null,
+  current_group: "",
   tempPositions: <any[]>[],
   employeePositions: <any[]>[],
   state: null,
@@ -348,7 +339,7 @@ const resetEmployee = () => {
   employee.branch = null
   employee.tempDepartments = []
   employee.employeeDepartments = []
-  employee.current_group = null
+  employee.current_group = ""
   employee.tempPositions = []
   employee.employeePositions = []
   employee.state = null
