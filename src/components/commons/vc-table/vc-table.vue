@@ -119,9 +119,6 @@ const onPageChanged = (page: any) => {
 const onSizeChanged = (size: number) => {
   emit('sizeChanged', size)
 }
-const onFilterChanged = (filters: any) => {
-  emit('filterChanged', filters)
-}
 
 const onFilterChanged = (filters: any) => {
   emit('filterChanged', filters)
