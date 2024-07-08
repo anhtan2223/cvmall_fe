@@ -73,6 +73,5 @@ export const useEmployeeStore = defineStore('useEmployeeStore', {
         this.getList()
       })
     },
-
   }
 })

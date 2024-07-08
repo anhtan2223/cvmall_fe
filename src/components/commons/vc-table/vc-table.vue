@@ -123,6 +123,10 @@ const onFilterChanged = (filters: any) => {
   emit('filterChanged', filters)
 }
 
+const onFilterChanged = (filters: any) => {
+  emit('filterChanged', filters)
+}
+
 const onRowDbClick = (item: any) => {
   if (tableConfig.value.dbClick) emit('dbClick', item)
 }
