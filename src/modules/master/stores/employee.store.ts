@@ -47,14 +47,10 @@ export const useEmployeeStore = defineStore('useEmployeeStore', {
     }, 
 
     async getGroups() {
-      this.employeeLoading = true
       await employeeService
         .getGroups()
         .then((data) => {
           this.employeeGroup = data ?? []
-        })
-        .finally(() => {
-          this.employeeLoading = false
         })
     }, 
 
@@ -73,5 +69,13 @@ export const useEmployeeStore = defineStore('useEmployeeStore', {
         this.getList()
       })
     },
+
+    async export() {
+      await employeeService.export()
+    },
+
+    async exportTemplate() {
+      await employeeService.exportTemplate()
+    }
   }
 })

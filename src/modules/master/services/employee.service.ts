@@ -4,6 +4,7 @@ import type { APIResponse } from '@/interfaces/response.interface'
 import { useToastStore } from '@/stores/toast.store'
 import { API } from '@/commons/config/employee.config'
 import qs from 'qs'
+import fileService from '@/utils/file';
 
 const employeeService = {
   async getList(params?: unknown): Promise<APIResponse<any[]>> {
@@ -49,6 +50,28 @@ const employeeService = {
         return response
       })
   },
+
+  async export() {
+    const toastStore = useToastStore()
+    return await apiClient.get(API.EXPORT, {
+      responseType: 'blob'
+    })
+    .then((response: any) => {
+      toastStore.fromApiResponse(response)
+      fileService.resolveAndDownloadBlob(response, "Danhsach_nhanvien.xlsx");
+    })
+  },
+
+  async exportTemplate() {
+    const toastStore = useToastStore()
+    return await apiClient.get(API.EXPORT_TEMPLATE, {
+      responseType: 'blob'
+    })
+   .then((response: any) => {
+     toastStore.fromApiResponse(response)
+     fileService.resolveAndDownloadBlob(response, "Template_danhsach_nhanvien.xlsx");
+   })
+  }
 }
 
 export default employeeService
