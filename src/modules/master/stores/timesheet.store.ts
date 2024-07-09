@@ -74,11 +74,12 @@ export const useTimesheetStore = defineStore('useTimesheetStore', {
       })
     },
 
-    async exportAllExcelByMonthYear() {
-      await timesheetService.exportAllExcelByMonthYear(
-        this.timesheetMonthYear.getMonth() + 1,
-        this.timesheetMonthYear.getFullYear()
-      )
+    async exportAllExcel() {
+      await timesheetService.exportAllExcel({
+        is_actived: true,
+        month: this.timesheetMonthYear.getMonth() + 1,
+        year: this.timesheetMonthYear.getFullYear(),
+      })
     },
   },
 })

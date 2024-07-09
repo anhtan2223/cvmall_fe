@@ -213,7 +213,7 @@
 
   const onExport = async () => {
     isExportAllTimeSheetsLoading.value = true
-    await timesheetStore.exportAllExcelByMonthYear()
+    await timesheetStore.exportAllExcel()
     isExportAllTimeSheetsLoading.value = false
   }
 

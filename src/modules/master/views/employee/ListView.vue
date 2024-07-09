@@ -12,10 +12,10 @@
         </vc-button>
       </vc-col>
       <vc-col :md="16" class="d-flex flex-end">
-        <vc-button class="ml-2" @click="onExport" :icon="'Download'">
+        <vc-button class="ml-2" @click="onExport" :icon="'Download'" disabled>
           {{ tl("Common", "BtnExportExcel") }}
         </vc-button>
-        <vc-button class="ml-2" @click="onImport" :icon="'Upload'">
+        <vc-button class="ml-2" @click="onImport" :icon="'Upload'" disabled>
           {{ tl("Common", "BtnImportExcel") }}
         </vc-button>
         <vc-button class="ml-2" @click="onAddNew" type="primary" :icon="'Plus'">
