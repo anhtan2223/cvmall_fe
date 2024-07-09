@@ -45,6 +45,7 @@ export const colConfig: {
   is_sort?: boolean;
   sort?: string
   linked?: boolean;
+  is_custom?: boolean;
   width?: number;
   filters?: Filter[] | null;
   filter_method?: Function | null;
@@ -82,7 +83,7 @@ export const colConfig: {
     width: 150,
     formatter: (data: any) =>
       data.employeeDepartments
-      .map((dept: any) => `• ${dept.department.name}`)
+      .map((dept: any) => `• ${dept?.department?.name}`)
       .join('\n')
   },
   {
@@ -94,15 +95,16 @@ export const colConfig: {
     title: tl(FUNC_NAME, "Vị trí"),
     formatter: (data: any) =>
       data.employeePositions
-      .map((dept: any) => `• ${dept.position.name}`)
+      .map((dept: any) => `• ${dept?.position?.name}`)
       .join('\n')
   },
   {
     key: "state",
     title: tl(FUNC_NAME, "Thực trạng"),
     width: 120,
+    is_custom: true,
     formatter: (data: any) => 
-      EMPLOYEE_STATES[data.state]
+      EMPLOYEE_STATES[data?.state]
   },
   {
     key: "phone",
@@ -125,7 +127,7 @@ export const colConfig: {
     is_sort: true,
     width: 100,
     formatter: (data: any) => 
-      new Date(data.birthday).toLocaleDateString('vi-VN', {day: '2-digit', month: '2-digit', year: 'numeric'})
+      new Date(data?.birthday)?.toLocaleDateString('vi-VN', {day: '2-digit', month: '2-digit', year: 'numeric'})
   },
   {
     key: "permanent_address",
@@ -147,7 +149,7 @@ export const colConfig: {
     title: tl(FUNC_NAME, "Ngày cấp CCCD"),
     width: 100,
     formatter: (data: any) => 
-      new Date(data.birthday).toLocaleDateString('vi-VN', {day: '2-digit', month: '2-digit', year: 'numeric'})
+      data?.date_issue ? new Date(data?.date_issue)?.toLocaleDateString('vi-VN', {day: '2-digit', month: '2-digit', year: 'numeric'}) : null
   },
   {
     key: "location_issue",

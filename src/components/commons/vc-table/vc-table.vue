@@ -38,7 +38,7 @@
               </el-table-column>
             </template>
           </el-table-column>
-          <el-table-column :prop="col.key" :column-key="col.key" :width="col.width" :label="col.title" :sortable="col.is_sort"  :sort-method="col.sort_method" v-if="col.is_custom"
+          <el-table-column :prop="col.key" :column-key="col.key" :width="col.width" :label="col.title" :sortable="col.sort ?? col.is_sort"  :sort-method="col.sort_method" v-if="col.is_custom"
           :filters="col.filters" :filter-method="col.filter_method">
             <template #default="scope">
               <div class="d-flex flex-start">
@@ -118,6 +118,10 @@ const onPageChanged = (page: any) => {
 
 const onSizeChanged = (size: number) => {
   emit('sizeChanged', size)
+}
+
+const onFilterChanged = (filters: any) => {
+  emit('filterChanged', filters)
 }
 
 const onRowDbClick = (item: any) => {
