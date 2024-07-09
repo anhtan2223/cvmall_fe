@@ -53,17 +53,19 @@ const timesheetService = {
       return response
     })
   },
-  async exportAllExcelByMonthYear(month: number, year: number) {
+  async exportAllExcel(params?: object) {
     return await apiClient
       .get(API.EXPORT_ALL_EXCEL_BY_MONTH_YEAR, {
         responseType: 'blob',
-        params: {
-          month,
-          year,
-        },
+        params: params,
+        paramsSerializer: params => {
+          return qs.stringify(params)
+        }
       })
       .then((response: any) => {
-        fileService.resolveAndDownloadBlob(response, `timesheet_table_${monthYear.getMonth()+1}/${monthYear.getFullYear()}.xlsx`)
+        const month = (params as {month: number})?.["month"] || new Date().getMonth() + 1;
+        const year = (params as {year: number})?.["year"] || new Date().getFullYear();
+        fileService.resolveAndDownloadBlob(response, `timesheet_${month}_${year}.xlsx`);
       })
   },
 }
