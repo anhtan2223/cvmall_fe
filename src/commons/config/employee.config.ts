@@ -21,7 +21,8 @@ export const API = {
   UPDATE: (id: string) => `${FUNC_NAME}/${id}`,
   DELETE: (id: string | string[]) => `${FUNC_NAME}/${id}`,
   DELETE_MULTI: `${FUNC_NAME}/delete-multi`,
-  EXPORT: `${FUNC_NAME}/export-excel`,
+  EXPORT: `${FUNC_NAME}/export_all`,
+  EXPORT_TEMPLATE: `${FUNC_NAME}/export_template`,
   GET_GROUP: `/${FUNC_NAME}/group`
 }
 

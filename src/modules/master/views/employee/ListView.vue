@@ -4,22 +4,25 @@
       <vc-col :span="8" class="d-flex">
         <vc-input v-model="employeeSearch" hide-details="true" :prefix-icon="'Search'"
           @on:keyup.enter="onSearch"></vc-input>
-        <vc-button class="ml-2" @click="onSearch" type="primary" :icon="'Search'">
+        <vc-button class="ml-2" @click="onSearch" type="primary" :icon="'Search'" :loading="employeeLoading">
           {{ tl("Common", "BtnSearch") }}
         </vc-button>
-        <vc-button class="ml-2" @click="reloadTable" :icon="'Refresh'">
+        <vc-button class="ml-2" @click="reloadTable" :icon="'Refresh'" :loading="employeeLoading">
           {{ tl("Common", "") }}
         </vc-button>
       </vc-col>
       <vc-col :md="16" class="d-flex flex-end">
-        <vc-button class="ml-2" @click="onExport" :icon="'Download'" disabled>
+        <vc-button class="ml-2" @click="onAddNew" type="primary" :icon="'Plus'" :loading="employeeLoading">
+          {{ tl("Common", "BtnAddNew") }}
+        </vc-button>
+        <vc-button class="ml-2" @click="onExport" :icon="'Download'" type="success" :loading="employeeLoading || isExporting">
           {{ tl("Common", "BtnExportExcel") }}
+        </vc-button>
+        <vc-button class="ml-2" @click="onExportTemplate" :icon="'Download'"  type="success" :loading="employeeLoading || isExportingTemplate">
+          {{ tl("Common", "BtnExportExcelTemplate") }}
         </vc-button>
         <vc-button class="ml-2" @click="onImport" :icon="'Upload'" disabled>
           {{ tl("Common", "BtnImportExcel") }}
-        </vc-button>
-        <vc-button class="ml-2" @click="onAddNew" type="primary" :icon="'Plus'">
-          {{ tl("Common", "BtnAddNew") }}
         </vc-button>
       </vc-col>
     </vc-row>
@@ -106,6 +109,8 @@ const confirmDialog = ref<any>(null);
 const detailRef = ref<any>(null);
 
 const tableKey = ref(0) // For force update table
+const isExporting = ref<boolean>(false)
+const isExportingTemplate = ref<boolean>(false)
 
 
 onBeforeMount(async () => {
@@ -175,9 +180,17 @@ const onAddNew = () => {
   detailRef.value.open()
 };
 
-const onExport = () => {
-  // employeeStore.export()
+const onExport = async () => {
+  isExporting.value = true
+  await employeeStore.export()
+  isExporting.value = false
 };
+
+const onExportTemplate = async () => {
+  isExportingTemplate.value = true
+  await employeeStore.exportTemplate()
+  isExportingTemplate.value = false
+}
 
 const onImport = () => {
   importStore.open()

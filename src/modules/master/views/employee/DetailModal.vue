@@ -101,7 +101,7 @@
     </template>
 
     <template #acttion>
-      <vc-button class="ml-2" @click="resetTable" :icon="'Refresh'">
+      <vc-button v-if="props.type != POPUP_TYPE.VIEW" class="ml-2" @click="resetTable" :icon="'Refresh'">
         {{ tl("Common", "") }}
       </vc-button>
       <vc-button v-if="props.type != POPUP_TYPE.VIEW" type="primary" class="ml-2" code="F00004"
@@ -438,14 +438,17 @@ const close = () => {
   employee.id = null
   employee.employee_code = null
   employee.tempEmployee_code = null
+  employee.current_group = ""
   modal.value.close()
 }
 
 const resetTable = async () => {
+  const tempGroup = employee.current_group
   if (employeeForm.value) employeeForm.value.resetFields()
   resetEmployee()
   if (props.type == POPUP_TYPE.EDIT) {
     employee.tempEmployee_code = employee.employee_code
+    employee.current_group = tempGroup
   }
 };
 
@@ -477,7 +480,6 @@ const getListFilters = () => {
     text: position.name,
   }))
 
-  console.log(employeeStore.getGroupsData)
   groups.value = [...employeeStore.getGroupsData].map(group => ({
     value: group.initial_name,
     text: group.initial_name,
