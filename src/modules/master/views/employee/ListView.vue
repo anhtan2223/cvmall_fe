@@ -21,7 +21,7 @@
         <vc-button class="ml-2" @click="onExportTemplate" :icon="'Download'"  type="success" :loading="employeeLoading || isExportingTemplate">
           {{ tl("Common", "BtnExportExcelTemplate") }}
         </vc-button>
-        <vc-button class="ml-2" @click="onImport" :icon="'Upload'" disabled>
+        <vc-button class="ml-2" @click="onImport" :icon="'Upload'">
           {{ tl("Common", "BtnImportExcel") }}
         </vc-button>
       </vc-col>
@@ -84,7 +84,7 @@ import { usePositionStore } from "@master/stores/position.store";
 import { useImportStore } from '@/stores/import.store'
 import { POPUP_TYPE, BRANCHES, EMPLOYEE_STATES } from "@/commons/const";
 
-const urlImport = ref("user/import")
+const urlImport = ref("employee/import")
 const template = ref({
   exportUrl: "user/download-file-template",
   fileName: "Template_Danhsachtaikhoan.xlsx"

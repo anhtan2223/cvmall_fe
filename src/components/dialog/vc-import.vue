@@ -4,9 +4,16 @@
       <vc-row :gutter="20">
         <vc-col :lg="24" :md="24" :sm="24" :xs="24">
           <vc-input-group required prop="file" :label="tl('Import', 'File')">
-            <el-upload v-model:file-list="dataValiable.fileList" class="upload-import-excel" :auto-upload="false"
-              :on-change="store.fileHandleChange" :on-remove="store.fileHandleRemove" :limit="1" :multiple="false"
-              :show-file-list="false" ref="uploadRef">
+            <el-upload 
+              v-model:file-list="dataValiable.fileList" 
+              class="upload-import-excel" 
+              :auto-upload="false"
+              :on-change="store.fileHandleChange" 
+              :on-remove="store.fileHandleRemove" 
+              :limit="1" 
+              :multiple="false"
+              :show-file-list="false" 
+              ref="uploadRef">
               <el-input readonly :value="dataValiable.fileName">
                 <template #append>
                   <vc-button :icon="'FolderOpened'" />
@@ -29,7 +36,7 @@
     </template>
 
     <template #acttion>
-      <vc-button class="ml-2" type="danger" v-if="isBreak" @click="store.onImport(urlImport, isErrors, onSuccess)"
+      <vc-button class="ml-2" type="danger" v-if="false" @click="store.onImport(urlImport, isErrors, onSuccess)"
         :loading="isLoading" :icon="'Download'">
         {{ tl(FUNC_NAME, 'BtnDownloadFileError') }}
       </vc-button>
