@@ -9,7 +9,7 @@
 
         <el-col :span="isMenuVisible ? 18 : 17" class="col-left">
           <el-header :style="{ width: `${widthMenu}px` }">
-            <vc-menu v-if="isMenuVisible" mode="horizontal" class="vc-menu-horizontal"></vc-menu>
+            <!-- <vc-menu v-if="isMenuVisible" mode="horizontal" class="vc-menu-horizontal"></vc-menu> -->
           </el-header>
         </el-col>
 
