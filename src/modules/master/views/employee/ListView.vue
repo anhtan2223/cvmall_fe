@@ -86,7 +86,7 @@ import { POPUP_TYPE, BRANCHES, EMPLOYEE_STATES } from "@/commons/const";
 
 const urlImport = ref("employee/import")
 const template = ref({
-  exportUrl: "user/download-file-template",
+  exportUrl: "employee/export_template",
   fileName: "Template_Danhsachtaikhoan.xlsx"
 })
 
