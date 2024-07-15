@@ -297,12 +297,13 @@
     let isValid = false
 
     if (dataGrid.value.some(t => {
-      return t.group == null &&  t.current_group == null &&
-        ((t.group != null && t.group != "") ||
-        (t.project_participation_hours != null && t.project_participation_hours != "") ||
-        (t.consumed_hours != null && t.consumed_hours != "") ||
-        (t.late_early_departures != null && t.late_early_departures != "") ||
-        (t.absence_hours != null && t.absence_hours != ""))
+      return t.group == null && 
+      (t.current_group == null || !timesheetMonthYearIsCurrentMonth.value) &&
+        ((!isNullOrEmpty(t.group)) ||
+        (!isNullOrEmpty(t.project_participation_hours)) ||
+        (!isNullOrEmpty(t.consumed_hours)) ||
+        (!isNullOrEmpty(t.late_early_departures)) ||
+        (!isNullOrEmpty(t.absence_hours)))
     })) {
       toastStore.push({
         type: 'warning',
