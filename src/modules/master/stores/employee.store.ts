@@ -76,6 +76,10 @@ export const useEmployeeStore = defineStore('useEmployeeStore', {
 
     async exportTemplate() {
       await employeeService.exportTemplate()
+    },
+
+    async checkCode(employee_code: string) {
+      return await employeeService.checkCode(employee_code)
     }
   }
 })

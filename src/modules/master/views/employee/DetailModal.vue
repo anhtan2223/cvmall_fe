@@ -1,5 +1,5 @@
 <template>
-  <vc-modal ref="modal" :title="tl('Employee', 'DetailTitle')" width="80%" @close="close">
+  <vc-modal ref="modal" :title="modalTitle()" width="80%" @close="close">
     <template #content>
       <el-form ref="employeeForm" :model="employee" :rules="rules" label-width="150px" label-position="right"
         require-asterisk-position="right" :disabled="type == POPUP_TYPE.VIEW">
@@ -59,8 +59,8 @@
               </vc-select>
             </vc-input-group>
 
-            <vc-input-group v-if="type != POPUP_TYPE.CREATE"  required prop="current_group" :label="tl('Employee', 'Nhóm')">
-              <vc-input disabled v-model="employee.current_group"></vc-input>
+            <vc-input-group required prop="current_group" :label="tl('Employee', 'Nhóm')">
+              <vc-select v-model="employee.current_group" :items="groups" fieldValue="value" fieldText="text"></vc-select>
             </vc-input-group>
 
             <vc-input-group required prop="state" :label="tl('Employee', 'Thực trạng')">
@@ -115,7 +115,7 @@
 </template>
 
 <script setup lang="ts">
-import { onBeforeMount, ref, reactive } from 'vue'
+import { onBeforeMount, ref, reactive, watch } from 'vue'
 import validate from '@/utils/validate_elp'
 import tl from '@/utils/locallize'
 import type { FormInstance } from 'element-plus'
@@ -136,8 +136,21 @@ const rules = reactive({
     {
       label: tl('Employee', 'Mã nhân sự'),
       validator: validate.numberWithPrefix('VHEC-'),
-      trigger: ['change', 'blur'],
+      trigger: ['blur'],
     },
+    {
+      label: tl('Employee', 'Mã nhân sự'),
+      validator: async (rule: any, value: any, callback: any) => {
+        if(props.type == POPUP_TYPE.CREATE) {
+          const isExisted = await employeeStore.checkCode(value)
+          if (isExisted) {
+            callback(new Error(tl('Employee', 'Mã nhân sự đã được sử dụng')))
+          }
+        }
+        callback()
+      },
+      trigger: ['blur'],
+    }
   ],
   full_name: [
     {
@@ -149,7 +162,7 @@ const rules = reactive({
     {
       label: tl('Employee', 'Họ và tên'),
       validator: validate.maxLengthRule,
-      trigger: ['change'],
+      trigger: ['change', 'blur'],
       max: 100,
     },
   ],
@@ -163,11 +176,17 @@ const rules = reactive({
     {
       label: tl('Employee', 'Tên viết tắt'),
       validator: validate.maxLengthRule,
-      trigger: ['change'],
+      trigger: ['change', 'blur'],
       max: 100,
     },
   ],
   phone: [
+    {
+      label: tl('Employee', 'SĐT'),
+      required: true,
+      validator: validate.required,
+      trigger: ['blur'],
+    },
     {
       label: tl('Employee', 'SĐT'),
       validator: validate.phoneNumberRule,
@@ -176,7 +195,7 @@ const rules = reactive({
     {
       label: tl('Role', 'SĐT'),
       validator: validate.maxLengthRule,
-      trigger: ['change'],
+      trigger: ['change', 'blur'],
       max: 50,
     },
   ],
@@ -192,7 +211,7 @@ const rules = reactive({
     {
       label: tl('Employee', 'Địa chỉ thường trú'),
       validator: validate.maxLengthRule,
-      trigger: ['change'],
+      trigger: ['change', 'blur'],
       max: 100,
     }
   ],
@@ -200,7 +219,7 @@ const rules = reactive({
     {
       label: tl('Employee', 'Địa chỉ hiện tại'),
       validator: validate.maxLengthRule,
-      trigger: ['change'],
+      trigger: ['change', 'blur'],
       max: 100,
     }
   ],
@@ -209,7 +228,7 @@ const rules = reactive({
       label: tl('Employee', 'Chi nhánh'),
       required: true,
       validator: validate.required,
-      trigger: ['change'],
+      trigger: ['change', 'blur'],
     }
   ],
   tempDepartments: [
@@ -217,7 +236,7 @@ const rules = reactive({
       label: tl('Employee', 'Phòng ban'),
       required: true,
       validator: validate.required,
-      trigger: ['change'],
+      trigger: ['change', 'blur'],
     }
   ],
   tempPositions: [
@@ -225,7 +244,7 @@ const rules = reactive({
       label: tl('Employee', 'Vị trí'),
       required: true,
       validator: validate.required,
-      trigger: ['change'],
+      trigger: ['change', 'blur'],
     }
   ],
   state: [
@@ -233,7 +252,7 @@ const rules = reactive({
       label: tl('Employee', 'Thực trạng'),
       required: true,
       validator: validate.required,
-      trigger: ['change'],
+      trigger: ['change', 'blur'],
     }
   ],
   personal_email: [
@@ -245,11 +264,17 @@ const rules = reactive({
     {
       label: tl('Employee', 'Email (cá nhân)'),
       validator: validate.maxLengthRule,
-      trigger: ['change'],
+      trigger: ['change', 'blur'],
       max: 100,
     }
   ],
   company_email: [
+    {
+      label: tl('Employee', 'Email (công ty)'),
+      validator: validate.required,
+      required: true,
+      trigger: ['blur']
+    },
     {
       label: tl('Employee', 'Email (công ty)'),
       validator: validate.emailRule,
@@ -258,22 +283,28 @@ const rules = reactive({
     {
       label: tl('Employee', 'Email (công ty)'),
       validator: validate.maxLengthRule,
-      trigger: ['change'],
+      trigger: ['change', 'blur'],
       max: 100,
     }
   ],
   id_number: [
     {
       label: tl('Employee', 'Số CCCD'),
+      required: true,
+      validator: validate.required,
+      trigger: ['blur']
+    },
+    {
+      label: tl('Employee', 'Số CCCD'),
       validator: validate.numberValidator,
-      trigger: ['change'],
+      trigger: ['change', 'blur'],
     }
   ],
   location_issue: [
     {
       label: tl('Employee', 'Nơi cấp CCCD'),
       validator: validate.maxLengthRule,
-      trigger: ['change'],
+      trigger: ['change', 'blur'],
       max: 100,
     }
   ],
@@ -282,7 +313,7 @@ const rules = reactive({
       label: tl('Employee', 'Tình trạng hôn nhân'),
       required: true,
       validator: validate.required,
-      trigger: ['change'],
+      trigger: ['change', 'blur'],
     }
   ]
 })
@@ -429,7 +460,6 @@ const open = async (employeeSource: any) => {
   }
   
   Object.assign(employee, employeeSource)
-
   modal.value.open()
 }
 
@@ -492,6 +522,17 @@ const getListFilters = () => {
         text: "Không có"
       }
     ]
+  }
+}
+
+const modalTitle = () => {
+  switch(props.type) {
+    case POPUP_TYPE.CREATE:
+      return "Thêm"
+    case POPUP_TYPE.EDIT:
+      return "Sửa"
+    case POPUP_TYPE.VIEW:
+      return "Xem"
   }
 }
 
