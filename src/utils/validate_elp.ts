@@ -38,7 +38,7 @@ export default {
     ) {
       callback()
     } else {
-      callback(new Error(tl('Common', 'ValidateInvalid', [rule.label ? rule.field : rule.label])))
+      callback(new Error(tl('Common', 'Email không hợp lệ', [rule.label ? rule.field : rule.label])))
     }
   },
   dateRule: (rule: any, value: any, callback: any) => {
@@ -58,7 +58,7 @@ export default {
     if (/^[+0-9][./0-9]{8,19}$/.test(value)) {
       callback()
     } else {
-      callback(new Error(tl('Common', 'ValidateInvalid', [rule.label ? rule.field : rule.label])))
+      callback(new Error(tl('Common', 'Số điện thoại không hợp lệ', [rule.label ? rule.field : rule.label])))
     }
   },
   checkPassword: (value: any, newVal: any, name: string) => {
@@ -113,7 +113,7 @@ export default {
     if (regex.test(value) || !value) {
       callback()
     } else {
-      callback(new Error('数字のみを入力してください'))
+      callback(new Error('Vui lòng chỉ nhập số'))
     }
   },
   sortOrderValidator: (rule: any, value: any, callback: any) => {
@@ -127,11 +127,11 @@ export default {
   },
   numberWithPrefix: (prefix: any) => {
     return (rule: any, value: any, callback: any) => {
-      const regex = new RegExp(`^${prefix}\\d+$`);
+      const regex = new RegExp(`^${prefix}\\d{4}$`);
       if (regex.test(value) || !value) {
         callback();
       } else {
-        callback(new Error(`Invalid format.`));
+        callback(new Error(`Định dạng không hợp lệ`));
       }
     };
   }

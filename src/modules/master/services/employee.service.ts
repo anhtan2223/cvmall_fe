@@ -71,6 +71,15 @@ const employeeService = {
      toastStore.fromApiResponse(response)
      fileService.resolveAndDownloadBlob(response, "Template_danhsach_nhanvien.xlsx");
    })
+  },
+
+  async checkCode(employee_code: string) {
+    const toastStore = useToastStore()
+    return await apiClient.get(API.CHECK_CODE, {params: {employee_code}})
+     .then((response: any) => {
+        toastStore.fromApiResponse(response)
+        return response
+      })
   }
 }
 

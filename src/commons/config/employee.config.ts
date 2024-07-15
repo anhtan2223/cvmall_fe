@@ -23,7 +23,8 @@ export const API = {
   DELETE_MULTI: `${FUNC_NAME}/delete-multi`,
   EXPORT: `${FUNC_NAME}/export_all`,
   EXPORT_TEMPLATE: `${FUNC_NAME}/export_template`,
-  GET_GROUP: `/${FUNC_NAME}/group`
+  GET_GROUP: `/${FUNC_NAME}/group`,
+  CHECK_CODE: `${FUNC_NAME}/check_code`
 }
 
 // ========================== CONFIG TABLE ==========================
