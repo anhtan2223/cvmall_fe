@@ -60,6 +60,7 @@ export enum BRANCH {
     "CAN_THO" = "Cần Thơ",
     "NHA_TRANG" = "Nha Trang",
     "HA_NOI" = "Hà Nội",
+    "JAPAN" = "Japan",
 }
 
 export const ERROR_TEXT = 'error'

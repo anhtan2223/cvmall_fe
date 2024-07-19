@@ -41,7 +41,6 @@
             :placeholder="timesheetMonthYearIsCurrentMonth ? data.current_group : ''"
             fieldValue="initial_name"
             fieldText="initial_name"
-            :disabled="!timesheetMonthYearIsCurrentMonth"
             :items="groups"/>
           </template>
           <template #state="{ data }">
@@ -297,8 +296,8 @@
     let isValid = false
 
     if (dataGrid.value.some(t => {
-      return t.group == null && 
-      (t.current_group == null || !timesheetMonthYearIsCurrentMonth.value) &&
+      return isNullOrEmpty(t.group) && 
+      (isNullOrEmpty(t.current_group) || !timesheetMonthYearIsCurrentMonth.value) &&
         ((!isNullOrEmpty(t.group)) ||
         (!isNullOrEmpty(t.project_participation_hours)) ||
         (!isNullOrEmpty(t.consumed_hours)) ||
