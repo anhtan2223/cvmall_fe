@@ -38,7 +38,7 @@
           <template #group="{ data }">
             <vc-select  
             v-model="data.group"
-            :placeholder="timesheetMonthYearIsCurrentMonth ? data.current_group : ''"
+            :placeholder="data.current_group"
             fieldValue="initial_name"
             fieldText="initial_name"
             :items="groups"/>
@@ -297,7 +297,7 @@
 
     if (dataGrid.value.some(t => {
       return isNullOrEmpty(t.group) && 
-      (isNullOrEmpty(t.current_group) || !timesheetMonthYearIsCurrentMonth.value) &&
+      isNullOrEmpty(t.current_group) &&
         ((!isNullOrEmpty(t.group)) ||
         (!isNullOrEmpty(t.project_participation_hours)) ||
         (!isNullOrEmpty(t.consumed_hours)) ||
