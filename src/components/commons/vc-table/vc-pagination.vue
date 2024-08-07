@@ -2,7 +2,7 @@
   <el-row class="vc-pagination">
     <el-col :span="24">
       <el-pagination small background v-model:currentPage="meta.page" v-model:page-size="meta.size"
-        :page-sizes="[10, 15, 30, 50]" :total="totalItem" @size-change="onSizeChange" @current-change="onPageChange"
+        :page-sizes="[10, 15, 30, 50, 100, 1000]" :total="totalItem" @size-change="onSizeChange" @current-change="onPageChange"
         layout="total, sizes, prev, pager, next, jumper">
       </el-pagination>
     </el-col>

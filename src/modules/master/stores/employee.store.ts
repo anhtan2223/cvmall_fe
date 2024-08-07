@@ -7,7 +7,11 @@ export const useEmployeeStore = defineStore('useEmployeeStore', {
     employeeFormData: <any>{},
     employeeGoSort: <any>[],
     employeeSearch: <any>[],
-    employeePageConfig: <any>[],
+    employeePageConfig: {
+      page: 1,
+      size: 100,
+      total: 0,
+    },
     employeeLoading: <any>[],
     employeeFilters: <any>[],
     employeeGroup: <any>[],

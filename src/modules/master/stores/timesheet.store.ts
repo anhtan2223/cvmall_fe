@@ -8,7 +8,11 @@ export const useTimesheetStore = defineStore('useTimesheetStore', {
     timesheetGoSort: <any>[],
     timesheetMonthYear: new Date(),
     timesheetSearch: <any>[],
-    timesheetPageConfig: <any>[],
+    timesheetPageConfig: {
+      page: 1,
+      size: 100,
+      total: 0,
+    },
     timesheetLoading: <any>[],
     timesheetFilters: {
       branch: [],
@@ -24,12 +28,12 @@ export const useTimesheetStore = defineStore('useTimesheetStore', {
       return state.timesheetGridData
     },
     timesheetMonthYearIsCurrentMonth: (state) => {
-      const currentMonth = new Date().getMonth();
-      const currentYear = new Date().getFullYear();
+      const currentMonth = new Date().getMonth()
+      const currentYear = new Date().getFullYear()
       return (
         state.timesheetMonthYear.getMonth() === currentMonth &&
         state.timesheetMonthYear.getFullYear() === currentYear
-      );
+      )
     },
   },
   actions: {
