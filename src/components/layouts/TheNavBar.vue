@@ -23,6 +23,7 @@
               </span>
               <template #dropdown>
                 <el-dropdown-menu>
+                  <el-dropdown-item @click="onChangePass">Change Password</el-dropdown-item>
                   <el-dropdown-item @click="onLogout">Logout</el-dropdown-item>
                 </el-dropdown-menu>
               </template>
@@ -74,6 +75,9 @@ const goPage = async (name: string) => {
 const onLogout = () => {
   authStore.logout()
   goPage("Login")
+}
+const onChangePass = () => {
+  goPage("ChangePassWord")
 }
 
 const toogleSidebar = () => {

@@ -107,14 +107,23 @@ const rules = reactive({
   ],
 })
 
+const resetField = () => {
+  passwordValidate.cfPass = ''
+  passwordValidate.newPass = ''
+  passwordValidate.olPass = ''
+}
+
 const changePassword = async () => {
   const data = {
-    id: account.value.profile.sub,
+    id: account.value.id,
     current_password: passwordValidate.olPass,
     new_password: passwordValidate.newPass,
   }
   if (data) {
-    await authService.changePassword(data)
+    const res = await authService.changePassword(data)
+    if(res.code == 0){
+      resetField()
+    }
   }
 }
 const handleChangePass = async (formEl: FormInstance | undefined) => {
