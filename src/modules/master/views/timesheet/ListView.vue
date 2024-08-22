@@ -26,6 +26,37 @@
         <vc-button class="ml-2" @click="onSaveAll" type="primary" :icon="'FolderChecked'" :loading="isExportAllTimeSheetsLoading">
           {{ tl("Common", "BtnSave") }}
         </vc-button>
+        <input
+          type="file"
+          @change="handleImport"
+          accepted=".xlxs"
+          id="Import"
+          style="display: none"
+        />
+        
+        <input
+          type="file"
+          @change="handleFileUpload"
+          accepted=".xlxs"
+          id="ImportMM"
+          style="display: none"
+        />
+          <el-dropdown placement="top-start">
+            <vc-button class="ml-2" :icon="'Upload'" :loading="isExportAllTimeSheetsLoading">
+              {{ tl("Common", "BtnImportExcel") }}
+            </vc-button>
+            <template #dropdown>
+              <el-dropdown-menu>
+                <el-dropdown-item @click="onImportMM"  :icon="'Upload'" :loading="isExportAllTimeSheetsLoading">
+                    {{ tl("Common", "Nhập Công Số") }}
+                </el-dropdown-item>
+                <el-dropdown-item @click="onImport"  :icon="'Upload'" :loading="isExportAllTimeSheetsLoading">
+                    {{ tl("Common", "Nhập Buổi Đi Muộn /  Về Sớm") }}
+                </el-dropdown-item>
+              </el-dropdown-menu>
+            </template>
+          </el-dropdown>
+        
         <vc-button class="ml-2" @click="onExport" type="success" :icon="'Download'" :loading="isExportAllTimeSheetsLoading">
           {{ tl("Common", "BtnExportExcel") }}
         </vc-button>
@@ -96,6 +127,7 @@
   import { useEmployeeStore } from '@master/stores/employee.store'
   import { BRANCH } from '@/commons/const'
   import { useToastStore } from '@/stores/toast.store'
+  import * as XLSX from 'xlsx'
 
   const timesheetStore = useTimesheetStore()
   const {
@@ -216,6 +248,62 @@
     isExportAllTimeSheetsLoading.value = false
   }
 
+  const handleImport = async (event : any) => {
+    isTableLoading.value = true
+    isExportAllTimeSheetsLoading.value = true
+    
+    const monthYear = new Date(timesheetMonthYear.value)
+    monthYear.setDate(15)
+    const file = event.target.files[0]
+    const formData = new FormData();
+    formData.append('file', file);
+    await timesheetStore.importExcel(formData, monthYear.toISOString())
+    await fetchData()
+    mapGridData()
+
+    isTableLoading.value = false
+    isExportAllTimeSheetsLoading.value = false
+  }
+  const onImport = () => {
+    document?.getElementById('Import')?.click()
+  }
+  const onImportMM = () => {
+    document?.getElementById('ImportMM')?.click()
+  }
+  const json = ref([])
+  const handleFileUpload = (event : any) => {
+    const file = event.target.files[0]
+    const reader = new FileReader()
+
+    reader.onload = async (e) => {
+      const data = new Uint8Array(e.target.result)
+      const workbook = XLSX.read(data, { type: 'array' })
+      const sheetName = workbook.SheetNames[1]
+      const worksheet = workbook.Sheets[sheetName]
+
+      const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 })
+      json.value = jsonData.filter(x => x.length > 12 && x[0] != null).map(x => {
+        return {
+          name : x[1] ,
+          project_participation_hours : x[10] ,
+          consumed_hours : x[11] ,
+        }
+      })
+      mappingFromFile()
+      await onSaveAll()
+    }
+
+    reader.readAsArrayBuffer(file)
+  }
+  const mappingFromFile = () => {
+    json.value.forEach(element => {
+      const value = dataGrid.value.find(x => x.full_name == element.name)
+      if(value){
+        value.project_participation_hours = element.project_participation_hours
+        value.consumed_hours = element.consumed_hours
+      }
+    })
+  }
   const onSortChange = async (sort: any, config: any) => {
     isTableLoading.value = true
     console.log(timesheetGoSort.value)

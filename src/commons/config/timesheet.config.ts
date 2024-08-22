@@ -20,7 +20,7 @@ export const API = {
   DELETE: (id: string | string[]) => `${FUNC_NAME}/${id}`,
   DELETE_MULTI: `${FUNC_NAME}/delete-multi`,
   EXPORT_ALL_EXCEL_BY_MONTH_YEAR: `${FUNC_NAME}/export-all-excel-by-month-year`,
-  RESET_PASSWORD: (id: string) => `${FUNC_NAME}/${id}/reset_password`,
+  IMPORT : `${FUNC_NAME}/import-late-early`
 }
 
 // ========================== CONFIG TABLE ==========================

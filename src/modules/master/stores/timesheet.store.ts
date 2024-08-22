@@ -85,5 +85,11 @@ export const useTimesheetStore = defineStore('useTimesheetStore', {
         year: this.timesheetMonthYear.getFullYear(),
       })
     },
+
+    async importExcel(data:any , month : any){
+      await timesheetService.importExcel(data , month).then(() => {
+        this.getList()
+      })
+    }
   },
 })

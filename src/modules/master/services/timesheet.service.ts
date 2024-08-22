@@ -63,11 +63,23 @@ const timesheetService = {
         }
       })
       .then((response: any) => {
-        const month = (params as {month: number})?.["month"] || new Date().getMonth() + 1;
-        const year = (params as {year: number})?.["year"] || new Date().getFullYear();
+        const month = (params as { month: number })?.["month"] || new Date().getMonth() + 1;
+        const year = (params as { year: number })?.["year"] || new Date().getFullYear();
         fileService.resolveAndDownloadBlob(response, `timesheet_${month}_${year}.xlsx`);
       })
   },
+  async importExcel(params?: object , month ?: string) {
+    const toastStore = useToastStore()
+    return await apiClient
+      .post(API.IMPORT + `?month=${month}`, params, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    }).then((response: any) => {
+      toastStore.fromApiResponse(response)
+      return response
+    })
+  }
 }
 
 export default timesheetService
